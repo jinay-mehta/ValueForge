@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Local Scratch & Build Output
+scratch/
+dist/
+.output/
+
+# Vercel
+.vercel/
+
+# Presentation and local assets (as requested)
+*.pptx
+ValueForge_Presentation.pptx
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+*.log
+.env*.local

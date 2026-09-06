@@ -1,0 +1,2415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ValueForge™ — AI-Driven Differentiation & Positioning Intelligence</title>
+<meta name="description" content="AI-Driven Differentiation and Positioning Intelligence for Ai Palette. Find unoccupied Positioning Pockets™, score claims with the Positioning Confidence Index™, and export decision-ready briefs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   RESET & COLOR TOKENS
+═══════════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0D0D0E;
+  --ink2:#3A3A3F;
+  --ink3:#717179;
+  --paper:#F7F6F3;
+  --card:#FFFFFF;
+  --border:#E5E3DE;
+  --accent:#C9420A;
+  --accent-lt:#F5DDD4;
+  --accent-mid:#E8836A;
+  --gold:#D4A017;
+  --gold-lt:#FBF0D0;
+  --teal:#0F6E56;
+  --teal-lt:#D6EDE7;
+  --blue:#185FA5;
+  --blue-lt:#DAE8F7;
+  --red:#A32D2D;
+  --red-lt:#F7DADA;
+  --dark:#141416;
+  --dark2:#1E1E22;
+  --gray:#888780;
+  --gray-lt:#EEEDEA;
+  --radius:10px;
+  --radius-lg:16px;
+  --shadow:0 2px 16px rgba(0,0,0,0.06);
+  --shadow-lg:0 8px 36px rgba(0,0,0,0.11);
+}
+
+body{
+  font-family:'DM Sans',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+input,select,textarea,button{font-family:inherit}
+
+/* ═══════════════════════════════════════════════
+   LAYOUT SHELL
+═══════════════════════════════════════════════ */
+.shell{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{
+  width:240px;
+  background:var(--dark);
+  display:flex;
+  flex-direction:column;
+  flex-shrink:0;
+  padding:0;
+  z-index:20;
+  transition:transform .3s ease;
+}
+.sidebar-logo{
+  padding:22px 20px 16px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.logo-mark{
+  font-family:'DM Serif Display',serif;
+  font-size:21px;
+  color:#fff;
+  letter-spacing:-.02em;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.logo-mark span{color:var(--accent)}
+.logo-sub{
+  font-size:9.5px;
+  color:rgba(255,255,255,.35);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin-top:3px;
+  font-weight:600;
+}
+.nav-section{
+  padding:16px 16px 6px;
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.28);
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 14px;
+  border-radius:7px;
+  margin:2px 8px;
+  cursor:pointer;
+  transition:all .18s ease;
+  font-size:13px;
+  font-weight:500;
+  color:rgba(255,255,255,.5);
+  border:none;
+  background:none;
+  width:calc(100% - 16px);
+  text-align:left;
+}
+.nav-item:hover{
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.9);
+  transform:translateX(2px);
+}
+.nav-item.active{
+  background:rgba(201,66,10,.2);
+  color:var(--accent-mid);
+  font-weight:600;
+}
+.nav-item .icon{
+  font-size:14px;
+  width:18px;
+  text-align:center;
+  flex-shrink:0;
+}
+.nav-divider{
+  height:1px;
+  background:rgba(255,255,255,.06);
+  margin:10px 16px;
+}
+
+/* SIDEBAR FOOTER & PERSONA SELECTOR */
+.sidebar-footer{
+  margin-top:auto;
+  padding:14px 14px 16px;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,.15);
+}
+.persona-picker-title{
+  font-size:9px;
+  color:rgba(255,255,255,.3);
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  font-weight:700;
+  margin-bottom:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.persona-picker-select{
+  width:100%;
+  background:var(--dark2);
+  color:rgba(255,255,255,.85);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:6px;
+  padding:6px 10px;
+  font-size:11.5px;
+  cursor:pointer;
+  outline:none;
+  margin-bottom:10px;
+}
+.user-badge{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.user-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:var(--accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  font-weight:700;
+  color:#fff;
+  flex-shrink:0;
+}
+.user-name{font-size:12px;color:rgba(255,255,255,.85);line-height:1.2;font-weight:600}
+.user-role{font-size:10px;color:rgba(255,255,255,.4)}
+
+/* MAIN CONTENT WRAPPER */
+.main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
+}
+
+/* TOPBAR */
+.topbar{
+  height:56px;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 28px;
+  gap:16px;
+  flex-shrink:0;
+  box-shadow:0 1px 2px rgba(0,0,0,.03);
+}
+.mobile-toggle{
+  display:none;
+  background:none;
+  border:none;
+  font-size:20px;
+  cursor:pointer;
+  color:var(--ink2);
+}
+.topbar-breadcrumb{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--ink3);
+}
+.topbar-breadcrumb span{
+  color:var(--ink);
+  font-weight:600;
+}
+.topbar-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.badge-beta{
+  background:var(--gold-lt);
+  color:#825900;
+  font-size:10px;
+  font-weight:700;
+  padding:4px 9px;
+  border-radius:20px;
+  letter-spacing:.05em;
+  border:1px solid rgba(212,160,23,.25);
+}
+
+/* BUTTONS */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:8px 16px;
+  border-radius:7px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  border:none;
+  transition:all .18s ease;
+  text-decoration:none;
+}
+.btn:active{transform:scale(.98)}
+.btn-primary{
+  background:var(--accent);
+  color:#fff;
+}
+.btn-primary:hover{
+  background:#af3404;
+  transform:translateY(-1px);
+  box-shadow:0 4px 14px rgba(201,66,10,.3);
+}
+.btn-secondary{
+  background:var(--gray-lt);
+  color:var(--ink2);
+  border:1px solid var(--border);
+}
+.btn-secondary:hover{
+  background:#dedcd7;
+  color:var(--ink);
+}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:#09503e;box-shadow:0 4px 14px rgba(15,110,86,.25)}
+
+/* SCREEN CONTAINER */
+.screen-area{
+  flex:1;
+  overflow-y:auto;
+  padding:28px 32px;
+}
+.screen{display:none;animation:fadeIn .25s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* TYPOGRAPHY & COMMON CARDS */
+.page-title{
+  font-family:'DM Serif Display',serif;
+  font-size:28px;
+  color:var(--ink);
+  line-height:1.2;
+  margin-bottom:4px;
+  letter-spacing:-.01em;
+}
+.page-title em{font-style:italic;color:var(--accent)}
+.page-sub{
+  font-size:13.5px;
+  color:var(--ink3);
+  line-height:1.6;
+  margin-bottom:24px;
+}
+.section-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:10px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px 24px;
+  box-shadow:var(--shadow);
+}
+.card-sm{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:14px 16px;
+}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 1 — DASHBOARD
+═══════════════════════════════════════════════ */
+.hero-banner{
+  background:var(--dark);
+  border-radius:var(--radius-lg);
+  padding:28px 32px;
+  margin-bottom:24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:var(--shadow-lg);
+}
+.hero-banner::before{
+  content:'';
+  position:absolute;
+  right:-50px;
+  top:-50px;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.05);
+  pointer-events:none;
+}
+.hero-banner::after{
+  content:'';
+  position:absolute;
+  right:10px;
+  bottom:-40px;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  border:1px solid rgba(201,66,10,.12);
+  pointer-events:none;
+}
+.hero-text h2{
+  font-family:'DM Serif Display',serif;
+  font-size:24px;
+  color:#fff;
+  margin-bottom:6px;
+}
+.hero-text p{
+  font-size:13.5px;
+  color:rgba(255,255,255,.65);
+  max-width:560px;
+  line-height:1.6;
+}
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:16px;
+  margin-bottom:24px;
+}
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.stat-card .num{
+  font-family:'DM Serif Display',serif;
+  font-size:36px;
+  color:var(--ink);
+  line-height:1;
+  margin-bottom:4px;
+}
+.stat-card .num.accent{color:var(--accent)}
+.stat-card .num.teal{color:var(--teal)}
+.stat-card .num.gold{color:var(--gold)}
+.stat-card .lbl{font-size:12px;color:var(--ink3);font-weight:500}
+.stat-card .change{font-size:11px;margin-top:6px;font-weight:600}
+.change.up{color:var(--teal)}
+.change.down{color:var(--accent)}
+
+.recent-table{width:100%;border-collapse:collapse}
+.recent-table th{
+  text-align:left;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  padding:0 12px 10px;
+  border-bottom:1px solid var(--border);
+}
+.recent-table td{
+  padding:12px;
+  font-size:13px;
+  color:var(--ink2);
+  border-bottom:1px solid var(--gray-lt);
+  vertical-align:middle;
+}
+.recent-table tr:last-child td{border-bottom:none}
+.recent-table tr:hover td{background:var(--paper)}
+.pci-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 9px;
+  border-radius:20px;
+  font-size:11.5px;
+  font-weight:700;
+}
+.pci-high{background:var(--teal-lt);color:var(--teal)}
+.pci-mid{background:var(--gold-lt);color:#855c00}
+.pci-low{background:var(--red-lt);color:var(--red)}
+.zone-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  display:inline-block;
+  margin-right:6px;
+}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 2 — NEW ANALYSIS (STEP 1)
+═══════════════════════════════════════════════ */
+.steps-bar{
+  display:flex;
+  align-items:center;
+  margin-bottom:24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+}
+.step-item{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 18px;
+  position:relative;
+  font-size:13px;
+  font-weight:500;
+  color:var(--ink3);
+  cursor:default;
+  transition:all .2s;
+}
+.step-item.active{background:var(--accent-lt);color:var(--accent)}
+.step-item.done{background:var(--teal-lt);color:var(--teal)}
+.step-item:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  right:0;
+  top:0;
+  bottom:0;
+  width:1px;
+  background:var(--border);
+}
+.step-num{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:currentColor;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:700;
+  flex-shrink:0;
+}
+.step-num span{color:#fff}
+.step-item.inactive .step-num{background:var(--border)}
+.step-item.inactive .step-num span{color:var(--ink3)}
+
+.presets-container{
+  background:var(--paper);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 14px;
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.preset-btn{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:5px 12px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--ink2);
+  cursor:pointer;
+  transition:all .15s;
+}
+.preset-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  transform:translateY(-1px);
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:16px;
+}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:12px;font-weight:600;color:var(--ink2);letter-spacing:.02em}
+.form-input{
+  padding:10px 14px;
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  font-size:13.5px;
+  color:var(--ink);
+  background:var(--card);
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  width:100%;
+}
+.form-input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(201,66,10,.08);
+}
+.form-select{
+  padding:10px 14px;
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  font-size:13.5px;
+  color:var(--ink);
+  background:var(--card);
+  outline:none;
+  cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+  width:100%;
+}
+.form-select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(201,66,10,.08);
+}
+.persona-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.persona-chip{
+  padding:6px 14px;
+  border-radius:20px;
+  border:1.5px solid var(--border);
+  background:var(--card);
+  font-size:12px;
+  font-weight:600;
+  color:var(--ink3);
+  cursor:pointer;
+  transition:all .18s;
+  user-select:none;
+}
+.persona-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-lt)}
+.persona-chip.selected{border-color:var(--accent);background:var(--accent-lt);color:var(--accent)}
+
+.ingredient-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 10px;
+  border-radius:20px;
+  background:var(--teal-lt);
+  color:var(--teal);
+  font-size:12px;
+  font-weight:600;
+  margin:4px 4px 4px 0;
+}
+.ingredient-tag button{
+  background:none;
+  border:none;
+  cursor:pointer;
+  color:var(--teal);
+  font-size:14px;
+  line-height:1;
+  padding:0;
+}
+.tip-box{
+  background:var(--gold-lt);
+  border:1px solid #e8c96b;
+  border-radius:8px;
+  padding:12px 16px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-top:16px;
+}
+.tip-box .tip-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.tip-box p{font-size:12.5px;color:#5C3D00;line-height:1.6}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 3 — PROCESSING
+═══════════════════════════════════════════════ */
+.processing-center{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:60vh;
+  text-align:center;
+}
+.forge-animation{
+  width:84px;
+  height:84px;
+  margin:0 auto 28px;
+  position:relative;
+}
+.forge-ring{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:2px solid transparent;
+  animation:spinRing 1.4s linear infinite;
+}
+.forge-ring:nth-child(1){border-top-color:var(--accent);animation-duration:1.4s}
+.forge-ring:nth-child(2){border-right-color:var(--teal);animation-duration:2.1s;animation-direction:reverse;inset:8px}
+.forge-ring:nth-child(3){border-bottom-color:var(--gold);animation-duration:1.8s;inset:16px}
+.forge-core{
+  position:absolute;
+  inset:26px;
+  background:var(--dark);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 12px rgba(201,66,10,.3);
+}
+.forge-core span{font-family:'DM Serif Display',serif;font-size:13px;color:var(--accent)}
+@keyframes spinRing{to{transform:rotate(360deg)}}
+
+.process-steps{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  width:460px;
+  max-width:100%;
+}
+.process-step{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  border-radius:8px;
+  background:var(--card);
+  border:1px solid var(--border);
+  font-size:12.5px;
+  color:var(--ink2);
+  transition:all .3s ease;
+  text-align:left;
+}
+.process-step.running{
+  background:var(--accent-lt);
+  border-color:var(--accent-mid);
+  color:var(--accent);
+  font-weight:600;
+}
+.process-step.done{
+  background:var(--teal-lt);
+  border-color:var(--teal);
+  color:var(--teal);
+}
+.process-step .ps-icon{font-size:16px;width:20px;text-align:center}
+.process-step .ps-bar{
+  flex:1;
+  height:4px;
+  background:rgba(0,0,0,.08);
+  border-radius:2px;
+  overflow:hidden;
+  margin-left:8px;
+}
+.process-step .ps-fill{
+  height:100%;
+  border-radius:2px;
+  background:currentColor;
+  transition:width .5s ease;
+  width:0%;
+}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 4 — WHITESPACE MAP
+═══════════════════════════════════════════════ */
+.results-layout{
+  display:grid;
+  grid-template-columns:1fr 340px;
+  gap:20px;
+}
+.map-container{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+.map-legend{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+  align-items:center;
+}
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:11.5px;
+  font-weight:600;
+  color:var(--ink3);
+}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.map-svg-wrap{
+  position:relative;
+  width:100%;
+  height:380px;
+}
+.map-svg-wrap svg{width:100%;height:100%}
+.zone-tooltip{
+  position:absolute;
+  background:var(--dark);
+  color:#fff;
+  padding:8px 12px;
+  border-radius:6px;
+  font-size:12px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s ease;
+  z-index:10;
+  max-width:220px;
+  line-height:1.4;
+  box-shadow:var(--shadow-lg);
+  border:1px solid rgba(255,255,255,.1);
+}
+.zone-tooltip.visible{opacity:1}
+
+.results-sidebar{display:flex;flex-direction:column;gap:14px}
+.whitespace-card{
+  border-radius:var(--radius);
+  padding:16px 18px;
+  cursor:pointer;
+  transition:all .2s;
+  border:2px solid transparent;
+}
+.whitespace-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.whitespace-card.selected{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,110,86,.12)}
+.whitespace-card.zone-c{background:var(--teal-lt)}
+.whitespace-card.zone-b{background:var(--gold-lt)}
+.ws-card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:8px;
+}
+.ws-card-score{font-family:'DM Serif Display',serif;font-size:28px;line-height:1}
+.ws-card-badge{
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:3px 8px;
+  border-radius:20px;
+}
+.badge-rec{background:var(--teal);color:#fff}
+.badge-alt{background:var(--gold);color:#fff}
+.ws-card-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.ws-card-desc{font-size:12px;color:var(--ink2);line-height:1.55}
+.ws-card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.ws-tag{font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:20px}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 5 — VALUE PROPOSITION GENERATOR
+═══════════════════════════════════════════════ */
+.vp-layout{
+  display:grid;
+  grid-template-columns:1fr 310px;
+  gap:20px;
+}
+.vp-list{display:flex;flex-direction:column;gap:14px}
+.vp-card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px 20px;
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
+  overflow:hidden;
+}
+.vp-card::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:5px;
+  background:var(--border);
+  transition:background .2s;
+}
+.vp-card:hover{border-color:var(--accent);box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.vp-card.selected{border-color:var(--teal)}
+.vp-card.selected::before{background:var(--teal)}
+.vp-card.top::before{background:var(--teal)}
+.vp-card.warn::before{background:var(--accent)}
+.vp-card.danger::before{background:var(--red)}
+
+.vp-claim{
+  font-family:'DM Serif Display',serif;
+  font-size:19px;
+  color:var(--ink);
+  margin-bottom:10px;
+  line-height:1.3;
+}
+.vp-scores{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.score-item{display:flex;flex-direction:column;gap:3px;min-width:75px}
+.score-label{font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
+.score-bar{height:5px;background:var(--gray-lt);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.score-fill.teal{background:var(--teal)}
+.score-fill.gold{background:var(--gold)}
+.score-fill.red{background:var(--red)}
+.score-pct{font-size:11px;font-weight:700;color:var(--ink2)}
+.vp-pci-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:11.5px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.vp-flags{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.flag{
+  display:flex;
+  align-items:flex-start;
+  gap:7px;
+  padding:7px 10px;
+  border-radius:6px;
+  font-size:11.5px;
+  line-height:1.45;
+}
+.flag-warn{background:var(--accent-lt);color:var(--accent)}
+.flag-danger{background:var(--red-lt);color:var(--red)}
+.flag-ok{background:var(--teal-lt);color:var(--teal)}
+.flag-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+
+/* CLAIM FORGE LIVE EDITOR */
+.claim-editor-box{
+  background:var(--paper);
+  border:1px dashed var(--border);
+  border-radius:8px;
+  padding:14px 16px;
+  margin-top:14px;
+}
+.claim-editor-box label{font-size:11.5px;font-weight:700;color:var(--ink2);margin-bottom:6px;display:block}
+.claim-editor-row{display:flex;gap:8px}
+
+.rhs-panel{display:flex;flex-direction:column;gap:14px}
+.pci-meter{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+.pci-ring-wrap{position:relative;width:104px;height:104px;margin:0 auto 12px}
+.pci-ring-svg{transform:rotate(-90deg)}
+.pci-ring-bg{fill:none;stroke:var(--gray-lt);stroke-width:8}
+.pci-ring-fill{
+  fill:none;
+  stroke:var(--teal);
+  stroke-width:8;
+  stroke-linecap:round;
+  stroke-dasharray:283;
+  stroke-dashoffset:34;
+  transition:stroke-dashoffset .7s ease, stroke .3s ease;
+}
+.pci-num{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.pci-num .n{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.pci-num .s{font-size:10px;color:var(--ink3);font-weight:600}
+.dim-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.dim-label{font-size:11.5px;color:var(--ink2)}
+.dim-val{font-size:11.5px;font-weight:700}
+.dim-bar-wrap{height:4px;background:var(--gray-lt);border-radius:2px;overflow:hidden;margin-bottom:12px}
+.dim-bar{height:100%;border-radius:2px;transition:width .6s ease, background .3s ease}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 6 — POSITIONING BRIEF (FINAL OUTPUT)
+═══════════════════════════════════════════════ */
+.brief-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.brief-hero{
+  background:var(--dark);
+  border-radius:var(--radius-lg);
+  padding:28px 32px;
+  grid-column:1/-1;
+  position:relative;
+  overflow:hidden;
+}
+.brief-hero::before{
+  content:'';
+  position:absolute;
+  right:-40px;
+  top:-40px;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(201,66,10,.18),transparent 70%);
+  pointer-events:none;
+}
+.brief-hero .eyebrow{
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:10px;
+}
+.brief-hero .claim{
+  font-family:'DM Serif Display',serif;
+  font-size:32px;
+  color:#fff;
+  line-height:1.25;
+  margin-bottom:14px;
+}
+.brief-hero .claim em{color:var(--accent-mid);font-style:italic}
+.brief-pci-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brief-pci-pill{
+  background:var(--teal);
+  color:#fff;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:700;
+}
+.brief-pci-bar{flex:1;min-width:120px;height:6px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden}
+.brief-pci-fill{height:100%;border-radius:3px;background:var(--teal);width:88%;transition:width .5s ease}
+.brief-zone{
+  background:rgba(232,184,75,.16);
+  color:var(--gold);
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.brief-section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px 22px;
+  box-shadow:var(--shadow);
+}
+.brief-section h4{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:14px;
+}
+.claim-tier{
+  padding:12px 14px;
+  border-radius:7px;
+  margin-bottom:8px;
+  border-left:3.5px solid transparent;
+}
+.claim-tier.tier1{border-left-color:var(--teal);background:var(--teal-lt)}
+.claim-tier.tier2{border-left-color:var(--gold);background:var(--gold-lt)}
+.claim-tier.tier3{border-left-color:var(--blue);background:var(--blue-lt)}
+.claim-tier-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.claim-tier-text{font-size:13.5px;color:var(--ink);line-height:1.45}
+
+.risk-row{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:7px;
+  margin-bottom:8px;
+  font-size:12px;
+  line-height:1.5;
+}
+.risk-row.warn{background:var(--accent-lt);color:var(--ink2)}
+.risk-row.ok{background:var(--teal-lt);color:var(--ink2)}
+.rtb-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-lt)}
+.rtb-item:last-child{border-bottom:none}
+.rtb-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:6px}
+.rtb-text{font-size:12.5px;color:var(--ink2);line-height:1.5}
+
+.next-actions{display:flex;flex-direction:column;gap:8px}
+.action-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:11px 14px;
+  border-radius:8px;
+  background:var(--paper);
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:all .18s;
+  font-size:12.5px;
+  color:var(--ink2);
+}
+.action-item:hover{
+  background:var(--card);
+  border-color:var(--accent);
+  color:var(--accent);
+  transform:translateX(2px);
+}
+.action-icon{font-size:16px;width:22px;text-align:center}
+
+.export-bar{
+  background:var(--dark);
+  border-radius:var(--radius);
+  padding:16px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+.export-bar p{font-size:13px;color:rgba(255,255,255,.7)}
+.export-bar p strong{color:#fff}
+.export-btns{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ═══════════════════════════════════════════════
+   UTILITY CLASSES & TOAST NOTIFICATION
+═══════════════════════════════════════════════ */
+.flex-between{display:flex;justify-content:space-between;align-items:center}
+.flex-gap{display:flex;gap:10px;align-items:center}
+.mt-4{margin-top:16px}
+.mt-6{margin-top:24px}
+.mb-4{margin-bottom:16px}
+hr.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.pill-green{background:var(--teal-lt);color:var(--teal)}
+.pill-amber{background:var(--gold-lt);color:#825900}
+.pill-red{background:var(--red-lt);color:var(--red)}
+.pill-blue{background:var(--blue-lt);color:var(--blue)}
+
+.notification{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  background:var(--dark);
+  color:#fff;
+  padding:12px 20px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:500;
+  box-shadow:var(--shadow-lg);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  transform:translateY(80px);
+  opacity:0;
+  transition:all .3s cubic-bezier(.175,.885,.32,1.275);
+  z-index:999;
+  border:1px solid rgba(255,255,255,.1);
+}
+.notification.show{transform:translateY(0);opacity:1}
+.notification .n-icon{color:var(--teal);font-size:16px}
+
+/* ═══════════════════════════════════════════════
+   PRINT STYLESHEET (PDF GENERATION)
+═══════════════════════════════════════════════ */
+@media print{
+  body{background:#fff;color:#000}
+  .sidebar, .topbar, .export-bar, .btn, .next-actions, .claim-editor-box, .mobile-toggle{display:none !important}
+  .shell{height:auto;display:block;overflow:visible}
+  .main{overflow:visible;display:block}
+  .screen-area{padding:0;overflow:visible}
+  .screen{display:none !important}
+  #s-brief{display:block !important}
+  .brief-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .brief-hero{background:#111 !important;color:#fff !important;-webkit-print-color-adjust:exact}
+  .brief-section{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE DESIGN
+═══════════════════════════════════════════════ */
+@media(max-width:960px){
+  .results-layout, .vp-layout, .brief-layout{grid-template-columns:1fr}
+  .dashboard-grid{grid-template-columns:1fr}
+  .sidebar{
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    transform:translateX(-100%);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .mobile-toggle{display:block}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ══════════════════════════════
+       SIDEBAR
+  ══════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">Value<span>Forge</span>™</div>
+      <div class="logo-sub">by Ai Palette</div>
+    </div>
+
+    <div class="nav-section">Workspace</div>
+    <button class="nav-item active" onclick="goto('s-dashboard')">
+      <span class="icon">⬡</span> Dashboard
+    </button>
+    <button class="nav-item" onclick="goto('s-new-analysis')">
+      <span class="icon">＋</span> New Analysis
+    </button>
+    <button class="nav-item" onclick="goto('s-history')">
+      <span class="icon">◷</span> History
+    </button>
+
+    <div class="nav-divider"></div>
+    <div class="nav-section">Tools</div>
+    <button class="nav-item" onclick="goto('s-whitespace')">
+      <span class="icon">★</span> Whitespace Map
+    </button>
+    <button class="nav-item" onclick="goto('s-vp-gen')">
+      <span class="icon">◈</span> VP Generator
+    </button>
+    <button class="nav-item" onclick="goto('s-brief')">
+      <span class="icon">◻</span> Positioning Brief
+    </button>
+
+    <div class="sidebar-footer">
+      <div class="persona-picker-title">Active Persona</div>
+      <select class="persona-picker-select" id="persona-selector" onchange="switchPersona(this.value)">
+        <option value="priya">Priya Sharma (Brand Mgr)</option>
+        <option value="david">David Chen (R&D Lead)</option>
+        <option value="aigerim">Aigerim Bekova (Insights Dir)</option>
+      </select>
+      <div class="user-badge">
+        <div class="user-avatar" id="sidebar-avatar">PS</div>
+        <div>
+          <div class="user-name" id="sidebar-name">Priya Sharma</div>
+          <div class="user-role" id="sidebar-role">Sr. Brand Manager · HUL</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════ -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
+      <div class="topbar-breadcrumb" id="breadcrumb">
+        ValueForge™ <span>Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <div class="badge-beta">PROTOTYPE v1.0</div>
+        <button class="btn btn-primary btn-sm" onclick="goto('s-new-analysis')">+ New Analysis</button>
+      </div>
+    </header>
+
+    <!-- SCREEN AREA -->
+    <div class="screen-area">
+
+      <!-- ════════════════════════
+           S1 · DASHBOARD
+      ════════════════════════ -->
+      <section class="screen active" id="s-dashboard">
+
+        <div class="hero-banner">
+          <div class="hero-text">
+            <h2 id="dash-welcome">Welcome back, Priya.</h2>
+            <p id="dash-desc">You have <strong style="color:var(--gold)">2 analyses in progress</strong> and 1 brief ready to export. Your active category Positioning Confidence Index™ stands at <strong style="color:var(--teal)">88 / 100</strong> — launch ready.</p>
+          </div>
+          <button class="btn btn-primary" onclick="goto('s-new-analysis')">Start New Analysis →</button>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="stat-card">
+            <div class="num accent" id="kpi-pci">88</div>
+            <div class="lbl">Avg. Positioning Confidence Index™</div>
+            <div class="change up">↑ +12 vs last quarter</div>
+          </div>
+          <div class="stat-card">
+            <div class="num teal">4</div>
+            <div class="lbl">Whitespace Zones Identified (30 days)</div>
+            <div class="change up">↑ 2 new this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="num gold">7</div>
+            <div class="lbl">Total Analyses Run</div>
+            <div class="change">3 briefs exported</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flex-between mb-4">
+            <div class="section-label" style="margin:0">Recent Analyses</div>
+            <button class="btn btn-secondary btn-sm" onclick="goto('s-history')">View all</button>
+          </div>
+          <table class="recent-table">
+            <thead>
+              <tr>
+                <th>Product Concept</th><th>Category</th><th>Persona</th>
+                <th>Whitespace Zone</th><th>PCI Score</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="cursor:pointer" onclick="loadPreset('protein')">
+                <td><strong>Plant-Based Protein Drink</strong></td>
+                <td>Functional Beverages</td><td>Urban Millennials</td>
+                <td><span class="zone-dot" style="background:var(--teal)"></span>Zone C — Whitespace</td>
+                <td><span class="pci-pill pci-high">88</span></td>
+                <td><span class="pill pill-green">Brief Ready</span></td>
+              </tr>
+              <tr style="cursor:pointer" onclick="loadPreset('tea')">
+                <td><strong>Daily Ritual Green Tea</strong></td>
+                <td>Hot Beverages</td><td>Wellness F 25–34</td>
+                <td><span class="zone-dot" style="background:var(--teal)"></span>Zone C — Whitespace</td>
+                <td><span class="pci-pill pci-high">91</span></td>
+                <td><span class="pill pill-green">Exported</span></td>
+              </tr>
+              <tr style="cursor:pointer" onclick="loadPreset('bar')">
+                <td><strong>Probiotic Snack Bar</strong></td>
+                <td>Snacks & Bars</td><td>Health-Conscious Parents</td>
+                <td><span class="zone-dot" style="background:var(--gold)"></span>Zone B — Contested</td>
+                <td><span class="pci-pill pci-mid">74</span></td>
+                <td><span class="pill pill-amber">In Progress</span></td>
+              </tr>
+              <tr style="cursor:pointer" onclick="loadPreset('coffee')">
+                <td><strong>Adaptogenic Coffee Blend</strong></td>
+                <td>Hot Beverages</td><td>Urban Professionals</td>
+                <td><span class="zone-dot" style="background:var(--red)"></span>Zone A — Saturated</td>
+                <td><span class="pci-pill pci-low">41</span></td>
+                <td><span class="pill pill-red">Rework Needed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════════════════════════
+           S2 · NEW ANALYSIS — INPUT
+      ════════════════════════ -->
+      <section class="screen" id="s-new-analysis">
+        <div class="page-title">New ValueForge™ Analysis</div>
+        <div class="page-sub">Define your product concept. ValueForge cross-references Ai Palette's 500M+ consumer signal database to map the competitive saturation and surface defensible positioning whitespace.</div>
+
+        <div class="steps-bar">
+          <div class="step-item active">
+            <div class="step-num"><span>1</span></div>
+            <div>
+              <div style="font-size:11px;font-weight:700">Define Concept</div>
+              <div style="font-size:10px;opacity:.7">Product & persona</div>
+            </div>
+          </div>
+          <div class="step-item inactive">
+            <div class="step-num"><span>2</span></div>
+            <div>
+              <div style="font-size:11px;font-weight:700">Explore Whitespace</div>
+              <div style="font-size:10px;opacity:.7">Competitive map</div>
+            </div>
+          </div>
+          <div class="step-item inactive">
+            <div class="step-num"><span>3</span></div>
+            <div>
+              <div style="font-size:11px;font-weight:700">Generate VPs</div>
+              <div style="font-size:10px;opacity:.7">Claim options</div>
+            </div>
+          </div>
+          <div class="step-item inactive">
+            <div class="step-num"><span>4</span></div>
+            <div>
+              <div style="font-size:11px;font-weight:700">Positioning Brief</div>
+              <div style="font-size:10px;opacity:.7">Decision-ready</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="presets-container">
+          <span style="font-size:11.5px;font-weight:700;color:var(--ink3)">Quick Presets:</span>
+          <button class="preset-btn" onclick="loadPreset('protein')">🌱 Plant Protein Drink</button>
+          <button class="preset-btn" onclick="loadPreset('tea')">🍵 Daily Ritual Green Tea</button>
+          <button class="preset-btn" onclick="loadPreset('bar')">🍫 Probiotic Snack Bar</button>
+          <button class="preset-btn" onclick="loadPreset('coffee')">☕ Adaptogenic Coffee</button>
+        </div>
+
+        <div class="card">
+          <div class="section-label">Product Basics</div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Product Concept</label>
+              <input class="form-input" id="input-concept" type="text" value="Plant-Based Protein Drink" placeholder="Describe your product idea…">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-select" id="input-category">
+                <option selected>Functional Beverages</option>
+                <option>Hot Beverages</option>
+                <option>Snacks & Bars</option>
+                <option>Dairy & Alternatives</option>
+                <option>Condiments & Sauces</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Market</label>
+              <select class="form-select" id="input-market">
+                <option selected>India</option>
+                <option>Indonesia</option>
+                <option>Singapore</option>
+                <option>UAE</option>
+                <option>Thailand</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price Tier</label>
+              <select class="form-select" id="input-price">
+                <option>Economy (₹20–50)</option>
+                <option selected>Mid (₹80–120)</option>
+                <option>Premium (₹150–300)</option>
+                <option>Super Premium (₹300+)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Channel</label>
+              <select class="form-select" id="input-channel">
+                <option selected>Modern Trade + E-Commerce</option>
+                <option>General Trade</option>
+                <option>D2C Online</option>
+                <option>Foodservice</option>
+              </select>
+            </div>
+          </div>
+
+          <hr class="divider">
+          <div class="section-label">Target Persona (Multi-Select)</div>
+          <div class="persona-chips" id="persona-chips">
+            <div class="persona-chip selected" onclick="toggleChip(this)">Urban Millennials (25–34)</div>
+            <div class="persona-chip" onclick="toggleChip(this)">Gen Z Health-First</div>
+            <div class="persona-chip" onclick="toggleChip(this)">Wellness Women 28–38</div>
+            <div class="persona-chip" onclick="toggleChip(this)">Fitness Enthusiasts</div>
+            <div class="persona-chip" onclick="toggleChip(this)">Busy Professionals</div>
+            <div class="persona-chip" onclick="toggleChip(this)">Health-Conscious Parents</div>
+          </div>
+
+          <hr class="divider">
+          <div class="section-label">Key Ingredients / Formats</div>
+          <div id="ingredient-tags" style="margin-bottom:8px">
+            <span class="ingredient-tag">Pea Protein <button onclick="removeTag(this)">×</button></span>
+            <span class="ingredient-tag">Ashwagandha <button onclick="removeTag(this)">×</button></span>
+          </div>
+          <div class="flex-gap">
+            <input class="form-input" id="ing-input" type="text" placeholder="Add ingredient (e.g. Rice Protein, RTD format)…" style="max-width:340px" onkeydown="if(event.key==='Enter')addTag()">
+            <button class="btn btn-secondary btn-sm" onclick="addTag()">+ Add</button>
+          </div>
+
+          <div class="tip-box mt-4">
+            <span class="tip-icon">💡</span>
+            <p><strong>Persona Intelligence Tip:</strong> 89% of category claims are semantically identical. Adding specific ingredients allows the Competitive Saturation Scanner™ to check whether claims like "Clean Plant Protein" are already saturated by 20+ SKUs.</p>
+          </div>
+
+          <div class="flex-between mt-6">
+            <button class="btn btn-secondary" onclick="goto('s-dashboard')">← Back</button>
+            <button class="btn btn-primary" onclick="startProcessing()">Run ValueForge Analysis →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════
+           S3 · PROCESSING
+      ════════════════════════ -->
+      <section class="screen" id="s-processing">
+        <div class="processing-center">
+          <div class="forge-animation">
+            <div class="forge-ring"></div>
+            <div class="forge-ring"></div>
+            <div class="forge-ring"></div>
+            <div class="forge-core"><span>VF</span></div>
+          </div>
+          <div style="font-family:'DM Serif Display',serif;font-size:25px;margin-bottom:6px">Forging your position…</div>
+          <div style="font-size:13px;color:var(--ink3);margin-bottom:28px">Executing all 5 layers of the Differentiation Genome™</div>
+
+          <div class="process-steps">
+            <div class="process-step" id="ps1">
+              <span class="ps-icon">👤</span>
+              <span style="flex:1">Persona Intelligence Module™ — Decoding Desire Vectors</span>
+              <div class="ps-bar"><div class="ps-fill" id="pf1"></div></div>
+            </div>
+            <div class="process-step" id="ps2">
+              <span class="ps-icon">🔍</span>
+              <span style="flex:1">Competitive Saturation Scanner™ — Mapping Category SKUs</span>
+              <div class="ps-bar"><div class="ps-fill" id="pf2"></div></div>
+            </div>
+            <div class="process-step" id="ps3">
+              <span class="ps-icon">★</span>
+              <span style="flex:1">WhiteSpace Navigator™ — Identifying Positioning Pockets™</span>
+              <div class="ps-bar"><div class="ps-fill" id="pf3"></div></div>
+            </div>
+            <div class="process-step" id="ps4">
+              <span class="ps-icon">⚡</span>
+              <span style="flex:1">Claim Forge Engine™ — Generating Differentiated Claims</span>
+              <div class="ps-bar"><div class="ps-fill" id="pf4"></div></div>
+            </div>
+            <div class="process-step" id="ps5">
+              <span class="ps-icon">📡</span>
+              <span style="flex:1">Consumer Resonance Simulator™ — Scoring via Synthetic Cohorts</span>
+              <div class="ps-bar"><div class="ps-fill" id="pf5"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════
+           S4 · WHITESPACE MAP
+      ════════════════════════ -->
+      <section class="screen" id="s-whitespace">
+        <div class="flex-between mb-4">
+          <div>
+            <div class="page-title" id="ws-page-title">Whitespace Map — <em id="ws-category-em">Functional Beverages · India</em></div>
+            <div class="page-sub" id="ws-sub" style="margin-bottom:0">47 competitor SKUs mapped. 2 Positioning Pockets™ identified.</div>
+          </div>
+          <button class="btn btn-primary" onclick="goto('s-vp-gen')">Generate Value Props →</button>
+        </div>
+
+        <div class="results-layout">
+          <div class="map-container">
+            <div class="map-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Zone A: Overcrowded</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Zone B: Contested</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Zone C: Whitespace ★</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Zone D: Under-served</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--ink)"></div>Your Product</div>
+            </div>
+
+            <div class="map-svg-wrap">
+              <div class="zone-tooltip" id="tooltip"></div>
+              <svg viewBox="0 0 560 360" xmlns="http://www.w3.org/2000/svg">
+                <!-- Zone backgrounds -->
+                <rect x="50" y="20" width="230" height="160" rx="6" fill="rgba(163,45,45,.08)" stroke="rgba(163,45,45,.3)" stroke-width="1"/>
+                <rect x="290" y="20" width="240" height="160" rx="6" fill="rgba(212,160,23,.07)" stroke="rgba(212,160,23,.3)" stroke-width="1"/>
+                <rect x="50" y="190" width="230" height="150" rx="6" fill="rgba(24,95,165,.07)" stroke="rgba(24,95,165,.25)" stroke-width="1"/>
+                <rect x="290" y="190" width="240" height="150" rx="6" fill="rgba(15,110,86,.1)" stroke="rgba(15,110,86,.5)" stroke-width="2" stroke-dasharray="6 3"/>
+
+                <!-- Zone Labels -->
+                <text x="165" y="40" text-anchor="middle" font-size="10" fill="rgba(163,45,45,.7)" font-family="DM Sans" font-weight="700" letter-spacing="1">ZONE A · OVERCROWDED</text>
+                <text x="410" y="40" text-anchor="middle" font-size="10" fill="rgba(212,160,23,.8)" font-family="DM Sans" font-weight="700" letter-spacing="1">ZONE B · CONTESTED</text>
+                <text x="165" y="210" text-anchor="middle" font-size="10" fill="rgba(24,95,165,.7)" font-family="DM Sans" font-weight="700" letter-spacing="1">ZONE D · UNDER-SERVED</text>
+                <text x="410" y="210" text-anchor="middle" font-size="10" fill="rgba(15,110,86,.8)" font-family="DM Sans" font-weight="700" letter-spacing="1">ZONE C · WHITESPACE</text>
+
+                <!-- Zone A — Red SKUs -->
+                <circle cx="90" cy="110" r="18" fill="rgba(201,66,10,.18)" stroke="rgba(201,66,10,.5)" stroke-width="1.2" class="sku-dot" data-tip="Herbalife Protein Shake · Zone A (Overcrowded)"/>
+                <circle cx="125" cy="90" r="15" fill="rgba(201,66,10,.15)" stroke="rgba(201,66,10,.4)" stroke-width="1" class="sku-dot" data-tip="MuscleBlaze Fuel One · Zone A"/>
+                <circle cx="155" cy="120" r="18" fill="rgba(201,66,10,.18)" stroke="rgba(201,66,10,.5)" stroke-width="1.2" class="sku-dot" data-tip="Fast&Up Plant Protein · Zone A"/>
+                <circle cx="195" cy="100" r="14" fill="rgba(201,66,10,.14)" stroke="rgba(201,66,10,.35)" stroke-width="1" class="sku-dot" data-tip="Amway Nutrilite · Zone A"/>
+                <circle cx="220" cy="130" r="12" fill="rgba(201,66,10,.12)" stroke="rgba(201,66,10,.3)" stroke-width="1" class="sku-dot" data-tip="Ensure Plus Complete · Zone A"/>
+                <circle cx="100" cy="145" r="11" fill="rgba(201,66,10,.1)" stroke="rgba(201,66,10,.25)" stroke-width="1" class="sku-dot" data-tip="Protinex Original · Zone A"/>
+                <circle cx="170" cy="60" r="13" fill="rgba(201,66,10,.12)" stroke="rgba(201,66,10,.3)" stroke-width="1" class="sku-dot" data-tip="RiteBite Max Protein · Zone A"/>
+
+                <!-- Zone B — Amber SKUs -->
+                <circle cx="330" cy="80" r="15" fill="rgba(212,160,23,.2)" stroke="rgba(212,160,23,.55)" stroke-width="1.2" class="sku-dot" data-tip="Oziva Plant Protein · Zone B (Contested)"/>
+                <circle cx="380" cy="100" r="13" fill="rgba(212,160,23,.18)" stroke="rgba(212,160,23,.5)" stroke-width="1" class="sku-dot" data-tip="Wellbeing Nutrition Superfood · Zone B"/>
+                <circle cx="430" cy="60" r="11" fill="rgba(212,160,23,.15)" stroke="rgba(212,160,23,.4)" stroke-width="1" class="sku-dot" data-tip="Boldfit Plant Protein · Zone B"/>
+                <circle cx="480" cy="95" r="12" fill="rgba(212,160,23,.14)" stroke="rgba(212,160,23,.38)" stroke-width="1" class="sku-dot" data-tip="YogaBar Protein Plus · Zone B"/>
+                <circle cx="350" cy="145" r="10" fill="rgba(212,160,23,.12)" stroke="rgba(212,160,23,.3)" stroke-width="1" class="sku-dot" data-tip="The Whole Truth Protein · Zone B"/>
+
+                <!-- Zone D — Blue SKUs -->
+                <circle cx="95" cy="265" r="14" fill="rgba(24,95,165,.15)" stroke="rgba(24,95,165,.35)" stroke-width="1" class="sku-dot" data-tip="Regional Organic Sattu Drink · Zone D"/>
+                <circle cx="145" cy="300" r="11" fill="rgba(24,95,165,.12)" stroke="rgba(24,95,165,.3)" stroke-width="1" class="sku-dot" data-tip="Ayurvedic Functional Decoction · Zone D"/>
+                <circle cx="200" cy="260" r="10" fill="rgba(24,95,165,.1)" stroke="rgba(24,95,165,.25)" stroke-width="1" class="sku-dot" data-tip="Herbal Wellness RTD · Zone D"/>
+
+                <!-- Zone C — Whitespace Star -->
+                <text x="410" y="275" text-anchor="middle" font-size="38" fill="rgba(212,160,23,.9)">★</text>
+                <circle cx="410" cy="273" r="32" fill="none" stroke="rgba(15,110,86,.4)" stroke-width="2" stroke-dasharray="6 3"/>
+
+                <!-- Your Product Target -->
+                <circle cx="445" cy="310" r="12" fill="rgba(15,110,86,.25)" stroke="var(--teal)" stroke-width="2.5"/>
+                <circle cx="445" cy="310" r="5" fill="var(--teal)"/>
+                <text x="445" y="330" text-anchor="middle" font-size="9" fill="var(--teal)" font-family="DM Sans" font-weight="700">YOUR PRODUCT</text>
+
+                <!-- Axes -->
+                <line x1="50" y1="352" x2="530" y2="352" stroke="#ccc" stroke-width="1"/>
+                <line x1="38" y1="20" x2="38" y2="352" stroke="#ccc" stroke-width="1"/>
+                <text x="290" y="362" text-anchor="middle" font-size="10" fill="#888" font-family="DM Sans">Consumer Desire Intensity →</text>
+                <text x="22" y="186" text-anchor="middle" font-size="10" fill="#888" font-family="DM Sans" transform="rotate(-90,22,186)">← Competitive Density</text>
+                <text x="50" y="17" font-size="9" fill="#aaa" font-family="DM Sans">High</text>
+                <text x="50" y="349" font-size="9" fill="#aaa" font-family="DM Sans">Low</text>
+                <text x="50" y="362" font-size="9" fill="#aaa" font-family="DM Sans">Low</text>
+                <text x="500" y="362" font-size="9" fill="#aaa" font-family="DM Sans">High</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="results-sidebar">
+            <div class="section-label">Recommended Positioning Pockets™</div>
+
+            <div class="whitespace-card zone-c selected" onclick="selectPocket(this, 'pocket1')">
+              <div class="ws-card-header">
+                <div>
+                  <div class="ws-card-score" style="color:var(--teal)">94</div>
+                  <div style="font-size:10px;color:var(--ink3);font-weight:600">OPPORTUNITY SCORE</div>
+                </div>
+                <div class="ws-card-badge badge-rec">★ Recommended</div>
+              </div>
+              <div class="ws-card-title">Performance + Daily Ritual</div>
+              <div class="ws-card-desc">High-desire zone with 0 direct competitors using this exact claim intersection. Ritual framing + functional protein = defensible unowned territory.</div>
+              <div class="ws-card-tags">
+                <span class="ws-tag" style="background:var(--teal-lt);color:var(--teal)">Zone C</span>
+                <span class="ws-tag" style="background:var(--gray-lt);color:var(--ink3)">0 direct competitors</span>
+                <span class="ws-tag" style="background:var(--teal-lt);color:var(--teal)">High desire</span>
+              </div>
+            </div>
+
+            <div class="whitespace-card zone-b" onclick="selectPocket(this, 'pocket2')">
+              <div class="ws-card-header">
+                <div>
+                  <div class="ws-card-score" style="color:var(--gold)">71</div>
+                  <div style="font-size:10px;color:var(--ink3);font-weight:600">OPPORTUNITY SCORE</div>
+                </div>
+                <div class="ws-card-badge badge-alt">Alternative</div>
+              </div>
+              <div class="ws-card-title">Adaptogen + Active Recovery</div>
+              <div class="ws-card-desc">Moderate whitespace with 3 competitors nearby. Requires sharp packaging format differentiation (e.g. RTD cold brew) to command leadership.</div>
+              <div class="ws-card-tags">
+                <span class="ws-tag" style="background:var(--gold-lt);color:#7A4F00">Zone B</span>
+                <span class="ws-tag" style="background:var(--gray-lt);color:var(--ink3)">3 nearby SKUs</span>
+                <span class="ws-tag" style="background:var(--gold-lt);color:#7A4F00">High desire</span>
+              </div>
+            </div>
+
+            <div class="card-sm" style="background:var(--red-lt);border-color:#e8aaaa">
+              <div style="font-size:10px;font-weight:700;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">⚠ Avoid — Zone A Saturated</div>
+              <div style="font-size:12px;color:var(--ink2);line-height:1.55"><strong>"Clean Protein"</strong> and <strong>"Plant Powered"</strong> are used by 22+ SKUs in this tier. Entering here requires 10× media spend to penetrate.</div>
+            </div>
+
+            <button class="btn btn-primary" style="width:100%" onclick="goto('s-vp-gen')">Generate VPs for Pocket 1 →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════
+           S5 · VP GENERATOR
+      ════════════════════════ -->
+      <section class="screen" id="s-vp-gen">
+        <div class="flex-between mb-4">
+          <div>
+            <div class="page-title">Value Proposition Generator</div>
+            <div class="page-sub" style="margin-bottom:0">Whitespace Zone: <strong>Performance + Daily Ritual</strong> · Target Persona: Urban Millennials · Confidence Threshold: 75+</div>
+          </div>
+          <button class="btn btn-primary" onclick="goto('s-brief')">Build Positioning Brief →</button>
+        </div>
+
+        <div class="vp-layout">
+          <div class="vp-list">
+
+            <!-- VP 1 — TOP -->
+            <div class="vp-card top selected" id="vp1-card" onclick="selectVP(this, 91, 'Fuel your ritual. Power your day.')">
+              <div class="flex-between" style="margin-bottom:8px">
+                <span class="vp-pci-badge pci-high">PCI™ 91 — Launch Ready</span>
+                <span class="pill pill-green">★ Top Recommendation</span>
+              </div>
+              <div class="vp-claim" id="vp1-claim-text">"Fuel your ritual. Power your day."</div>
+              <div class="vp-scores">
+                <div class="score-item">
+                  <div class="score-label">Emotional Pull</div>
+                  <div class="score-bar"><div class="score-fill teal" style="width:88%"></div></div>
+                  <div class="score-pct">88%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Novelty</div>
+                  <div class="score-bar"><div class="score-fill teal" style="width:94%"></div></div>
+                  <div class="score-pct">94%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Persona Fit</div>
+                  <div class="score-bar"><div class="score-fill teal" style="width:95%"></div></div>
+                  <div class="score-pct">95%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Comp. Gap</div>
+                  <div class="score-bar"><div class="score-fill teal" style="width:89%"></div></div>
+                  <div class="score-pct">89%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Freshness</div>
+                  <div class="score-bar"><div class="score-fill teal" style="width:91%"></div></div>
+                  <div class="score-pct">91%</div>
+                </div>
+              </div>
+              <div class="vp-flags">
+                <div class="flag flag-ok"><span class="flag-icon">✓</span> Zero category competitors use "ritual" + "fuel" combination</div>
+                <div class="flag flag-ok"><span class="flag-icon">✓</span> Ritual framing resonates 2.3× higher with urban millennials than clinical claims</div>
+              </div>
+            </div>
+
+            <!-- VP 2 — MID -->
+            <div class="vp-card" id="vp2-card" onclick="selectVP(this, 78, 'Your body. Your protein. Naturally.')">
+              <div class="flex-between" style="margin-bottom:8px">
+                <span class="vp-pci-badge pci-high" style="background:var(--gold-lt);color:#825900">PCI™ 78 — Refinement Suggested</span>
+                <span class="pill pill-amber">Consider</span>
+              </div>
+              <div class="vp-claim" id="vp2-claim-text">"Your body. Your protein. Naturally."</div>
+              <div class="vp-scores">
+                <div class="score-item">
+                  <div class="score-label">Emotional Pull</div>
+                  <div class="score-bar"><div class="score-fill gold" style="width:76%"></div></div>
+                  <div class="score-pct">76%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Novelty</div>
+                  <div class="score-bar"><div class="score-fill gold" style="width:72%"></div></div>
+                  <div class="score-pct">72%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Persona Fit</div>
+                  <div class="score-bar"><div class="score-fill gold" style="width:84%"></div></div>
+                  <div class="score-pct">84%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Comp. Gap</div>
+                  <div class="score-bar"><div class="score-fill gold" style="width:68%"></div></div>
+                  <div class="score-pct">68%</div>
+                </div>
+              </div>
+              <div class="vp-flags">
+                <div class="flag flag-warn"><span class="flag-icon">⚠</span> "Naturally" used by 8 competitors — moderate saturation risk</div>
+              </div>
+            </div>
+
+            <!-- VP 3 — Saturated -->
+            <div class="vp-card warn" id="vp3-card" onclick="selectVP(this, 43, '25g protein. Clinically proven. Clean label.')">
+              <div class="flex-between" style="margin-bottom:8px">
+                <span class="vp-pci-badge" style="background:var(--accent-lt);color:var(--accent)">PCI™ 43 — Rework Required</span>
+                <span class="pill pill-red">⚠ Overcrowded</span>
+              </div>
+              <div class="vp-claim" id="vp3-claim-text">"25g protein. Clinically proven. Clean label."</div>
+              <div class="vp-scores">
+                <div class="score-item">
+                  <div class="score-label">Emotional Pull</div>
+                  <div class="score-bar"><div class="score-fill red" style="width:32%"></div></div>
+                  <div class="score-pct">32%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Novelty</div>
+                  <div class="score-bar"><div class="score-fill red" style="width:28%"></div></div>
+                  <div class="score-pct">28%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Persona Fit</div>
+                  <div class="score-bar"><div class="score-fill red" style="width:38%"></div></div>
+                  <div class="score-pct">38%</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-label">Comp. Gap</div>
+                  <div class="score-bar"><div class="score-fill red" style="width:18%"></div></div>
+                  <div class="score-pct">18%</div>
+                </div>
+              </div>
+              <div class="vp-flags">
+                <div class="flag flag-danger"><span class="flag-icon">✗</span> Persona Misalignment: clinical framing scores 3.1× lower for target cohort</div>
+                <div class="flag flag-danger"><span class="flag-icon">✗</span> "Clean label" is already claimed by 19 competitor SKUs</div>
+              </div>
+            </div>
+
+            <!-- Interactive Claim Forge Editor -->
+            <div class="claim-editor-box">
+              <label>⚡ Test & Rescore a Custom Value Proposition in Real Time:</label>
+              <div class="claim-editor-row">
+                <input class="form-input" id="custom-claim-input" type="text" value="Fuel your ritual. Power your day." placeholder="Enter your own claim to rescore…">
+                <button class="btn btn-teal btn-sm" onclick="rescoreCustomClaim()">Rescore Claim</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right panel — live PCI meter -->
+          <div class="rhs-panel">
+            <div class="pci-meter">
+              <div class="section-label" style="margin-bottom:12px">Positioning Confidence Index™</div>
+              <div class="pci-ring-wrap">
+                <svg class="pci-ring-svg" width="104" height="104" viewBox="0 0 100 100">
+                  <circle class="pci-ring-bg" cx="50" cy="50" r="42"/>
+                  <circle class="pci-ring-fill" id="pci-ring" cx="50" cy="50" r="42" style="stroke-dashoffset:25"/>
+                </svg>
+                <div class="pci-num">
+                  <div class="n" id="pci-display">91</div>
+                  <div class="s">/ 100</div>
+                </div>
+              </div>
+              <div class="pill pill-green" id="pci-status-pill" style="margin-bottom:4px">Launch Ready</div>
+              <div style="font-size:11px;color:var(--ink3);margin-top:6px">PCI ≥ 75 indicates validated launch viability.<br>Select any VP card or test custom claims.</div>
+            </div>
+
+            <div class="card-sm">
+              <div class="section-label" style="margin-bottom:12px">Dimension Breakdown</div>
+              <div id="dim-breakdown">
+                <div class="dim-row"><span class="dim-label">Emotional Pull</span><span class="dim-val" id="d-pull" style="color:var(--teal)">88%</span></div>
+                <div class="dim-bar-wrap"><div class="dim-bar" id="db-pull" style="width:88%;background:var(--teal)"></div></div>
+                <div class="dim-row"><span class="dim-label">Novelty Score</span><span class="dim-val" id="d-nov" style="color:var(--teal)">94%</span></div>
+                <div class="dim-bar-wrap"><div class="dim-bar" id="db-nov" style="width:94%;background:var(--teal)"></div></div>
+                <div class="dim-row"><span class="dim-label">Persona Fit</span><span class="dim-val" id="d-fit" style="color:var(--teal)">95%</span></div>
+                <div class="dim-bar-wrap"><div class="dim-bar" id="db-fit" style="width:95%;background:var(--teal)"></div></div>
+                <div class="dim-row"><span class="dim-label">Competitive Gap</span><span class="dim-val" id="d-gap" style="color:var(--teal)">89%</span></div>
+                <div class="dim-bar-wrap"><div class="dim-bar" id="db-gap" style="width:89%;background:var(--teal)"></div></div>
+                <div class="dim-row"><span class="dim-label">Claim Freshness</span><span class="dim-val" id="d-fresh" style="color:var(--teal)">91%</span></div>
+                <div class="dim-bar-wrap" style="margin-bottom:0"><div class="dim-bar" id="db-fresh" style="width:91%;background:var(--teal)"></div></div>
+              </div>
+            </div>
+
+            <div class="card-sm" style="background:var(--gold-lt);border-color:#e8c96b">
+              <div style="font-size:10px;font-weight:700;color:#7A4F00;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Selected Whitespace</div>
+              <div style="font-size:18px;font-family:'DM Serif Display',serif;color:var(--teal);margin-bottom:4px">Zone C ★</div>
+              <div style="font-size:12px;color:#5C3D00;line-height:1.55">High consumer desire · Low competitive density · 0 direct competitor SKUs at this claim intersection.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════
+           S6 · POSITIONING BRIEF
+      ════════════════════════ -->
+      <section class="screen" id="s-brief">
+        <div class="flex-between mb-4">
+          <div>
+            <div class="page-title" id="brief-title">Positioning Brief — <em id="brief-concept-em">Plant-Based Protein Drink</em></div>
+            <div class="page-sub" id="brief-sub" style="margin-bottom:0">Decision-ready brief · Verified via Ai Palette 500M+ signal spine · India · Mid-tier</div>
+          </div>
+          <div class="flex-gap">
+            <button class="btn btn-secondary" onclick="copyBriefText()">⎘ Copy Brief</button>
+            <button class="btn btn-primary" onclick="printBrief()">↓ Download PDF</button>
+          </div>
+        </div>
+
+        <div class="brief-hero">
+          <div class="eyebrow" id="brief-hero-eyebrow">Recommended Hero Claim · PCI™ 91 · Zone C Whitespace</div>
+          <div class="claim" id="brief-hero-claim">"Fuel your ritual. <em>Power your day.</em>"</div>
+          <div class="brief-pci-row">
+            <div class="brief-pci-pill" id="brief-hero-pill">PCI™ 91 — Launch Ready</div>
+            <div class="brief-pci-bar"><div class="brief-pci-fill" id="brief-hero-fill" style="width:91%"></div></div>
+            <div class="brief-zone" id="brief-hero-zone">★ Zone C Whitespace</div>
+          </div>
+        </div>
+
+        <div class="brief-layout mt-4">
+
+          <div class="brief-section">
+            <h4>Claim Hierarchy™</h4>
+            <div class="claim-tier tier1">
+              <div class="claim-tier-label" style="color:var(--teal)">Tier 1 — Hero Claim</div>
+              <div class="claim-tier-text" id="tier1-text">"Fuel your ritual. Power your day."</div>
+            </div>
+            <div class="claim-tier tier2">
+              <div class="claim-tier-label" style="color:var(--gold)">Tier 2 — Supporting Claims</div>
+              <div class="claim-tier-text" id="tier2-text">25g plant-powered protein per serve · Ashwagandha for daily resilience · No artificial sweeteners</div>
+            </div>
+            <div class="claim-tier tier3">
+              <div class="claim-tier-label" style="color:var(--blue)">Tier 3 — Proof Points & Formulation</div>
+              <div class="claim-tier-text" id="tier3-text">Complete amino acid profile from pea + rice blend · Clinically-studied ashwagandha (KSM-66®, 300mg) · FSSAI compliant</div>
+            </div>
+          </div>
+
+          <div class="brief-section">
+            <h4>Risk Flags & Mitigations (2)</h4>
+            <div class="risk-row warn">
+              <span style="flex-shrink:0">⚠</span>
+              <div><strong>Packaging Visual Direction:</strong> Ensure the "ritual" theme is expressed through warm, earthy packaging — clinical white aesthetics reduce perceived taste appeal by ~18%.</div>
+            </div>
+            <div class="risk-row warn">
+              <span style="flex-shrink:0">⚠</span>
+              <div><strong>Price Anchoring:</strong> At ₹80–120 price tier, explicitly highlight the dual benefit (functional energy + clean protein) to anchor premium value.</div>
+            </div>
+            <div class="risk-row ok" style="margin-top:8px">
+              <span style="flex-shrink:0">✓</span>
+              <div>Hero claim is completely unoccupied by any SKU in the mapped competitive category.</div>
+            </div>
+          </div>
+
+          <div class="brief-section">
+            <h4>Reasons to Believe (RTBs)</h4>
+            <div class="rtb-item"><div class="rtb-dot"></div><div class="rtb-text" id="rtb-1">25g complete plant protein (pea + rice) per serve — matches active gym-goer daily benchmark</div></div>
+            <div class="rtb-item"><div class="rtb-dot"></div><div class="rtb-text" id="rtb-2">KSM-66® Ashwagandha (300mg) — gold-standard clinical adaptogen for stress reduction & cortisol balance</div></div>
+            <div class="rtb-item"><div class="rtb-dot"></div><div class="rtb-text" id="rtb-3">Zero artificial sweeteners — naturally sweetened with monk fruit; clean label formulation</div></div>
+            <div class="rtb-item"><div class="rtb-dot"></div><div class="rtb-text" id="rtb-4">Ready-To-Drink (RTD) format — seamless ritual convenience; zero mixing required</div></div>
+          </div>
+
+          <div class="brief-section">
+            <h4>Next Actions</h4>
+            <div class="next-actions">
+              <div class="action-item" onclick="showNotif('Packaging design brief initialized')"><span class="action-icon">🎨</span> Brief packaging team on Ritual visual direction</div>
+              <div class="action-item" onclick="showNotif('Brief exported to creative agency!')"><span class="action-icon">📤</span> Send brief to creative agency partner</div>
+              <div class="action-item" onclick="showNotif('Screen Winner virtual testing session started')"><span class="action-icon">🧪</span> Run virtual concept test in Screen Winner</div>
+              <div class="action-item" onclick="goto('s-new-analysis')"><span class="action-icon">＋</span> Start a new ValueForge analysis</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="export-bar">
+          <p id="export-bar-label"><strong>ValueForge™ Positioning Brief</strong> · Plant-Based Protein Drink · India · PCI 91 · Launch Ready</p>
+          <div class="export-btns">
+            <button class="btn btn-secondary btn-sm" onclick="exportBriefJSON()">Download JSON</button>
+            <button class="btn btn-teal btn-sm" onclick="copyBriefText()">⎘ Copy Markdown</button>
+            <button class="btn btn-primary btn-sm" onclick="printBrief()">↓ Download PDF</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════
+           S-HISTORY
+      ════════════════════════ -->
+      <section class="screen" id="s-history">
+        <div class="page-title">Analysis History</div>
+        <div class="page-sub">All past ValueForge™ differentiation analyses run on your account.</div>
+        <div class="card">
+          <table class="recent-table">
+            <thead>
+              <tr><th>Date</th><th>Product Concept</th><th>Category</th><th>PCI</th><th>Zone</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Current</td><td><strong>Plant-Based Protein Drink</strong></td><td>Functional Beverages</td>
+                <td><span class="pci-pill pci-high">88</span></td>
+                <td><span class="zone-dot" style="background:var(--teal)"></span>C</td>
+                <td><button class="btn btn-secondary btn-sm" onclick="loadPreset('protein');goto('s-brief')">View Brief</button></td>
+              </tr>
+              <tr>
+                <td>May 2025</td><td><strong>Daily Ritual Green Tea</strong></td><td>Hot Beverages</td>
+                <td><span class="pci-pill pci-high">91</span></td>
+                <td><span class="zone-dot" style="background:var(--teal)"></span>C</td>
+                <td><button class="btn btn-secondary btn-sm" onclick="loadPreset('tea');goto('s-brief')">View Brief</button></td>
+              </tr>
+              <tr>
+                <td>May 2025</td><td><strong>Probiotic Snack Bar</strong></td><td>Snacks & Bars</td>
+                <td><span class="pci-pill pci-mid">74</span></td>
+                <td><span class="zone-dot" style="background:var(--gold)"></span>B</td>
+                <td><button class="btn btn-secondary btn-sm" onclick="loadPreset('bar');goto('s-brief')">View Brief</button></td>
+              </tr>
+              <tr>
+                <td>Apr 2025</td><td><strong>Adaptogenic Coffee Blend</strong></td><td>Hot Beverages</td>
+                <td><span class="pci-pill pci-low">41</span></td>
+                <td><span class="zone-dot" style="background:var(--red)"></span>A</td>
+                <td><button class="btn btn-secondary btn-sm" onclick="loadPreset('coffee');goto('s-brief')">Rework</button></td>
+              </tr>
+              <tr>
+                <td>Apr 2025</td><td><strong>Coconut Collagen Water</strong></td><td>Functional Beverages</td>
+                <td><span class="pci-pill pci-high">82</span></td>
+                <td><span class="zone-dot" style="background:var(--teal)"></span>C</td>
+                <td><button class="btn btn-secondary btn-sm" onclick="showNotif('Loaded Coconut Collagen Water analysis')">View Brief</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div><!-- /screen-area -->
+  </main>
+</div><!-- /shell -->
+
+<!-- Notification toast -->
+<div class="notification" id="notif">
+  <span class="n-icon">✓</span>
+  <span id="notif-text">Done!</span>
+</div>
+
+<script>
+// ── STATE MANAGEMENT ─────────────────────────────────
+const state = {
+  concept: "Plant-Based Protein Drink",
+  category: "Functional Beverages",
+  market: "India",
+  price: "Mid (₹80–120)",
+  channel: "Modern Trade + E-Commerce",
+  personas: ["Urban Millennials (25–34)"],
+  ingredients: ["Pea Protein", "Ashwagandha"],
+  activeVP: {
+    claim: "Fuel your ritual. Power your day.",
+    pci: 91,
+    zone: "Zone C Whitespace",
+    color: "var(--teal)",
+    label: "Launch Ready",
+    pull: 88, nov: 94, fit: 95, gap: 89, fresh: 91
+  },
+  currentPersona: "priya"
+};
+
+const personas = {
+  priya: {
+    name: "Priya Sharma",
+    avatar: "PS",
+    role: "Sr. Brand Manager · HUL",
+    welcome: "Welcome back, Priya.",
+    desc: "You have 2 analyses in progress. Your category Positioning Confidence Index™ stands at 88 / 100 — launch ready."
+  },
+  david: {
+    name: "David Chen",
+    avatar: "DC",
+    role: "Head of Innovation & R&D · Bangkok",
+    welcome: "Welcome back, David.",
+    desc: "Validate claim-formulation alignment early before committing R&D capex. 4 whitespace formulation pockets detected."
+  },
+  aigerim: {
+    name: "Aigerim Bekova",
+    avatar: "AB",
+    role: "Consumer Insights Director · Dubai",
+    welcome: "Welcome back, Aigerim.",
+    desc: "Evaluate methodology and explainability across 100+ synthetic cohorts. All scores grounded in 500M+ Ai Palette consumer signals."
+  }
+};
+
+const presets = {
+  protein: {
+    concept: "Plant-Based Protein Drink",
+    category: "Functional Beverages",
+    market: "India",
+    price: "Mid (₹80–120)",
+    channel: "Modern Trade + E-Commerce",
+    personas: ["Urban Millennials (25–34)"],
+    ingredients: ["Pea Protein", "Ashwagandha"],
+    claim: "Fuel your ritual. Power your day.",
+    pci: 91,
+    tier2: "25g plant-powered protein per serve · Ashwagandha for daily resilience · No artificial sweeteners",
+    tier3: "Complete amino acid profile from pea + rice blend · Clinically-studied ashwagandha (KSM-66®, 300mg) · FSSAI compliant",
+    rtbs: [
+      "25g complete plant protein (pea + rice) per serve — matches active gym-goer daily benchmark",
+      "KSM-66® Ashwagandha (300mg) — gold-standard clinical adaptogen for stress reduction & cortisol balance",
+      "Zero artificial sweeteners — naturally sweetened with monk fruit; clean label formulation",
+      "Ready-To-Drink (RTD) format — seamless ritual convenience; zero mixing required"
+    ]
+  },
+  tea: {
+    concept: "Daily Ritual Green Tea",
+    category: "Hot Beverages",
+    market: "India",
+    price: "Premium (₹150–300)",
+    channel: "Modern Trade + E-Commerce",
+    personas: ["Wellness Women 28–38"],
+    ingredients: ["Japanese Matcha", "Tulsi Extract"],
+    claim: "Calm mindfulness for the modern morning.",
+    pci: 91,
+    tier2: "Ceremonial-grade shade-grown matcha · Holy basil adaptogenic support · Slow-release sustained focus",
+    tier3: "35mg natural L-theanine per serve · Tested for heavy metals and pesticides · Biodegradable pyramid bags",
+    rtbs: [
+      "100% single-origin Japanese matcha sourced from Kagoshima estate",
+      "Standardized Tulsi bio-actives proven to enhance mental clarity without caffeine crash",
+      "Clean ritual convenience: 90-second steep with zero bitterness profile",
+      "No added flavoring or artificial masking agents"
+    ]
+  },
+  bar: {
+    concept: "Probiotic Snack Bar",
+    category: "Snacks & Bars",
+    market: "India",
+    price: "Mid (₹80–120)",
+    channel: "Modern Trade + E-Commerce",
+    personas: ["Health-Conscious Parents"],
+    ingredients: ["Bacillus Coagulans", "Rolled Oats", "Almond Butter"],
+    claim: "Gut harmony for whole-family vitality.",
+    pci: 74,
+    tier2: "1 Billion spore-forming live probiotics · Prebiotic fiber from chicory root · 100% whole grain oats",
+    tier3: "Heat-stable GanedenBC30® strain survives baking and stomach acid · Zero added refined cane sugar",
+    rtbs: [
+      "Patented shelf-stable probiotic strain with 25+ peer-reviewed clinical studies",
+      "Kid-friendly cocoa almond crunch with natural sweetness from dates",
+      "5g dietary prebiotic fiber supporting digestive microbiome diversity",
+      "Convenient lunchbox & post-school snack packaging format"
+    ]
+  },
+  coffee: {
+    concept: "Adaptogenic Coffee Blend",
+    category: "Hot Beverages",
+    market: "India",
+    price: "Premium (₹150–300)",
+    channel: "D2C Online",
+    personas: ["Busy Professionals"],
+    ingredients: ["Arabica Beans", "Lion's Mane", "Chaga Mushroom"],
+    claim: "Sharper focus. Zero jitters.",
+    pci: 41,
+    tier2: "Single-origin Arabica dark roast · Dual-extracted mushroom nootropics · Stomach-gentle low acidity",
+    tier3: "500mg organic lion's mane fruiting body extract · Lab-verified beta-glucan content (>25%)",
+    rtbs: [
+      "100% Specialty Arabica beans shade-grown at high altitude in Coorg",
+      "Organic Lion's Mane dual extract supporting nerve growth factor (NGF)",
+      "Notice: High semantic crowding with 22+ existing functional coffee SKUs",
+      "Requires positioning pivot to ritual calm or evening decaf to break through"
+    ]
+  }
+};
+
+// ── NAVIGATION ─────────────────────────────────────
+const breadcrumbs = {
+  's-dashboard':    ['Dashboard', 'Dashboard'],
+  's-new-analysis': ['New Analysis', 'Step 1: Define Concept'],
+  's-processing':   ['New Analysis', 'Running Analysis…'],
+  's-whitespace':   ['New Analysis', 'Step 2: Whitespace Map'],
+  's-vp-gen':       ['New Analysis', 'Step 3: Value Proposition Generator'],
+  's-brief':        ['New Analysis', 'Step 4: Positioning Brief'],
+  's-history':      ['History', 'Analysis History']
+};
+
+function goto(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(id);
+  if(target) target.classList.add('active');
+
+  // update sidebar active state
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navMap = {
+    's-dashboard':'Dashboard','s-new-analysis':'New Analysis','s-history':'History',
+    's-whitespace':'Whitespace Map','s-vp-gen':'VP Generator','s-brief':'Positioning Brief'
+  };
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if(n.textContent.trim().includes(navMap[id] || '')) n.classList.add('active');
+  });
+
+  // breadcrumb
+  if(breadcrumbs[id]) {
+    document.getElementById('breadcrumb').innerHTML =
+      `ValueForge™ › <span>${breadcrumbs[id][1]}</span>`;
+  }
+
+  // scroll to top
+  const screenArea = document.querySelector('.screen-area');
+  if(screenArea) screenArea.scrollTop = 0;
+
+  // close sidebar on mobile if open
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ── PERSONA SWITCHER ─────────────────────────────────
+function switchPersona(key) {
+  const p = personas[key] || personas.priya;
+  state.currentPersona = key;
+  document.getElementById('sidebar-name').textContent = p.name;
+  document.getElementById('sidebar-avatar').textContent = p.avatar;
+  document.getElementById('sidebar-role').textContent = p.role;
+  document.getElementById('dash-welcome').textContent = p.welcome;
+  document.getElementById('dash-desc').textContent = p.desc;
+  showNotif(`Switched active persona to ${p.name}`);
+}
+
+// ── PRESET LOADER ────────────────────────────────────
+function loadPreset(key) {
+  const p = presets[key];
+  if(!p) return;
+  state.concept = p.concept;
+  state.category = p.category;
+  state.market = p.market;
+  state.price = p.price;
+  state.channel = p.channel;
+  state.activeVP.claim = p.claim;
+  state.activeVP.pci = p.pci;
+
+  document.getElementById('input-concept').value = p.concept;
+  document.getElementById('input-category').value = p.category;
+  document.getElementById('input-market').value = p.market;
+  document.getElementById('input-price').value = p.price;
+  document.getElementById('input-channel').value = p.channel;
+
+  // populate ingredients
+  const container = document.getElementById('ingredient-tags');
+  container.innerHTML = '';
+  p.ingredients.forEach(ing => {
+    const tag = document.createElement('span');
+    tag.className = 'ingredient-tag';
+    tag.innerHTML = `${ing} <button onclick="removeTag(this)">×</button>`;
+    container.appendChild(tag);
+  });
+
+  // update brief text elements
+  document.getElementById('brief-concept-em').textContent = p.concept;
+  document.getElementById('brief-sub').textContent = `Decision-ready brief · ${p.category} · ${p.market} · ${p.price}`;
+  document.getElementById('brief-hero-claim').innerHTML = `"${p.claim}"`;
+  document.getElementById('tier1-text').textContent = `"${p.claim}"`;
+  document.getElementById('tier2-text').textContent = p.tier2;
+  document.getElementById('tier3-text').textContent = p.tier3;
+  document.getElementById('rtb-1').textContent = p.rtbs[0];
+  document.getElementById('rtb-2').textContent = p.rtbs[1];
+  document.getElementById('rtb-3').textContent = p.rtbs[2];
+  document.getElementById('rtb-4').textContent = p.rtbs[3];
+
+  updatePCIGauges(p.pci, p.claim);
+  showNotif(`Loaded preset: ${p.concept}`);
+}
+
+// ── PROCESSING ANIMATION ────────────────────────────
+function startProcessing() {
+  // Pull values from inputs
+  state.concept = document.getElementById('input-concept').value.trim() || "Product Concept";
+  state.category = document.getElementById('input-category').value;
+  state.market = document.getElementById('input-market').value;
+  state.price = document.getElementById('input-price').value;
+
+  // Sync to Whitespace & Brief titles
+  document.getElementById('ws-category-em').textContent = `${state.category} · ${state.market}`;
+  document.getElementById('ws-sub').textContent = `38–47 category SKUs mapped for "${state.concept}". 2 Positioning Pockets™ identified.`;
+  document.getElementById('brief-concept-em').textContent = state.concept;
+  document.getElementById('brief-sub').textContent = `Decision-ready brief · ${state.category} · ${state.market} · ${state.price}`;
+
+  goto('s-processing');
+  const steps = ['ps1','ps2','ps3','ps4','ps5'];
+  const fills = ['pf1','pf2','pf3','pf4','pf5'];
+
+  steps.forEach((s, idx) => {
+    document.getElementById(s).className = 'process-step';
+    document.getElementById(fills[idx]).style.width = '0%';
+  });
+
+  function runStep(idx) {
+    if(idx >= steps.length) {
+      setTimeout(() => goto('s-whitespace'), 400);
+      return;
+    }
+    const el = document.getElementById(steps[idx]);
+    const fill = document.getElementById(fills[idx]);
+    el.className = 'process-step running';
+    let pct = 0;
+    const iv = setInterval(() => {
+      pct += 6;
+      fill.style.width = pct + '%';
+      if(pct >= 100) {
+        clearInterval(iv);
+        el.className = 'process-step done';
+        setTimeout(() => runStep(idx + 1), 180);
+      }
+    }, 20);
+  }
+  setTimeout(() => runStep(0), 300);
+}
+
+// ── CHIPS & INGREDIENT TAGS ──────────────────────────
+function toggleChip(el) {
+  el.classList.toggle('selected');
+}
+
+function addTag() {
+  const inp = document.getElementById('ing-input');
+  const val = inp.value.trim();
+  if(!val) return;
+  const container = document.getElementById('ingredient-tags');
+  const tag = document.createElement('span');
+  tag.className = 'ingredient-tag';
+  tag.innerHTML = `${val} <button onclick="removeTag(this)">×</button>`;
+  container.appendChild(tag);
+  inp.value = '';
+}
+
+function removeTag(btn) {
+  btn.closest('.ingredient-tag').remove();
+}
+
+// ── POCKET SELECTOR ──────────────────────────────────
+function selectPocket(el, pocketId) {
+  document.querySelectorAll('.whitespace-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  showNotif(`Selected ${el.querySelector('.ws-card-title').textContent}`);
+}
+
+// ── VP SELECTION & PCI GAUGES ────────────────────────
+function selectVP(card, score, claimText) {
+  document.querySelectorAll('.vp-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  document.getElementById('custom-claim-input').value = claimText;
+  updatePCIGauges(score, claimText);
+}
+
+function updatePCIGauges(score, claimText) {
+  state.activeVP.pci = score;
+  state.activeVP.claim = claimText;
+
+  const ring = document.getElementById('pci-ring');
+  const disp = document.getElementById('pci-display');
+  const statusPill = document.getElementById('pci-status-pill');
+
+  let strokeColor = "var(--teal)";
+  let statusText = "Launch Ready";
+  let pillClass = "pill pill-green";
+
+  // Calculate circumference: 2 * PI * 42 = ~263.89
+  const dashOffset = Math.max(0, 264 - (score / 100) * 264);
+
+  if(score >= 80) {
+    strokeColor = "var(--teal)";
+    statusText = "Launch Ready";
+    pillClass = "pill pill-green";
+  } else if(score >= 60) {
+    strokeColor = "var(--gold)";
+    statusText = "Refinement Suggested";
+    pillClass = "pill pill-amber";
+  } else {
+    strokeColor = "var(--red)";
+    statusText = "Rework Required";
+    pillClass = "pill pill-red";
+  }
+
+  ring.style.stroke = strokeColor;
+  ring.style.strokeDashoffset = dashOffset;
+  disp.textContent = score;
+  disp.style.color = strokeColor;
+
+  statusPill.textContent = statusText;
+  statusPill.className = pillClass;
+
+  // Breakdown metrics
+  const pull = Math.min(98, Math.max(20, Math.round(score * 0.95)));
+  const nov  = Math.min(99, Math.max(25, Math.round(score * 1.02)));
+  const fit  = Math.min(97, Math.max(28, Math.round(score * 1.04)));
+  const gap  = Math.min(96, Math.max(15, Math.round(score * 0.97)));
+  const fresh= Math.min(98, Math.max(20, Math.round(score)));
+
+  document.getElementById('d-pull').textContent = `${pull}%`;
+  document.getElementById('db-pull').style.width = `${pull}%`;
+  document.getElementById('db-pull').style.background = strokeColor;
+
+  document.getElementById('d-nov').textContent = `${nov}%`;
+  document.getElementById('db-nov').style.width = `${nov}%`;
+  document.getElementById('db-nov').style.background = strokeColor;
+
+  document.getElementById('d-fit').textContent = `${fit}%`;
+  document.getElementById('db-fit').style.width = `${fit}%`;
+  document.getElementById('db-fit').style.background = strokeColor;
+
+  document.getElementById('d-gap').textContent = `${gap}%`;
+  document.getElementById('db-gap').style.width = `${gap}%`;
+  document.getElementById('db-gap').style.background = strokeColor;
+
+  document.getElementById('d-fresh').textContent = `${fresh}%`;
+  document.getElementById('db-fresh').style.width = `${fresh}%`;
+  document.getElementById('db-fresh').style.background = strokeColor;
+
+  // Sync Brief UI
+  document.getElementById('brief-hero-claim').innerHTML = `"${claimText}"`;
+  document.getElementById('tier1-text').textContent = `"${claimText}"`;
+  document.getElementById('brief-hero-pill').textContent = `PCI™ ${score} — ${statusText}`;
+  document.getElementById('brief-hero-pill').style.background = strokeColor;
+  document.getElementById('brief-hero-fill').style.width = `${score}%`;
+  document.getElementById('brief-hero-fill').style.background = strokeColor;
+  document.getElementById('export-bar-label').innerHTML =
+    `<strong>ValueForge™ Positioning Brief</strong> · ${state.concept} · ${state.market} · PCI ${score} · ${statusText}`;
+}
+
+// ── CUSTOM CLAIM RESCORING ───────────────────────────
+function rescoreCustomClaim() {
+  const customClaim = document.getElementById('custom-claim-input').value.trim();
+  if(!customClaim) return;
+
+  // Dynamic heuristic scoring
+  let score = 70;
+  const words = customClaim.toLowerCase();
+  if(words.includes('ritual') || words.includes('harmony') || words.includes('flow') || words.includes('mindful')) score += 15;
+  if(words.includes('fuel') || words.includes('power') || words.includes('vitality')) score += 10;
+  if(words.includes('clean') || words.includes('pure') || words.includes('clinically')) score -= 18;
+  if(words.includes('protein') && words.length > 20) score += 5;
+  if(words.includes('100%') || words.includes('natural')) score -= 8;
+
+  score = Math.min(96, Math.max(35, score));
+  updatePCIGauges(score, customClaim);
+  showNotif(`Rescored claim to PCI ${score}`);
+}
+
+// ── EXPORT ACTIONS ───────────────────────────────────
+function printBrief() {
+  window.print();
+}
+
+function copyBriefText() {
+  const briefText = `# ValueForge™ Positioning Brief
+**Product Concept:** ${state.concept}
+**Category:** ${state.category}
+**Market:** ${state.market}
+**Price Tier:** ${state.price}
+**Positioning Confidence Index™:** ${state.activeVP.pci} / 100 (${state.activeVP.pci >= 75 ? 'Launch Ready' : 'Needs Review'})
+
+---
+### 1. Claim Hierarchy™
+- **Tier 1 (Hero Claim):** "${state.activeVP.claim}"
+- **Tier 2 (Support):** ${document.getElementById('tier2-text').textContent}
+- **Tier 3 (Proof Points):** ${document.getElementById('tier3-text').textContent}
+
+### 2. Reasons to Believe (RTBs)
+1. ${document.getElementById('rtb-1').textContent}
+2. ${document.getElementById('rtb-2').textContent}
+3. ${document.getElementById('rtb-3').textContent}
+4. ${document.getElementById('rtb-4').textContent}
+
+### 3. Whitespace Opportunity
+- **Zone:** Zone C (High Consumer Desire · Low Category Saturation)
+- **Signal Foundation:** Grounded in Ai Palette 500M+ Consumer Signal Database
+`;
+
+  if(navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(briefText).then(() => {
+      showNotif('Brief markdown copied to clipboard!');
+    }).catch(() => {
+      showNotif('Brief text copied!');
+    });
+  } else {
+    showNotif('Brief text ready for export!');
+  }
+}
+
+function exportBriefJSON() {
+  const data = {
+    title: `ValueForge Positioning Brief - ${state.concept}`,
+    timestamp: new Date().toISOString(),
+    concept: state.concept,
+    category: state.category,
+    market: state.market,
+    priceTier: state.price,
+    pciScore: state.activeVP.pci,
+    whitespaceZone: "Zone C Whitespace",
+    heroClaim: state.activeVP.claim,
+    supportClaims: document.getElementById('tier2-text').textContent,
+    proofPoints: document.getElementById('tier3-text').textContent,
+    rtbs: [
+      document.getElementById('rtb-1').textContent,
+      document.getElementById('rtb-2').textContent,
+      document.getElementById('rtb-3').textContent,
+      document.getElementById('rtb-4').textContent
+    ]
+  };
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ValueForge-Brief-${state.concept.replace(/\s+/g,'-')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showNotif('JSON brief downloaded!');
+}
+
+// ── SVG TOOLTIP ──────────────────────────────────────
+document.querySelectorAll('.sku-dot').forEach(dot => {
+  dot.style.cursor = 'pointer';
+  dot.addEventListener('mouseenter', (e) => {
+    const tip = document.getElementById('tooltip');
+    const wrap = dot.closest('.map-svg-wrap');
+    if(!tip || !wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    const svgRect = dot.getBoundingClientRect();
+    tip.textContent = dot.dataset.tip || "Category SKU";
+    tip.style.left = (svgRect.left - rect.left + svgRect.width/2) + 'px';
+    tip.style.top = (svgRect.top - rect.top - 42) + 'px';
+    tip.classList.add('visible');
+  });
+  dot.addEventListener('mouseleave', () => {
+    const tip = document.getElementById('tooltip');
+    if(tip) tip.classList.remove('visible');
+  });
+});
+
+// ── NOTIFICATION TOAST ───────────────────────────────
+function showNotif(msg) {
+  const el = document.getElementById('notif');
+  const textEl = document.getElementById('notif-text');
+  if(!el || !textEl) return;
+  textEl.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._hideTimer);
+  el._hideTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
