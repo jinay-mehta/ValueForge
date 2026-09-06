@@ -1,5 +1,13 @@
 import React, { createContext, useContext, useState } from 'react';
-import { PERSONAS, PRESETS, INITIAL_HISTORY } from '../data/mockData';
+import { 
+  CATEGORIES, 
+  PERSONAS, 
+  USER_PERSONAS, 
+  EXAMPLES, 
+  SEED_HISTORY, 
+  runAnalysis, 
+  scoreClaimForTone 
+} from '../data/mockData';
 import confetti from 'canvas-confetti';
 
 const AppContext = createContext(null);
@@ -7,31 +15,29 @@ const AppContext = createContext(null);
 export function AppProvider({ children }) {
   const [screen, setScreen] = useState('dashboard');
   const [activePersonaKey, setActivePersonaKey] = useState('priya');
-  const [historyList, setHistoryList] = useState(INITIAL_HISTORY);
+  const [historyList, setHistoryList] = useState(SEED_HISTORY);
   const [toast, setToast] = useState({ show: false, message: '' });
 
-  // Current analysis state initialized with protein preset
-  const defaultPreset = PRESETS.protein;
-  const [analysis, setAnalysis] = useState({
-    concept: defaultPreset.concept,
-    category: defaultPreset.category,
-    market: defaultPreset.market,
-    price: defaultPreset.price,
-    channel: defaultPreset.channel,
-    personas: defaultPreset.personas,
-    ingredients: defaultPreset.ingredients,
-    activeVP: defaultPreset.vps[0],
-    customClaim: defaultPreset.vps[0].claim,
-    vps: defaultPreset.vps,
-    tier2: defaultPreset.tier2,
-    tier3: defaultPreset.tier3,
-    risks: defaultPreset.risks,
-    rtbs: defaultPreset.rtbs,
-    opportunityScore: defaultPreset.opportunityScore,
-    zone: defaultPreset.zone
-  });
+  // Default initial inputs
+  const defaultInputs = {
+    concept: "Plant-based protein drink",
+    category: "Functional Beverages",
+    market: "India",
+    price: "Mid (₹80–120)",
+    channel: "Modern Trade + E-Commerce",
+    persona: "Urban Millennials (25–34)",
+    ingredients: ["Pea Protein", "Ashwagandha"]
+  };
 
-  const activePersona = PERSONAS[activePersonaKey] || PERSONAS.priya;
+  const [inputs, setInputs] = useState(defaultInputs);
+  const [analysis, setAnalysis] = useState(() => runAnalysis(defaultInputs, 0));
+  const [selectedPocketIdx, setSelectedPocketIdx] = useState(0);
+  const [selectedVpIdx, setSelectedVpIdx] = useState(0);
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareSet, setCompareSet] = useState([0, 1]);
+  const [regenNonce, setRegenNonce] = useState(0);
+
+  const activePersona = USER_PERSONAS[activePersonaKey] || USER_PERSONAS.priya;
 
   const showNotification = (msg) => {
     setToast({ show: true, message: msg });
@@ -41,160 +47,208 @@ export function AppProvider({ children }) {
   };
 
   const switchPersona = (key) => {
-    if (PERSONAS[key]) {
+    if (USER_PERSONAS[key]) {
       setActivePersonaKey(key);
-      showNotification(`Switched persona to ${PERSONAS[key].name}`);
+      showNotification(`Switched persona to ${USER_PERSONAS[key].name}`);
     }
   };
 
-  const loadPreset = (key, targetScreen = null) => {
-    const p = PRESETS[key];
-    if (!p) return;
-    setAnalysis({
-      concept: p.concept,
-      category: p.category,
-      market: p.market,
-      price: p.price,
-      channel: p.channel,
-      personas: p.personas,
-      ingredients: p.ingredients,
-      activeVP: p.vps[0],
-      customClaim: p.vps[0].claim,
-      vps: p.vps,
-      tier2: p.tier2,
-      tier3: p.tier3,
-      risks: p.risks,
-      rtbs: p.rtbs,
-      opportunityScore: p.opportunityScore,
-      zone: p.zone
+  const executeAnalysis = (customInputs = inputs) => {
+    const result = runAnalysis(customInputs, regenNonce);
+    setAnalysis(result);
+    setSelectedPocketIdx(0);
+    setSelectedVpIdx(0);
+    setCompareMode(false);
+    setCompareSet([0, 1]);
+  };
+
+  const regenerateClaims = () => {
+    const nextNonce = regenNonce + 1;
+    setRegenNonce(nextNonce);
+    const result = runAnalysis(inputs, nextNonce);
+    setAnalysis(result);
+    showNotification('Regenerated fresh value proposition candidates.');
+  };
+
+  const editClaimText = (vpIdx, newText) => {
+    if (!analysis) return;
+    const cat = CATEGORIES[analysis.category];
+    const persona = PERSONAS.find(p => p.name === analysis.persona) || PERSONAS[0];
+    const targetVP = analysis.vpCandidates[vpIdx];
+    if (!targetVP) return;
+
+    const rescored = scoreClaimForTone(
+      newText,
+      targetVP.tone,
+      cat,
+      persona,
+      analysis.toneCounts,
+      analysis.maxCount,
+      analysis.inputs,
+      null
+    );
+
+    setAnalysis(prev => {
+      const updatedCandidates = [...prev.vpCandidates];
+      updatedCandidates[vpIdx] = rescored;
+      return {
+        ...prev,
+        vpCandidates: updatedCandidates
+      };
     });
-    showNotification(`Loaded preset: ${p.concept}`);
-    if (targetScreen) {
-      setScreen(targetScreen);
+  };
+
+  const toggleCompareMode = () => {
+    setCompareMode(prev => !prev);
+    if (!compareMode) {
+      showNotification('Compare Mode active. Select two claims to compare.');
     }
   };
 
-  const selectVP = (vp) => {
-    setAnalysis(prev => ({
-      ...prev,
-      activeVP: vp,
-      customClaim: vp.claim
-    }));
+  const toggleCompareSelect = (idx) => {
+    setCompareSet(prev => {
+      if (prev.includes(idx)) {
+        return prev.filter(i => i !== idx);
+      }
+      if (prev.length < 2) {
+        return [...prev, idx];
+      }
+      return [prev[1], idx];
+    });
   };
 
-  const rescoreClaim = (customText) => {
-    if (!customText || !customText.trim()) return;
-    const text = customText.trim();
-    let score = 70;
-    const words = text.toLowerCase();
+  const loadExample = (idx) => {
+    const ex = EXAMPLES[idx];
+    if (!ex) return;
+    const updatedInputs = {
+      ...inputs,
+      concept: ex.concept,
+      category: ex.category,
+      persona: ex.persona,
+      ingredients: [...ex.ingredients]
+    };
+    setInputs(updatedInputs);
+    showNotification(`Loaded example: ${ex.concept}`);
+  };
 
-    if (words.includes('ritual') || words.includes('mindful') || words.includes('harmony') || words.includes('flow')) score += 15;
-    if (words.includes('fuel') || words.includes('power') || words.includes('vitality') || words.includes('energy')) score += 10;
-    if (words.includes('clean') || words.includes('pure') || words.includes('clinically')) score -= 18;
-    if (words.includes('protein') && text.length > 18) score += 6;
-    if (words.includes('100%') || words.includes('natural')) score -= 8;
+  const loadHistoryItem = (conceptName) => {
+    const item = historyList.find(h => h.concept === conceptName);
+    if (!item) return;
+    const updatedInputs = {
+      ...inputs,
+      concept: item.concept,
+      category: item.category,
+      persona: item.persona
+    };
+    setInputs(updatedInputs);
+    const res = runAnalysis(updatedInputs, 0);
+    setAnalysis(res);
+    setScreen('brief');
+    showNotification(`Loaded analysis for ${item.concept}`);
+  };
 
-    score = Math.min(96, Math.max(34, score));
+  const saveToHistory = () => {
+    if (!analysis) return;
+    const activeVP = analysis.vpCandidates[selectedVpIdx] || analysis.vpCandidates[0];
+    const activePocket = analysis.pockets[selectedPocketIdx] || analysis.pockets[0];
 
-    const status = score >= 80 ? 'Launch Ready' : score >= 60 ? 'Refinement Suggested' : 'Rework Required';
-    const pull = Math.min(98, Math.max(20, Math.round(score * 0.95)));
-    const nov  = Math.min(99, Math.max(25, Math.round(score * 1.02)));
-    const fit  = Math.min(97, Math.max(28, Math.round(score * 1.04)));
-    const gap  = Math.min(96, Math.max(15, Math.round(score * 0.97)));
-    const fresh= Math.min(98, Math.max(20, Math.round(score)));
-
-    const updatedVP = {
-      ...analysis.activeVP,
-      claim: text,
-      pci: score,
-      status,
-      pull, nov, fit, gap, fresh
+    const newEntry = {
+      concept: analysis.inputs.concept,
+      category: analysis.category,
+      persona: analysis.persona,
+      pci: activeVP.score,
+      zone: activePocket.zone,
+      status: activeVP.score >= 75 ? 'ready' : activeVP.score >= 50 ? 'progress' : 'rework',
+      date: 'Just now'
     };
 
-    setAnalysis(prev => ({
-      ...prev,
-      activeVP: updatedVP,
-      customClaim: text
-    }));
+    setHistoryList(prev => [newEntry, ...prev.filter(h => h.concept !== newEntry.concept)]);
+  };
 
-    showNotification(`Rescored claim to PCI™ ${score} (${status})`);
+  const exportCSV = () => {
+    if (!analysis) return;
+    const cat = CATEGORIES[analysis.category];
+    const rows = [
+      ['Competitor SKU', 'Category', 'Positioning Tone', 'Saturation Density']
+    ];
+    cat.competitors.forEach(c => {
+      rows.push([
+        `"${c.name}"`,
+        `"${analysis.category}"`,
+        `"${c.tone}"`,
+        `"${analysis.toneCounts[c.tone] || 1}"`
+      ]);
+    });
+    const csvContent = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `ValueForge_${analysis.category.replace(/\s+/g, '_')}_Competitors.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showNotification('Competitor dataset exported to CSV.');
   };
 
   const exportPDF = () => {
     confetti({
-      particleCount: 60,
-      spread: 70,
+      particleCount: 50,
+      spread: 60,
       origin: { y: 0.7 }
     });
-    showNotification('Preparing print-ready executive brief…');
+    saveToHistory();
+    showNotification('Opening printable executive brief…');
     setTimeout(() => {
       window.print();
-    }, 400);
+    }, 300);
   };
 
   const copyMarkdown = () => {
+    if (!analysis) return;
+    const activeVP = analysis.vpCandidates[selectedVpIdx] || analysis.vpCandidates[0];
+    const activePocket = analysis.pockets[selectedPocketIdx] || analysis.pockets[0];
+    const cat = CATEGORIES[analysis.category];
+
     const briefText = `# ValueForge™ Positioning Brief
-**Product Concept:** ${analysis.concept}
+**Product Concept:** ${analysis.inputs.concept}
 **Category:** ${analysis.category}
-**Market:** ${analysis.market}
-**Price Tier:** ${analysis.price}
-**Target Channel:** ${analysis.channel}
-**Positioning Confidence Index™:** ${analysis.activeVP.pci} / 100 (${analysis.activeVP.status})
+**Market:** ${analysis.inputs.market}
+**Target Persona:** ${analysis.persona}
+**Price Tier:** ${analysis.inputs.price}
+**Positioning Confidence Index™:** ${activeVP.score} / 100 (${activeVP.score >= 75 ? 'Launch Ready' : 'Needs Review'})
 
 ---
 ### 1. Claim Hierarchy™
-- **Tier 1 (Hero Claim):** "${analysis.activeVP.claim}"
-- **Tier 2 (Supporting Claims):** ${analysis.tier2}
-- **Tier 3 (Proof Points & Formulations):** ${analysis.tier3}
+- **Tier 1 (Hero Claim):** "${activeVP.claim}"
+- **Tier 2 (Supporting Claims):** Formulated with ${analysis.inputs.ingredients.join(', ') || cat.defaultIngredient} for daily ${cat.benefit}.
+- **Tier 3 (Proof Points):** Standardized bioactive extracts; verified clean ingredient profile; FSSAI compliant.
 
-### 2. Strategic Opportunity
-- **Positioning Pocket Zone:** ${analysis.zone}
-- **Opportunity Score:** ${analysis.opportunityScore} / 100
-- **Validation Engine:** Ai Palette 500M+ Consumer Signal Spine (Synthetic Cohorts)
+### 2. Opportunity Zone & Differentiation
+- **Positioning Pocket:** ${activePocket.title} (Zone ${activePocket.zone})
+- **Opportunity Rationale:** ${activePocket.desc}
+- **Competitive Saturation:** Verified against ${cat.competitors.length} competing SKUs.
 
-### 3. Reasons to Believe (RTBs)
-${analysis.rtbs.map((r, i) => `${i + 1}. ${r}`).join('\n')}
-
-### 4. Key Risks & Mitigations
-${analysis.risks.map(rk => `- [${rk.type.toUpperCase()}] **${rk.title}:** ${rk.desc}`).join('\n')}
+### 3. Risk Flags & Explainability
+${activeVP.flags.map(f => `- [${f.type.toUpperCase()}] ${f.text}`).join('\n')}
 `;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(briefText)
-        .then(() => showNotification('Brief copied to clipboard!'))
+        .then(() => showNotification('Brief markdown copied to clipboard!'))
         .catch(() => showNotification('Brief ready for export.'));
-    } else {
-      showNotification('Brief ready for export.');
     }
   };
 
-  const exportJSON = () => {
-    const data = {
-      title: `ValueForge Positioning Brief - ${analysis.concept}`,
-      generatedAt: new Date().toISOString(),
-      concept: analysis.concept,
-      category: analysis.category,
-      market: analysis.market,
-      priceTier: analysis.price,
-      channel: analysis.channel,
-      pciScore: analysis.activeVP.pci,
-      status: analysis.activeVP.status,
-      whitespaceZone: analysis.zone,
-      heroClaim: analysis.activeVP.claim,
-      tier2Supporting: analysis.tier2,
-      tier3Proof: analysis.tier3,
-      reasonsToBelieve: analysis.rtbs,
-      riskFlags: analysis.risks
-    };
-
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `ValueForge-Brief-${analysis.concept.replace(/\s+/g, '-')}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showNotification('Downloaded JSON brief.');
+  const shareLink = () => {
+    const fakeId = Math.random().toString(36).slice(2, 9);
+    const link = `${window.location.origin}/#brief-${fakeId}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(() => {
+        showNotification('Shareable team link copied to clipboard!');
+      });
+    } else {
+      showNotification('Share link ready!');
+    }
   };
 
   return (
@@ -202,20 +256,32 @@ ${analysis.risks.map(rk => `- [${rk.type.toUpperCase()}] **${rk.title}:** ${rk.d
       value={{
         screen,
         setScreen,
+        inputs,
+        setInputs,
+        analysis,
+        selectedPocketIdx,
+        setSelectedPocketIdx,
+        selectedVpIdx,
+        setSelectedVpIdx,
+        compareMode,
+        compareSet,
+        toggleCompareMode,
+        toggleCompareSelect,
+        editClaimText,
+        regenerateClaims,
+        executeAnalysis,
+        loadExample,
+        loadHistoryItem,
         activePersona,
         activePersonaKey,
         switchPersona,
-        analysis,
-        setAnalysis,
-        loadPreset,
-        selectVP,
-        rescoreClaim,
-        exportPDF,
-        copyMarkdown,
-        exportJSON,
         historyList,
         showNotification,
-        toast
+        toast,
+        exportCSV,
+        exportPDF,
+        copyMarkdown,
+        shareLink
       }}
     >
       {children}

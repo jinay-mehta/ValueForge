@@ -1,12 +1,258 @@
-export const PERSONAS = {
+// ══════════════════════════════════════════════════════════
+// VALUEFORGE™ CATEGORY & COMPETITIVE INTELLIGENCE DATASET
+// ══════════════════════════════════════════════════════════
+
+export const CATEGORIES = {
+  "Functional Beverages": {
+    benefit: "energy",
+    moment: "morning",
+    defaultIngredient: "plant protein",
+    competitors: [
+      { name: "Herbalife Protein Shake", tone: "clinical" },
+      { name: "MuscleBlaze Whey", tone: "clinical" },
+      { name: "Fast&Up Protein", tone: "clinical" },
+      { name: "Amway Protein", tone: "clinical" },
+      { name: "Ensure Plus", tone: "clinical" },
+      { name: "Protinex Daily", tone: "convenience" },
+      { name: "RiteBite Fuel Shake", tone: "convenience" },
+      { name: "OZiva Plant Protein", tone: "social" },
+      { name: "Bevzilla Cold Brew Protein", tone: "social" },
+      { name: "Yakult Original", tone: "convenience" }
+    ],
+    saturatedClaims: [
+      "25g protein",
+      "clean label",
+      "no added sugar",
+      "plant-powered",
+      "clinically tested",
+      "clinically proven"
+    ]
+  },
+  "Hot Beverages": {
+    benefit: "calm",
+    moment: "evening",
+    defaultIngredient: "ashwagandha",
+    competitors: [
+      { name: "Tetley Green Tea", tone: "clinical" },
+      { name: "Lipton Immuni-T", tone: "clinical" },
+      { name: "Sleepy Owl Cold Brew", tone: "social" },
+      { name: "Blue Tokai Coffee", tone: "social" },
+      { name: "Vahdam Wellness Tea", tone: "ritual" },
+      { name: "Twinings Detox", tone: "clinical" },
+      { name: "Typhoo Green Tea", tone: "clinical" },
+      { name: "MyMuse Adaptogen Latte", tone: "ritual" },
+      { name: "Chaayos Kadak Chai", tone: "convenience" }
+    ],
+    saturatedClaims: [
+      "antioxidant rich",
+      "detox",
+      "immunity boost",
+      "100% natural",
+      "farm fresh",
+      "pure"
+    ]
+  },
+  "Snacks & Bars": {
+    benefit: "fuel",
+    moment: "midday",
+    defaultIngredient: "almonds",
+    competitors: [
+      { name: "RiteBite Max Protein", tone: "clinical" },
+      { name: "Yoga Bar Protein", tone: "clinical" },
+      { name: "The Whole Truth Bar", tone: "social" },
+      { name: "Slurrp Farm Snacks", tone: "convenience" },
+      { name: "Too Yumm Baked", tone: "convenience" },
+      { name: "Epigamia Protein Bites", tone: "clinical" },
+      { name: "Nutriwish Trail Mix", tone: "ritual" },
+      { name: "Open Secret Millet Bar", tone: "social" }
+    ],
+    saturatedClaims: [
+      "high protein",
+      "no maida",
+      "gluten free",
+      "guilt-free",
+      "baked not fried",
+      "zero sugar"
+    ]
+  },
+  "Dairy & Alternatives": {
+    benefit: "gut health",
+    moment: "breakfast",
+    defaultIngredient: "probiotics",
+    competitors: [
+      { name: "Epigamia Greek Yogurt", tone: "clinical" },
+      { name: "Go Desi A2 Milk", tone: "ritual" },
+      { name: "Nutriwiz Almond Milk", tone: "social" },
+      { name: "Sofit Soy Milk", tone: "convenience" },
+      { name: "Amul High Protein", tone: "clinical" },
+      { name: "Mother Dairy Probiotic", tone: "clinical" },
+      { name: "Raw Pressery Oat Milk", tone: "social" }
+    ],
+    saturatedClaims: [
+      "probiotic",
+      "farm fresh",
+      "no preservatives",
+      "high calcium",
+      "rich & creamy",
+      "natural"
+    ]
+  },
+  "Skincare": {
+    benefit: "glow",
+    moment: "evening",
+    defaultIngredient: "niacinamide",
+    competitors: [
+      { name: "Minimalist Niacinamide", tone: "clinical" },
+      { name: "The Ordinary Serum", tone: "clinical" },
+      { name: "Plum 15% Vit-C Serum", tone: "clinical" },
+      { name: "Mamaearth Vitamin C", tone: "social" },
+      { name: "Dot & Key Glow Serum", tone: "ritual" },
+      { name: "Foxtale Barrier Repair", tone: "clinical" },
+      { name: "Re'equil Sunscreen", tone: "clinical" },
+      { name: "Forest Essentials Ubtan", tone: "ritual" }
+    ],
+    saturatedClaims: [
+      "dermat tested",
+      "paraben free",
+      "niacinamide",
+      "clinically proven",
+      "cruelty free",
+      "10% concentration"
+    ]
+  },
+  "Haircare": {
+    benefit: "strength",
+    moment: "weekend",
+    defaultIngredient: "onion extract",
+    competitors: [
+      { name: "WOW Onion Oil", tone: "clinical" },
+      { name: "Mamaearth Onion Shampoo", tone: "social" },
+      { name: "Indulekha Bringha", tone: "ritual" },
+      { name: "Kesh King Ayurvedic", tone: "ritual" },
+      { name: "Bare Anatomy Serum", tone: "clinical" },
+      { name: "Traya Hair Growth", tone: "clinical" },
+      { name: "Khadi Natural Shampoo", tone: "ritual" }
+    ],
+    saturatedClaims: [
+      "ayurvedic formula",
+      "sulphate free",
+      "hair fall control",
+      "onion extract",
+      "doctor recommended",
+      "clinically tested"
+    ]
+  }
+};
+
+export const PERSONAS = [
+  { 
+    name: "Urban Millennials (25–34)", 
+    weights: { ritual: 0.90, clinical: 0.30, social: 0.60, convenience: 0.50 } 
+  },
+  { 
+    name: "Gen Z Health-First",        
+    weights: { ritual: 0.50, clinical: 0.40, social: 0.90, convenience: 0.60 } 
+  },
+  { 
+    name: "Wellness Women 28–38",      
+    weights: { ritual: 0.95, clinical: 0.50, social: 0.40, convenience: 0.40 } 
+  },
+  { 
+    name: "Fitness Enthusiasts",       
+    weights: { ritual: 0.30, clinical: 0.80, social: 0.50, convenience: 0.50 } 
+  },
+  { 
+    name: "Busy Professionals",        
+    weights: { ritual: 0.40, clinical: 0.50, social: 0.30, convenience: 0.90 } 
+  },
+  { 
+    name: "Health-Conscious Parents",  
+    weights: { ritual: 0.60, clinical: 0.65, social: 0.30, convenience: 0.70 } 
+  }
+];
+
+export const CLAIM_TEMPLATES = {
+  ritual: [
+    "Your {moment} ritual, reimagined.",
+    "Make {concept} part of your everyday ritual.",
+    "Slow down. {concept} — on your terms.",
+    "{articleMoment} moment, made for you."
+  ],
+  clinical: [
+    "{ingredient}. Clinically studied. Visibly {benefit}.",
+    "Backed by science. Built for {benefit}.",
+    "The {catShort} formulated like a lab, not a trend.",
+    "{ingredient} you can verify — not just trust."
+  ],
+  social: [
+    "The {catShort} everyone's asking about.",
+    "Join the {conceptShort} movement.",
+    "Made for how you actually live — and share.",
+    "Your feed's next favorite {catShort}."
+  ],
+  convenience: [
+    "{benefitCap}. Zero compromise. Zero effort.",
+    "Fits your day, not the other way around.",
+    "One step. All the {benefit}.",
+    "{conceptShort}, without the extra steps."
+  ]
+};
+
+export const RISK_TEMPLATES = {
+  saturation: (n) => `Saturation Flag: similar language already used by ${n} competitor SKU${n === 1 ? '' : 's'} in this category.`,
+  misalign:   (persona) => `Persona Misalignment: this tone scores well below the dominant Desire Vector for ${persona}.`,
+  price:      () => `Price Anchoring Risk: at this price tier, the claim needs a stronger visible reason-to-believe or risks rejection.`
+};
+
+export const EXAMPLES = [
+  { 
+    concept: "Plant-based protein drink", 
+    category: "Functional Beverages", 
+    persona: "Urban Millennials (25–34)", 
+    ingredients: ["Pea Protein", "Ashwagandha"] 
+  },
+  { 
+    concept: "Daily ritual green tea", 
+    category: "Hot Beverages", 
+    persona: "Wellness Women 28–38", 
+    ingredients: ["L-Theanine"] 
+  },
+  { 
+    concept: "10% niacinamide brightening serum", 
+    category: "Skincare", 
+    persona: "Gen Z Health-First", 
+    ingredients: ["Niacinamide", "Zinc"] 
+  },
+  { 
+    concept: "High-protein millet snack bar", 
+    category: "Snacks & Bars", 
+    persona: "Fitness Enthusiasts", 
+    ingredients: ["Millet", "Whey"] 
+  }
+];
+
+export const CATEGORIES_LIST = Object.keys(CATEGORIES);
+export const MARKETS_LIST = ['India', 'Indonesia', 'Singapore', 'UAE', 'Thailand'];
+export const PRICE_TIERS_LIST = [
+  'Economy (₹20–50)',
+  'Mid (₹80–120)',
+  'Premium (₹150–300)',
+  'Super Premium (₹300+)'
+];
+export const CHANNELS_LIST = [
+  'Modern Trade + E-Commerce',
+  'General Trade',
+  'D2C Online',
+  'Foodservice'
+];
+
+export const USER_PERSONAS = {
   priya: {
     id: 'priya',
     name: 'Priya Sharma',
     avatar: 'PS',
     title: 'Sr. Brand Manager',
-    org: 'Tier-1 FMCG (Mumbai)',
-    tagline: 'Defend positioning with data, not instinct',
-    painPoint: 'Agency briefs take 8 weeks — often too late to change formulation',
+    org: 'HUL (Tier-1 FMCG Mumbai)',
     welcome: 'Welcome back, Priya.',
     desc: 'You have 2 analyses in progress. Your category Positioning Confidence Index™ stands at 88 / 100 — launch ready.'
   },
@@ -16,8 +262,6 @@ export const PERSONAS = {
     avatar: 'DC',
     title: 'Head of Innovation & R&D',
     org: 'Regional FMCG (Bangkok)',
-    tagline: 'De-risk functional claim ownability upfront',
-    painPoint: 'Uncertain whether functional ingredients are ownable or already dead in the category',
     welcome: 'Welcome back, David.',
     desc: 'Validate claim-formulation alignment early before committing R&D capex. 4 formulation whitespace pockets detected.'
   },
@@ -27,360 +271,254 @@ export const PERSONAS = {
     avatar: 'AB',
     title: 'Consumer Insights Director',
     org: 'Global CPG (Dubai)',
-    tagline: 'Brief leadership with defensible whitespace evidence',
-    painPoint: 'Must defend AI-generated scores to skeptical CMOs with transparent methodology',
     welcome: 'Welcome back, Aigerim.',
     desc: 'Evaluate methodology across 100+ synthetic cohorts grounded in Ai Palette\'s 500M+ regional consumer signal spine.'
   }
 };
 
-export const CATEGORIES = [
-  'Functional Beverages',
-  'Hot Beverages',
-  'Snacks & Bars',
-  'Dairy & Alternatives',
-  'Condiments & Sauces'
-];
-
-export const MARKETS = [
-  'India',
-  'Indonesia',
-  'Singapore',
-  'UAE',
-  'Thailand'
-];
-
-export const PRICE_TIERS = [
-  'Economy (₹20–50)',
-  'Mid (₹80–120)',
-  'Premium (₹150–300)',
-  'Super Premium (₹300+)'
-];
-
-export const CHANNELS = [
-  'Modern Trade + E-Commerce',
-  'General Trade',
-  'D2C Online',
-  'Foodservice'
-];
-
-export const TARGET_PERSONAS_LIST = [
-  'Urban Millennials (25–34)',
-  'Gen Z Health-First',
-  'Wellness Women 28–38',
-  'Fitness Enthusiasts',
-  'Busy Professionals',
-  'Health-Conscious Parents'
-];
-
-export const PRESETS = {
-  protein: {
-    id: 'protein',
-    concept: 'Plant-Based Protein Drink',
-    category: 'Functional Beverages',
-    market: 'India',
-    price: 'Mid (₹80–120)',
-    channel: 'Modern Trade + E-Commerce',
-    personas: ['Urban Millennials (25–34)'],
-    ingredients: ['Pea Protein', 'Ashwagandha'],
-    opportunityScore: 94,
-    zone: 'Zone C Whitespace',
-    vps: [
-      {
-        id: 'vp-1',
-        type: 'top',
-        pci: 91,
-        status: 'Launch Ready',
-        badge: '★ Top Recommendation',
-        claim: 'Fuel your ritual. Power your day.',
-        pull: 88, nov: 94, fit: 95, gap: 89, fresh: 91,
-        flags: [
-          { type: 'ok', text: 'Zero direct competitors use "ritual" + "fuel" combination in category' },
-          { type: 'ok', text: 'Ritual framing scores 2.3× higher for urban millennials vs clinical claims' }
-        ]
-      },
-      {
-        id: 'vp-2',
-        type: 'mid',
-        pci: 78,
-        status: 'Refinement Suggested',
-        badge: 'Consider',
-        claim: 'Your body. Your protein. Naturally.',
-        pull: 76, nov: 72, fit: 84, gap: 68, fresh: 75,
-        flags: [
-          { type: 'warn', text: '"Naturally" used by 8 competitors — moderate saturation risk' }
-        ]
-      },
-      {
-        id: 'vp-3',
-        type: 'warn',
-        pci: 43,
-        status: 'Rework Required',
-        badge: '⚠ Overcrowded',
-        claim: '25g protein. Clinically proven. Clean label.',
-        pull: 32, nov: 28, fit: 38, gap: 18, fresh: 25,
-        flags: [
-          { type: 'danger', text: 'Persona Misalignment: clinical framing scores 3.1× lower for target cohort' },
-          { type: 'danger', text: '"Clean label" is already claimed by 19 competitor SKUs' }
-        ]
-      }
-    ],
-    tier2: '25g plant-powered protein per serve · Ashwagandha for daily resilience · No artificial sweeteners',
-    tier3: 'Complete amino acid profile from pea + rice blend · Clinically-studied ashwagandha (KSM-66®, 300mg) · FSSAI compliant',
-    risks: [
-      {
-        type: 'warn',
-        title: 'Packaging Visual Direction',
-        desc: 'Ensure the "ritual" theme is expressed through warm, earthy packaging — clinical white aesthetics reduce perceived taste appeal by ~18%.'
-      },
-      {
-        type: 'warn',
-        title: 'Price Anchoring',
-        desc: 'At ₹80–120 price tier, explicitly highlight the dual benefit (functional energy + clean protein) to anchor premium value.'
-      },
-      {
-        type: 'ok',
-        title: 'Defensible Space',
-        desc: 'Hero claim is completely unoccupied by any SKU in the mapped competitive category.'
-      }
-    ],
-    rtbs: [
-      '25g complete plant protein (pea + rice) per serve — matches active gym-goer daily benchmark',
-      'KSM-66® Ashwagandha (300mg) — gold-standard clinical adaptogen for stress reduction & cortisol balance',
-      'Zero artificial sweeteners — naturally sweetened with monk fruit; clean label formulation',
-      'Ready-To-Drink (RTD) format — seamless ritual convenience; zero mixing required'
-    ]
+export const SEED_HISTORY = [
+  { 
+    concept: "Plant-based protein drink", 
+    category: "Functional Beverages", 
+    persona: "Urban Millennials (25–34)", 
+    pci: 88, 
+    zone: "C", 
+    status: "ready", 
+    date: "Jun 2025" 
   },
-  tea: {
-    id: 'tea',
-    concept: 'Daily Ritual Green Tea',
-    category: 'Hot Beverages',
-    market: 'India',
-    price: 'Premium (₹150–300)',
-    channel: 'Modern Trade + E-Commerce',
-    personas: ['Wellness Women 28–38'],
-    ingredients: ['Japanese Matcha', 'Tulsi Extract'],
-    opportunityScore: 91,
-    zone: 'Zone C Whitespace',
-    vps: [
-      {
-        id: 'vp-1',
-        type: 'top',
-        pci: 91,
-        status: 'Launch Ready',
-        badge: '★ Top Recommendation',
-        claim: 'Calm mindfulness for the modern morning.',
-        pull: 92, nov: 89, fit: 94, gap: 90, fresh: 90,
-        flags: [
-          { type: 'ok', text: 'Mindfulness morning positioning is unowned in tier-1 retail teas' },
-          { type: 'ok', text: 'Emotional resonance scores 92% with wellness women' }
-        ]
-      },
-      {
-        id: 'vp-2',
-        type: 'mid',
-        pci: 75,
-        status: 'Refinement Suggested',
-        badge: 'Consider',
-        claim: 'Pure antioxidants from whole-leaf matcha.',
-        pull: 70, nov: 68, fit: 80, gap: 65, fresh: 72,
-        flags: [
-          { type: 'warn', text: '"Antioxidant" claims used by 14 competitors' }
-        ]
-      },
-      {
-        id: 'vp-3',
-        type: 'warn',
-        pci: 48,
-        status: 'Rework Required',
-        badge: '⚠ Saturated',
-        claim: 'Green tea for rapid weight loss and detox.',
-        pull: 35, nov: 20, fit: 40, gap: 15, fresh: 20,
-        flags: [
-          { type: 'danger', text: '"Detox" is heavily commoditized and faces regulatory scrutiny' }
-        ]
-      }
-    ],
-    tier2: 'Ceremonial-grade shade-grown matcha · Holy basil adaptogenic support · Slow-release sustained focus',
-    tier3: '35mg natural L-theanine per serve · Tested for heavy metals and pesticides · Biodegradable pyramid bags',
-    risks: [
-      {
-        type: 'warn',
-        title: 'Brewing Education',
-        desc: 'Water temperature guidance is essential; boiling water scorches matcha and induces bitterness.'
-      },
-      {
-        type: 'ok',
-        title: 'Ingredient Authenticity',
-        desc: 'Single-origin Kagoshima traceability provides strong brand moat against domestic blends.'
-      }
-    ],
-    rtbs: [
-      '100% single-origin Japanese matcha sourced from Kagoshima estate',
-      'Standardized Tulsi bio-actives proven to enhance mental clarity without caffeine crash',
-      'Clean ritual convenience: 90-second steep with zero bitterness profile',
-      'No added flavoring or artificial masking agents'
-    ]
+  { 
+    concept: "Daily ritual green tea", 
+    category: "Hot Beverages", 
+    persona: "Wellness Women 28–38", 
+    pci: 91, 
+    zone: "C", 
+    status: "ready", 
+    date: "May 2025" 
   },
-  bar: {
-    id: 'bar',
-    concept: 'Probiotic Snack Bar',
-    category: 'Snacks & Bars',
-    market: 'India',
-    price: 'Mid (₹80–120)',
-    channel: 'Modern Trade + E-Commerce',
-    personas: ['Health-Conscious Parents'],
-    ingredients: ['Bacillus Coagulans', 'Rolled Oats', 'Almond Butter'],
-    opportunityScore: 74,
-    zone: 'Zone B Contested',
-    vps: [
-      {
-        id: 'vp-1',
-        type: 'top',
-        pci: 74,
-        status: 'Consider with Pivot',
-        badge: '★ Best Available',
-        claim: 'Gut harmony for whole-family vitality.',
-        pull: 78, nov: 72, fit: 82, gap: 64, fresh: 76,
-        flags: [
-          { type: 'ok', text: 'Family gut harmony balances health appeal with kid-friendly flavor' },
-          { type: 'warn', text: '3 direct competitor bars launched in last 6 months' }
-        ]
-      },
-      {
-        id: 'vp-2',
-        type: 'mid',
-        pci: 68,
-        status: 'Refinement Suggested',
-        badge: 'Alternative',
-        claim: 'High fiber probiotic fuel on the go.',
-        pull: 65, nov: 58, fit: 74, gap: 55, fresh: 60,
-        flags: [
-          { type: 'warn', text: '"High fiber" is an expectation, not a differentiator' }
-        ]
-      },
-      {
-        id: 'vp-3',
-        type: 'warn',
-        pci: 39,
-        status: 'Rework Required',
-        badge: '⚠ Saturated',
-        claim: 'Healthy protein snack bar with no added sugar.',
-        pull: 30, nov: 18, fit: 34, gap: 12, fresh: 15,
-        flags: [
-          { type: 'danger', text: '28+ SKUs in modern trade use this exact phrasing' }
-        ]
-      }
-    ],
-    tier2: '1 Billion spore-forming live probiotics · Prebiotic fiber from chicory root · 100% whole grain oats',
-    tier3: 'Heat-stable GanedenBC30® strain survives baking and stomach acid · Zero added refined cane sugar',
-    risks: [
-      {
-        type: 'warn',
-        title: 'Competitive Crowding',
-        desc: 'Bars have high shelf turnover. Shelf placement must emphasize digestive health rather than general snack aisle.'
-      }
-    ],
-    rtbs: [
-      'Patented shelf-stable probiotic strain with 25+ peer-reviewed clinical studies',
-      'Kid-friendly cocoa almond crunch with natural sweetness from dates',
-      '5g dietary prebiotic fiber supporting digestive microbiome diversity',
-      'Convenient lunchbox & post-school snack packaging format'
-    ]
+  { 
+    concept: "Probiotic snack bar", 
+    category: "Snacks & Bars", 
+    persona: "Health-Conscious Parents", 
+    pci: 74, 
+    zone: "B", 
+    status: "progress", 
+    date: "May 2025" 
   },
-  coffee: {
-    id: 'coffee',
-    concept: 'Adaptogenic Coffee Blend',
-    category: 'Hot Beverages',
-    market: 'India',
-    price: 'Premium (₹150–300)',
-    channel: 'D2C Online',
-    personas: ['Busy Professionals'],
-    ingredients: ['Arabica Beans', 'Lion\'s Mane', 'Chaga Mushroom'],
-    opportunityScore: 41,
-    zone: 'Zone A Saturated',
-    vps: [
-      {
-        id: 'vp-1',
-        type: 'warn',
-        pci: 41,
-        status: 'Rework Required',
-        badge: '⚠ Overcrowded',
-        claim: 'Sharper focus. Zero jitters.',
-        pull: 50, nov: 32, fit: 55, gap: 20, fresh: 25,
-        flags: [
-          { type: 'danger', text: 'Overcrowded: 22+ functional coffee brands use "focus + no jitters"' },
-          { type: 'warn', text: 'Recommend pivoting to evening decaf or calm decompression' }
-        ]
-      }
-    ],
-    tier2: 'Single-origin Arabica dark roast · Dual-extracted mushroom nootropics · Stomach-gentle low acidity',
-    tier3: '500mg organic lion\'s mane fruiting body extract · Lab-verified beta-glucan content (>25%)',
-    risks: [
-      {
-        type: 'danger',
-        title: 'Severe Saturation',
-        desc: 'Zone A territory requires 10× paid customer acquisition spend. Re-engineering the positioning angle is strongly advised.'
-      }
-    ],
-    rtbs: [
-      '100% Specialty Arabica beans shade-grown at high altitude in Coorg',
-      'Organic Lion\'s Mane dual extract supporting nerve growth factor (NGF)',
-      'High semantic crowding in metro D2C segment',
-      'Requires repositioning to evening or recovery focus'
-    ]
-  }
-};
-
-export const INITIAL_HISTORY = [
-  {
-    id: 'hist-1',
-    date: 'Current',
-    concept: 'Plant-Based Protein Drink',
-    category: 'Functional Beverages',
-    pci: 88,
-    zone: 'C',
-    status: 'Brief Ready',
-    presetKey: 'protein'
+  { 
+    concept: "Adaptogenic coffee", 
+    category: "Hot Beverages", 
+    persona: "Busy Professionals", 
+    pci: 41, 
+    zone: "A", 
+    status: "rework", 
+    date: "Apr 2025" 
   },
-  {
-    id: 'hist-2',
-    date: 'May 2025',
-    concept: 'Daily Ritual Green Tea',
-    category: 'Hot Beverages',
-    pci: 91,
-    zone: 'C',
-    status: 'Exported',
-    presetKey: 'tea'
+  { 
+    concept: "Coconut collagen water", 
+    category: "Functional Beverages", 
+    persona: "Urban Millennials (25–34)", 
+    pci: 82, 
+    zone: "C", 
+    status: "ready", 
+    date: "Apr 2025" 
   },
-  {
-    id: 'hist-3',
-    date: 'May 2025',
-    concept: 'Probiotic Snack Bar',
-    category: 'Snacks & Bars',
-    pci: 74,
-    zone: 'B',
-    status: 'In Progress',
-    presetKey: 'bar'
-  },
-  {
-    id: 'hist-4',
-    date: 'Apr 2025',
-    concept: 'Adaptogenic Coffee Blend',
-    category: 'Hot Beverages',
-    pci: 41,
-    zone: 'A',
-    status: 'Rework Needed',
-    presetKey: 'coffee'
-  },
-  {
-    id: 'hist-5',
-    date: 'Apr 2025',
-    concept: 'Coconut Collagen Water',
-    category: 'Functional Beverages',
-    pci: 82,
-    zone: 'C',
-    status: 'Exported',
-    presetKey: 'protein'
+  { 
+    concept: "Millet breakfast biscuit", 
+    category: "Snacks & Bars", 
+    persona: "Health-Conscious Parents", 
+    pci: 69, 
+    zone: "B", 
+    status: "progress", 
+    date: "Mar 2025" 
   }
 ];
+
+// ══════════════════════════════════════════════════════════
+// DETERMINISTIC ALGORITHMIC ENGINE
+// ══════════════════════════════════════════════════════════
+
+function hashStr(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function seededRandom(seed) {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return function () {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+export function titleCase(s) {
+  if (!s) return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+export function shortConcept(s) {
+  if (!s) return '';
+  const words = s.trim().split(/\s+/);
+  return words.length > 3 ? words.slice(-2).join(' ') : s;
+}
+
+export function toneToPocketTitle(tone, cat) {
+  const map = {
+    ritual: `${titleCase(cat.moment)} Ritual + ${titleCase(cat.benefit)}`,
+    clinical: `Verified ${titleCase(cat.benefit)}, Proven Simply`,
+    social: `Shareable ${titleCase(cat.benefit)} Moments`,
+    convenience: `Effortless ${titleCase(cat.benefit)}, On Demand`
+  };
+  return map[tone] || 'Differentiated Territory';
+}
+
+export function toneToPocketDesc(tone, crowding, count, personaName) {
+  if (crowding < 0.35) {
+    return `High-desire zone for ${personaName} with only ${count} competitor${count === 1 ? '' : 's'} using this framing. Largely unowned territory.`;
+  }
+  if (crowding < 0.65) {
+    return `Moderate whitespace — ${count} competitors nearby. Requires sharp execution to stand out, but desire is strong for this persona.`;
+  }
+  return `Contested territory — ${count} competitors already active here. High desire but will require 3–5× the typical media weight to break through.`;
+}
+
+export function scoreClaimForTone(claimText, tone, cat, persona, toneCounts, maxCount, inputs, rng) {
+  const personaFit = persona.weights[tone] || 0.5;
+  const lc = claimText.toLowerCase();
+  const satMatches = (cat.saturatedClaims || []).filter(sc => {
+    const words = sc.split(' ');
+    return words.some(w => w.length > 3 && lc.includes(w));
+  });
+  const novelty = Math.max(0.08, 1 - satMatches.length * 0.22);
+  const count = toneCounts[tone] || 1;
+  const crowding = count / Math.max(1, maxCount);
+  const competitiveGap = Math.max(0.05, 1 - crowding * 0.85);
+  const freshness = Math.max(0.15, 1 - crowding * 0.55 - (tone === 'clinical' ? 0.12 : 0));
+
+  let score = Math.round((personaFit * 35 + novelty * 25 + competitiveGap * 25 + freshness * 15) + (rng ? (rng() * 5 - 2.5) : 0));
+  score = Math.max(12, Math.min(97, score));
+
+  const flags = [];
+  if (novelty < 0.55) {
+    flags.push({ type: 'danger', icon: '✗', text: RISK_TEMPLATES.saturation(satMatches.length + count) });
+  }
+  if (personaFit < 0.45) {
+    flags.push({ type: 'danger', icon: '✗', text: RISK_TEMPLATES.misalign(inputs.persona) });
+  }
+  if (score >= 75) {
+    flags.unshift({
+      type: 'ok',
+      icon: '✓',
+      text: `${count === 0 ? 'Zero' : count} competitor${count === 1 ? '' : 's'} currently combine "${tone}" framing with this category's core benefit.`
+    });
+  }
+  if (inputs.price && inputs.price.includes('Premium') && novelty < 0.6) {
+    flags.push({ type: 'warn', icon: '⚠', text: RISK_TEMPLATES.price() });
+  }
+
+  return {
+    claim: claimText,
+    tone,
+    score,
+    dims: {
+      personaFit: Math.round(personaFit * 100),
+      novelty: Math.round(novelty * 100),
+      competitiveGap: Math.round(competitiveGap * 100),
+      freshness: Math.round(freshness * 100)
+    },
+    flags: flags.filter(Boolean)
+  };
+}
+
+export function runAnalysis(inputs, nonce = 0) {
+  const cat = CATEGORIES[inputs.category] || CATEGORIES["Functional Beverages"];
+  const persona = PERSONAS.find(p => p.name === inputs.persona) || PERSONAS[0];
+  const seedStr = `${inputs.concept}|${inputs.category}|${inputs.persona}|${inputs.price}|${nonce}`;
+  const rng = seededRandom(hashStr(seedStr));
+
+  // 1. Competitive Saturation
+  const toneCounts = { ritual: 0, clinical: 0, social: 0, convenience: 0 };
+  cat.competitors.forEach(c => {
+    if (toneCounts[c.tone] !== undefined) toneCounts[c.tone]++;
+  });
+  const maxCount = Math.max(1, ...Object.values(toneCounts));
+
+  const competitorsPositioned = cat.competitors.map((c) => {
+    const crowding = toneCounts[c.tone] / maxCount;
+    const desire = persona.weights[c.tone] || 0.5;
+    return {
+      ...c,
+      crowding,
+      desire,
+      jitterX: rng() * 0.4 - 0.2,
+      jitterY: rng() * 0.4 - 0.2
+    };
+  });
+
+  // 2. Whitespace Navigator
+  const tones = ["ritual", "clinical", "social", "convenience"];
+  const toneScores = tones.map(t => {
+    const crowding = toneCounts[t] / maxCount;
+    const desire = persona.weights[t] || 0.5;
+    const opportunity = desire * (1 - crowding * 0.75);
+    return { tone: t, crowding, desire, opportunity, count: toneCounts[t] };
+  }).sort((a, b) => b.opportunity - a.opportunity);
+
+  const pockets = toneScores.slice(0, 2).map((ts, idx) => {
+    const score = Math.round(60 + ts.opportunity * 38 + rng() * 4);
+    const zone = ts.crowding < 0.4 ? 'C' : 'B';
+    return {
+      tone: ts.tone,
+      score: Math.min(99, score),
+      zone,
+      title: toneToPocketTitle(ts.tone, cat),
+      desc: toneToPocketDesc(ts.tone, ts.crowding, toneCounts[ts.tone], persona.name),
+      competitorCount: toneCounts[ts.tone],
+      recommended: idx === 0
+    };
+  });
+
+  // 3. Claim Forge Engine
+  const shortC = shortConcept(inputs.concept);
+  const ingredient = (inputs.ingredients && inputs.ingredients[0]) || cat.defaultIngredient;
+  const ctx = {
+    concept: inputs.concept.charAt(0).toLowerCase() + inputs.concept.slice(1),
+    conceptShort: shortC,
+    ingredient: titleCase(ingredient),
+    benefit: cat.benefit,
+    benefitCap: titleCase(cat.benefit),
+    moment: cat.moment,
+    catShort: inputs.category.toLowerCase(),
+    articleMoment: (/^[aeiou]/i.test(cat.moment) ? 'An ' : 'A ') + cat.moment
+  };
+  const fillTemplate = (t) => t.replace(/\{(\w+)\}/g, (m, k) => ctx[k] || m);
+
+  const candidateTones = [pockets[0].tone, pockets[1] ? pockets[1].tone : tones[1]];
+  const usedTones = new Set(candidateTones);
+  const remaining = tones.filter(t => !usedTones.has(t));
+  candidateTones.push(remaining[Math.floor(rng() * remaining.length)] || tones[2]);
+  candidateTones.push(remaining.find(t => t !== candidateTones[2]) || tones[3]);
+
+  const vpCandidates = candidateTones.slice(0, 4).map((tone) => {
+    const templates = CLAIM_TEMPLATES[tone] || CLAIM_TEMPLATES.ritual;
+    const claim = fillTemplate(templates[Math.floor(rng() * templates.length)]);
+    return scoreClaimForTone(claim, tone, cat, persona, toneCounts, maxCount, inputs, rng);
+  });
+  vpCandidates.sort((a, b) => b.score - a.score);
+
+  return {
+    inputs: { ...inputs },
+    category: inputs.category,
+    persona: inputs.persona,
+    competitors: competitorsPositioned,
+    toneCounts,
+    maxCount,
+    pockets,
+    vpCandidates,
+    generatedAt: new Date()
+  };
+}

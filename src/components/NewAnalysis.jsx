@@ -1,33 +1,35 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
-  CATEGORIES, 
-  MARKETS, 
-  PRICE_TIERS, 
-  CHANNELS, 
-  TARGET_PERSONAS_LIST 
+  CATEGORIES_LIST, 
+  MARKETS_LIST, 
+  PRICE_TIERS_LIST, 
+  CHANNELS_LIST, 
+  PERSONAS 
 } from '../data/mockData';
-import { ArrowRight, ArrowLeft, Plus, Sparkles, Lightbulb } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Plus, Lightbulb } from 'lucide-react';
 
 export default function NewAnalysis() {
-  const { analysis, setAnalysis, setScreen, loadPreset, showNotification } = useApp();
+  const { inputs, setInputs, setScreen, loadExample, showNotification } = useApp();
   const [ingInput, setIngInput] = useState('');
+  const [errConcept, setErrConcept] = useState(false);
 
-  const handleTogglePersona = (p) => {
-    setAnalysis(prev => {
-      const exists = prev.personas.includes(p);
-      const updated = exists 
-        ? prev.personas.filter(item => item !== p)
-        : [...prev.personas, p];
-      return { ...prev, personas: updated.length > 0 ? updated : [p] };
-    });
+  const handleConceptChange = (val) => {
+    setInputs(prev => ({ ...prev, concept: val }));
+    if (val.trim().length >= 4) {
+      setErrConcept(false);
+    }
+  };
+
+  const handleSelectPersona = (pName) => {
+    setInputs(prev => ({ ...prev, persona: pName }));
   };
 
   const handleAddIngredient = () => {
     if (!ingInput.trim()) return;
     const val = ingInput.trim();
-    if (!analysis.ingredients.includes(val)) {
-      setAnalysis(prev => ({
+    if (!inputs.ingredients.includes(val)) {
+      setInputs(prev => ({
         ...prev,
         ingredients: [...prev.ingredients, val]
       }));
@@ -36,15 +38,16 @@ export default function NewAnalysis() {
   };
 
   const handleRemoveIngredient = (ing) => {
-    setAnalysis(prev => ({
+    setInputs(prev => ({
       ...prev,
       ingredients: prev.ingredients.filter(item => item !== ing)
     }));
   };
 
   const handleStartAnalysis = () => {
-    if (!analysis.concept.trim()) {
-      showNotification('Please enter a product concept idea.');
+    if (!inputs.concept || inputs.concept.trim().length < 4) {
+      setErrConcept(true);
+      showNotification('Please enter a product concept (min. 4 characters).');
       return;
     }
     setScreen('processing');
@@ -54,8 +57,7 @@ export default function NewAnalysis() {
     <section className="new-analysis-view">
       <div className="page-title">New ValueForge™ Analysis</div>
       <div className="page-sub">
-        Define your product concept. ValueForge executes all 5 layers of the Differentiation Genome™ across 
-        Ai Palette's 500M+ consumer signals to find defensible Positioning Pockets™.
+        Define your product concept. ValueForge maps the competitive landscape, finds whitespace, and generates a positioning brief tailored to your category and persona.
       </div>
 
       <div className="steps-bar">
@@ -90,89 +92,104 @@ export default function NewAnalysis() {
       </div>
 
       <div className="presets-container">
-        <span style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--ink3)' }}>Quick Presets:</span>
-        <button className="preset-btn" onClick={() => loadPreset('protein')}>🌱 Plant Protein Drink</button>
-        <button className="preset-btn" onClick={() => loadPreset('tea')}>🍵 Daily Ritual Green Tea</button>
-        <button className="preset-btn" onClick={() => loadPreset('bar')}>🍫 Probiotic Snack Bar</button>
-        <button className="preset-btn" onClick={() => loadPreset('coffee')}>☕ Adaptogenic Coffee</button>
+        <span style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--ink3)' }}>Try an example:</span>
+        <button className="preset-btn" onClick={() => loadExample(0)}>⚡ Protein Drink</button>
+        <button className="preset-btn" onClick={() => loadExample(1)}>🍵 Functional Tea</button>
+        <button className="preset-btn" onClick={() => loadExample(2)}>✨ Niacinamide Serum</button>
+        <button className="preset-btn" onClick={() => loadExample(3)}>🌾 Millet Protein Bar</button>
       </div>
 
       <div className="card">
         <div className="section-label">Product Basics</div>
         <div className="form-grid">
           <div className="form-group full">
-            <label className="form-label">Product Concept</label>
+            <div className="flex-between">
+              <label className="form-label">Product Concept *</label>
+              <span style={{ fontSize: '10.5px', color: 'var(--ink3)' }}>
+                {inputs.concept.length} / 120
+              </span>
+            </div>
             <input
-              className="form-input"
+              className={`form-input ${errConcept ? 'input-err' : ''}`}
               type="text"
-              value={analysis.concept}
-              onChange={(e) => setAnalysis(prev => ({ ...prev, concept: e.target.value }))}
-              placeholder="e.g. Plant-based protein drink for morning ritual…"
+              maxLength={120}
+              value={inputs.concept}
+              onChange={(e) => handleConceptChange(e.target.value)}
+              placeholder="e.g. Plant-based protein drink for daily morning ritual…"
             />
+            {errConcept && (
+              <div style={{ fontSize: '11px', color: 'var(--red)', marginTop: '2px' }}>
+                Please describe your product concept (min. 4 characters).
+              </div>
+            )}
           </div>
+
           <div className="form-group">
-            <label className="form-label">Category</label>
+            <label className="form-label">Category *</label>
             <select
               className="form-select"
-              value={analysis.category}
-              onChange={(e) => setAnalysis(prev => ({ ...prev, category: e.target.value }))}
+              value={inputs.category}
+              onChange={(e) => setInputs(prev => ({ ...prev, category: e.target.value }))}
             >
-              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+              {CATEGORIES_LIST.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
+
           <div className="form-group">
             <label className="form-label">Market</label>
             <select
               className="form-select"
-              value={analysis.market}
-              onChange={(e) => setAnalysis(prev => ({ ...prev, market: e.target.value }))}
+              value={inputs.market}
+              onChange={(e) => setInputs(prev => ({ ...prev, market: e.target.value }))}
             >
-              {MARKETS.map(m => <option key={m} value={m}>{m}</option>)}
+              {MARKETS_LIST.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>
+
           <div className="form-group">
             <label className="form-label">Price Tier</label>
             <select
               className="form-select"
-              value={analysis.price}
-              onChange={(e) => setAnalysis(prev => ({ ...prev, price: e.target.value }))}
+              value={inputs.price}
+              onChange={(e) => setInputs(prev => ({ ...prev, price: e.target.value }))}
             >
-              {PRICE_TIERS.map(pt => <option key={pt} value={pt}>{pt}</option>)}
+              {PRICE_TIERS_LIST.map(pt => <option key={pt} value={pt}>{pt}</option>)}
             </select>
           </div>
+
           <div className="form-group">
             <label className="form-label">Target Channel</label>
             <select
               className="form-select"
-              value={analysis.channel}
-              onChange={(e) => setAnalysis(prev => ({ ...prev, channel: e.target.value }))}
+              value={inputs.channel}
+              onChange={(e) => setInputs(prev => ({ ...prev, channel: e.target.value }))}
             >
-              {CHANNELS.map(ch => <option key={ch} value={ch}>{ch}</option>)}
+              {CHANNELS_LIST.map(ch => <option key={ch} value={ch}>{ch}</option>)}
             </select>
           </div>
         </div>
 
         <hr className="divider" />
-        <div className="section-label">Target Persona (Multi-Select)</div>
+        <div className="section-label">Target Persona * (Select one)</div>
         <div className="persona-chips">
-          {TARGET_PERSONAS_LIST.map(p => {
-            const isSelected = analysis.personas.includes(p);
+          {PERSONAS.map(p => {
+            const isSelected = inputs.persona === p.name;
             return (
               <div
-                key={p}
+                key={p.name}
                 className={`persona-chip ${isSelected ? 'selected' : ''}`}
-                onClick={() => handleTogglePersona(p)}
+                onClick={() => handleSelectPersona(p.name)}
               >
-                {p}
+                {p.name}
               </div>
             );
           })}
         </div>
 
         <hr className="divider" />
-        <div className="section-label">Key Ingredients / Formats</div>
+        <div className="section-label">Key Ingredients / Formats (Optional)</div>
         <div style={{ marginBottom: '8px' }}>
-          {analysis.ingredients.map(ing => (
+          {inputs.ingredients.map(ing => (
             <span key={ing} className="ingredient-tag">
               {ing} <button onClick={() => handleRemoveIngredient(ing)}>×</button>
             </span>
@@ -182,27 +199,27 @@ export default function NewAnalysis() {
           <input
             className="form-input"
             type="text"
-            placeholder="Add ingredient or format (e.g. Ashwagandha, RTD, Matcha)…"
+            placeholder="Add ingredient or format (e.g. Ashwagandha, RTD, Niacinamide)…"
             style={{ maxWidth: '360px' }}
             value={ingInput}
             onChange={(e) => setIngInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') handleAddIngredient(); }}
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddIngredient(); } }}
           />
           <button className="btn btn-secondary btn-sm" onClick={handleAddIngredient}>
             <Plus size={14} /> Add
           </button>
         </div>
 
-        <div className="tip-box">
+        <div className="tip-box mt-4">
           <span className="tip-icon"><Lightbulb size={18} color="#825900" /></span>
           <p>
-            <strong>Persona Intelligence Tip:</strong> 89% of category claims are semantically identical. Adding specific ingredients allows the Competitive Saturation Scanner™ to check whether claims like "Clean Plant Protein" are already saturated by 20+ SKUs.
+            <strong>Pro Tip:</strong> Adding ingredients helps ValueForge cross-reference claim density at the formulation level — identifying whether an ingredient-led claim is already overused in your category before you commit to it.
           </p>
         </div>
 
         <div className="flex-between mt-6">
           <button className="btn btn-secondary" onClick={() => setScreen('dashboard')}>
-            <ArrowLeft size={15} /> Back
+            <ArrowLeft size={15} /> Cancel
           </button>
           <button className="btn btn-primary" onClick={handleStartAnalysis}>
             Run ValueForge Analysis <ArrowRight size={15} />

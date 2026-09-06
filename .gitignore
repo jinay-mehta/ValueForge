@@ -9,9 +9,13 @@ dist/
 # Vercel
 .vercel/
 
-# Presentation and local assets (as requested)
+# Presentation and local assets
 *.pptx
 ValueForge_Presentation.pptx
+
+# Standalone Prototype HTML files (as requested)
+ValueForge_Prototype.html
+ValueForge_New.html
 
 # OS & Editor
 .DS_Store
