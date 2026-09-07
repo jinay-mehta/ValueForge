@@ -22,3 +22,5 @@ ValueForge_New.html
 Thumbs.db
 *.log
 .env*.local
+
+.vercel
