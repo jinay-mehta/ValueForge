@@ -195,32 +195,6 @@ Built with **React 18 + Vite**, the application features:
    ```
 
 ---
-
-## ☁️ Vercel Deployment
-
-**🔗 Live Production App:** **[https://valueforge-seven.vercel.app](https://valueforge-seven.vercel.app)**
-
-This repository is pre-configured for instant zero-config deployment on **Vercel**:
-
-### Option 1: Automatic Deployment via GitHub (Recommended)
-1. Navigate to [Vercel](https://vercel.com).
-2. Click **Add New Project** and import `jinay-mehta/ValueForge` from your GitHub account.
-3. Vercel automatically detects the **Vite** framework preset (`Build Command: vite build`, `Output Directory: dist`).
-4. Click **Deploy**. Vercel will build and assign your production domain.
-
-### Option 2: Deploy via Vercel CLI
-```bash
-# Login to Vercel
-vercel login
-
-# Deploy to production
-vercel --prod
-```
-
-The included `vercel.json` file configures clean URLs, client-side routing rewrites (`/(.*) -> /index.html`), and enterprise security headers (`nosniff`, `DENY`).
-
----
-
 ## 🏆 Team Credits
 
 **Team “Three of a Kind”**  
@@ -232,4 +206,4 @@ The included `vercel.json` file configures clean URLs, client-side routing rewri
 
 ---
 
-*ValueForge™ and Differentiation Genome™ are conceptual product intelligence features designed for Ai Palette.*
+*ValueForge™ are conceptual product intelligence features designed for Ai Palette.*
