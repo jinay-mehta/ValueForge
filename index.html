@@ -1,17 +1,1905 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ValueForge™ — AI Differentiation & Positioning Intelligence</title>
-    <meta name="description" content="AI-Driven Differentiation and Positioning Intelligence for Ai Palette. Find unoccupied Positioning Pockets™, score claims with the Positioning Confidence Index™, and export decision-ready briefs." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ValueForge™ — Interactive Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════
+   RESET & ROOT
+═══════════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0D0D0E; --ink2:#3A3A3F; --ink3:#717179;
+  --paper:#F7F6F3; --card:#FFFFFF; --border:#E5E3DE;
+  --accent:#C9420A; --accent-lt:#F5DDD4; --accent-mid:#E8836A;
+  --gold:#D4A017; --gold-lt:#FBF0D0;
+  --teal:#0F6E56; --teal-lt:#D6EDE7;
+  --blue:#185FA5; --blue-lt:#DAE8F7;
+  --red-lt:#F7DADA; --red:#A32D2D;
+  --dark:#141416; --dark2:#1E1E22;
+  --gray:#888780; --gray-lt:#EEEDEA;
+  --radius:10px; --radius-lg:16px;
+  --shadow:0 2px 16px rgba(0,0,0,0.07);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.14);
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+input,select,textarea,button{font-family:inherit}
+button{cursor:pointer}
+::selection{background:var(--accent-lt);color:var(--accent)}
+*:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#D6D3CB;border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:#BFBBB0}
+
+/* ═══════════════════════════════════════════════
+   LAYOUT SHELL
+═══════════════════════════════════════════════ */
+.shell{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR NAV */
+.sidebar{width:224px;background:var(--dark);display:flex;flex-direction:column;flex-shrink:0;padding:0;transition:width .25s ease}
+.sidebar-logo{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between}
+.logo-mark{font-family:'DM Serif Display',serif;font-size:19px;color:#fff;letter-spacing:-.02em;display:flex;align-items:center;gap:7px}
+.logo-mark .mark-icon{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--accent),#8f2f07);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;font-family:'DM Sans',sans-serif}
+.logo-mark span{color:var(--accent)}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.14em;text-transform:uppercase;margin-top:2px;padding-left:29px}
+.nav-section{padding:16px 14px 6px;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:7px;margin:1px 6px;cursor:pointer;transition:all .15s;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.45);border:none;background:none;width:calc(100% - 12px);text-align:left;position:relative}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.nav-item.active{background:rgba(201,66,10,.2);color:#fff}
+.nav-item.active::before{content:'';position:absolute;left:-6px;top:50%;transform:translateY(-50%);width:3px;height:16px;background:var(--accent);border-radius:2px}
+.nav-item .icon{font-size:13px;width:18px;text-align:center;flex-shrink:0;color:currentColor}
+.nav-item .nav-badge{margin-left:auto;font-size:9px;font-weight:700;background:var(--accent);color:#fff;padding:1px 6px;border-radius:10px}
+.nav-divider{height:1px;background:rgba(255,255,255,.06);margin:8px 14px}
+.sidebar-footer{margin-top:auto;padding:14px;border-top:1px solid rgba(255,255,255,.06)}
+.user-badge{display:flex;align-items:center;gap:10px;padding:6px;border-radius:8px;cursor:pointer;transition:background .15s}
+.user-badge:hover{background:rgba(255,255,255,.05)}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:11.5px;color:rgba(255,255,255,.7);line-height:1.3;font-weight:600}
+.user-role{font-size:9.5px;color:rgba(255,255,255,.32)}
+
+/* MAIN CONTENT */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.topbar{height:54px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;flex-shrink:0;box-shadow:0 1px 0 rgba(0,0,0,.04);z-index:20}
+.topbar-breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink3)}
+.topbar-breadcrumb .crumb{cursor:pointer;transition:color .15s}
+.topbar-breadcrumb .crumb:hover{color:var(--accent)}
+.topbar-breadcrumb .current{color:var(--ink);font-weight:600}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.badge-beta{background:var(--gold-lt);color:#8a6300;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.04em}
+.icon-btn{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink3);transition:all .15s;position:relative}
+.icon-btn:hover{background:var(--gray-lt);color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 17px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .16s;white-space:nowrap}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 1px 2px rgba(201,66,10,.25)}
+.btn-primary:hover{background:#a83208;box-shadow:0 4px 14px rgba(201,66,10,.32)}
+.btn-secondary{background:var(--card);color:var(--ink2);border:1.5px solid var(--border)}
+.btn-secondary:hover{background:var(--gray-lt);border-color:#d0cdc4}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:#0a5542}
+.btn-ghost{background:transparent;color:var(--ink3);border:1.5px solid transparent}
+.btn-ghost:hover{background:var(--gray-lt);color:var(--ink)}
+.btn-sm{padding:6px 13px;font-size:12px}
+.btn-block{width:100%;justify-content:center}
+
+/* SCREEN AREA */
+.screen-area{flex:1;overflow-y:auto;padding:26px 28px 60px}
+.screen-area.narrow{max-width:1180px}
+
+/* ═══════════════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════════════ */
+.screen{display:none;animation:fadeIn .32s cubic-bezier(.16,1,.3,1)}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes shimmer{0%{background-position:-300px 0}100%{background-position:300px 0}}
+@keyframes countUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:400px}}
+
+/* ═══════════════════════════════════════════════
+   TYPOGRAPHY
+═══════════════════════════════════════════════ */
+.page-title{font-family:'DM Serif Display',serif;font-size:27px;color:var(--ink);line-height:1.18;margin-bottom:4px}
+.page-title em{font-style:italic;color:var(--accent)}
+.page-sub{font-size:13.5px;color:var(--ink3);line-height:1.6;margin-bottom:22px;max-width:640px}
+.section-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow)}
+.card-sm{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+.mono{font-family:var(--mono)}
+
+/* ═══════════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════════ */
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);animation:countUp .4s ease backwards}
+.stat-card .num{font-family:'DM Serif Display',serif;font-size:32px;color:var(--ink);line-height:1;margin-bottom:4px}
+.stat-card .num.accent{color:var(--accent)} .stat-card .num.teal{color:var(--teal)} .stat-card .num.gold{color:var(--gold)}
+.stat-card .lbl{font-size:11.5px;color:var(--ink3)}
+.stat-card .change{font-size:10.5px;margin-top:6px;font-weight:600;display:flex;align-items:center;gap:3px}
+.change.up{color:var(--teal)} .change.down{color:var(--accent)}
+.recent-table{width:100%;border-collapse:collapse}
+.recent-table th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:0 12px 10px;border-bottom:1px solid var(--border)}
+.recent-table td{padding:12px;font-size:12.5px;color:var(--ink2);border-bottom:1px solid var(--gray-lt);vertical-align:middle}
+.recent-table tr:last-child td{border-bottom:none}
+.recent-table tbody tr{cursor:pointer;transition:background .12s}
+.recent-table tbody tr:hover td{background:var(--paper)}
+.pci-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--mono)}
+.pci-high{background:var(--teal-lt);color:var(--teal)}
+.pci-mid{background:var(--gold-lt);color:#8a6300}
+.pci-low{background:var(--red-lt);color:var(--red)}
+.zone-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;flex-shrink:0}
+.hero-banner{background:linear-gradient(135deg,#141416 0%,#1c2438 100%);border-radius:var(--radius-lg);padding:26px 30px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:20px;overflow:hidden;position:relative}
+.hero-banner::before{content:'';position:absolute;right:-60px;top:-60px;width:280px;height:280px;border-radius:50%;border:1px solid rgba(255,255,255,.05)}
+.hero-banner::after{content:'';position:absolute;right:-20px;top:-20px;width:200px;height:200px;border-radius:50%;border:1px solid rgba(255,255,255,.07)}
+.hero-text h2{font-family:'DM Serif Display',serif;font-size:21px;color:#fff;margin-bottom:6px}
+.hero-text p{font-size:12.5px;color:rgba(255,255,255,.55);max-width:440px;line-height:1.65}
+.search-box{position:relative;flex:1;max-width:260px}
+.search-box input{width:100%;padding:7px 12px 7px 30px;border-radius:7px;border:1.5px solid var(--border);font-size:12.5px;background:var(--paper)}
+.search-box .sicon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--ink3)}
+.empty-state{text-align:center;padding:50px 20px;color:var(--ink3)}
+.empty-state .es-icon{font-size:32px;margin-bottom:10px;opacity:.4}
+.empty-state .es-title{font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:4px}
+.empty-state .es-sub{font-size:12px}
+
+/* ═══════════════════════════════════════════════
+   STEPS BAR (clickable)
+═══════════════════════════════════════════════ */
+.steps-bar{display:flex;align-items:center;gap:0;margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0;overflow:hidden}
+.step-item{flex:1;display:flex;align-items:center;gap:10px;padding:13px 18px;position:relative;font-size:13px;font-weight:500;color:var(--ink3);cursor:default;transition:all .2s;border:none;background:none;text-align:left}
+.step-item.clickable{cursor:pointer}
+.step-item.clickable:hover{background:rgba(0,0,0,.02)}
+.step-item.active{background:var(--accent-lt);color:var(--accent)}
+.step-item.done{background:var(--teal-lt);color:var(--teal)}
+.step-item:not(:last-child)::after{content:'';position:absolute;right:0;top:0;bottom:0;width:1px;background:var(--border)}
+.step-num{width:23px;height:23px;border-radius:50%;background:currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.step-num span{color:#fff}
+.step-item.active .step-num{background:var(--accent)}
+.step-item.done .step-num{background:var(--teal)}
+.step-item.inactive .step-num{background:var(--border)}
+.step-item.inactive .step-num span{color:var(--ink3)}
+.step-item.done .step-num span::before{content:'✓'}
+
+/* ═══════════════════════════════════════════════
+   FORM
+═══════════════════════════════════════════════ */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:12px;font-weight:600;color:var(--ink2);letter-spacing:.02em;display:flex;justify-content:space-between}
+.form-label .req{color:var(--accent)}
+.char-count{font-size:10.5px;color:var(--ink3);font-weight:400}
+.form-input{padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13.5px;color:var(--ink);background:var(--card);outline:none;transition:border-color .2s;width:100%}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,66,10,.08)}
+.form-input.err{border-color:var(--red)}
+.field-err{font-size:11px;color:var(--red);display:none}
+.field-err.show{display:block}
+.form-select{padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13.5px;color:var(--ink);background:var(--card);outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;width:100%}
+.form-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,66,10,.08)}
+.persona-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.persona-chip{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:600;color:var(--ink3);cursor:pointer;transition:all .15s;user-select:none}
+.persona-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-lt)}
+.persona-chip.selected{border-color:var(--accent);background:var(--accent);color:#fff}
+.ingredient-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;background:var(--teal-lt);color:var(--teal);font-size:12px;font-weight:600;margin:4px 4px 0 0;animation:popIn .2s ease}
+.ingredient-tag button{background:none;border:none;cursor:pointer;color:var(--teal);font-size:14px;line-height:1;padding:0}
+.tip-box{background:var(--gold-lt);border:1px solid #e8c96b;border-radius:8px;padding:12px 16px;display:flex;gap:10px;align-items:flex-start;margin-top:16px}
+.tip-box .tip-icon{font-size:15px;flex-shrink:0;margin-top:1px;color:#8a6300}
+.tip-box p{font-size:12.5px;color:#5C3D00;line-height:1.6}
+.example-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.example-chip{padding:6px 12px;border-radius:7px;border:1.5px dashed var(--border);background:transparent;font-size:11.5px;font-weight:600;color:var(--ink3);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px}
+.example-chip:hover{border-color:var(--accent);color:var(--accent);border-style:solid}
+
+/* ═══════════════════════════════════════════════
+   PROCESSING
+═══════════════════════════════════════════════ */
+.processing-center{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:62vh;text-align:center}
+.forge-animation{width:84px;height:84px;margin:0 auto 26px;position:relative}
+.forge-ring{position:absolute;inset:0;border-radius:50%;border:2.5px solid transparent;animation:spinRing 1.4s linear infinite}
+.forge-ring:nth-child(1){border-top-color:var(--accent);animation-duration:1.4s}
+.forge-ring:nth-child(2){border-right-color:var(--teal);animation-duration:2.1s;animation-direction:reverse;inset:9px}
+.forge-ring:nth-child(3){border-bottom-color:var(--gold);animation-duration:1.8s;inset:18px}
+.forge-core{position:absolute;inset:26px;background:var(--dark);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.forge-core span{font-family:'DM Serif Display',serif;font-size:13px;color:var(--accent)}
+@keyframes spinRing{to{transform:rotate(360deg)}}
+.process-steps{display:flex;flex-direction:column;gap:9px;width:440px;max-width:100%}
+.process-step{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;background:var(--card);border:1px solid var(--border);font-size:12.5px;color:var(--ink2);transition:all .3s;text-align:left}
+.process-step.running{background:var(--accent-lt);border-color:var(--accent-mid);color:var(--accent)}
+.process-step.done{background:var(--teal-lt);border-color:var(--teal);color:var(--teal)}
+.process-step .ps-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.process-step .ps-bar{flex:1;height:4px;background:rgba(0,0,0,.08);border-radius:2px;overflow:hidden;margin-left:8px}
+.process-step .ps-fill{height:100%;border-radius:2px;background:currentColor;transition:width 0.6s ease;width:0%}
+.process-detail{font-size:11px;color:var(--ink3);margin-top:2px;font-family:var(--mono)}
+
+/* ═══════════════════════════════════════════════
+   WHITESPACE MAP
+═══════════════════════════════════════════════ */
+.results-layout{display:grid;grid-template-columns:1fr 328px;gap:18px}
+.map-container{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.map-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px;align-items:center;font-size:11px}
+.legend-item{display:flex;align-items:center;gap:6px;font-weight:600;color:var(--ink3)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.map-svg-wrap{position:relative;width:100%;height:360px}
+.map-svg-wrap svg{width:100%;height:100%}
+.zone-tooltip{position:absolute;background:var(--dark);color:#fff;padding:9px 13px;border-radius:8px;font-size:11.5px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:10;max-width:210px;line-height:1.5}
+.zone-tooltip.visible{opacity:1}
+.zone-tooltip b{color:var(--gold)}
+.results-sidebar{display:flex;flex-direction:column;gap:12px;max-height:520px;overflow-y:auto;padding-right:2px}
+.whitespace-card{border-radius:var(--radius);padding:15px 17px;cursor:pointer;transition:all .18s;border:2px solid transparent}
+.whitespace-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.whitespace-card.selected{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,110,86,.12)}
+.whitespace-card.zone-c{background:var(--teal-lt)}
+.whitespace-card.zone-b{background:var(--gold-lt)}
+.ws-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px}
+.ws-card-score{font-family:'DM Serif Display',serif;font-size:26px;line-height:1}
+.ws-card-badge{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px}
+.badge-rec{background:var(--teal);color:#fff}
+.badge-alt{background:var(--gold);color:#fff}
+.ws-card-title{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.ws-card-desc{font-size:11.5px;color:var(--ink3);line-height:1.55}
+.ws-card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.ws-tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px}
+.zone-detail-panel{background:var(--dark);border-radius:var(--radius);padding:16px 18px;color:#fff;margin-top:4px;animation:popIn .2s ease}
+.zone-detail-panel h5{font-size:12px;color:var(--gold);margin-bottom:8px;font-weight:700}
+.zone-detail-panel .zd-row{display:flex;justify-content:space-between;font-size:11.5px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.zone-detail-panel .zd-row:last-child{border-bottom:none}
+.zone-detail-panel .zd-label{color:rgba(255,255,255,.5)}
+.zone-detail-panel .zd-val{font-weight:700;font-family:var(--mono)}
+
+/* ═══════════════════════════════════════════════
+   VP GENERATOR
+═══════════════════════════════════════════════ */
+.vp-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.vp-layout{display:grid;grid-template-columns:1fr 300px;gap:18px}
+.vp-list{display:flex;flex-direction:column;gap:12px}
+.vp-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:17px 19px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.vp-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--border);transition:background .2s}
+.vp-card:hover{border-color:var(--accent);box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.vp-card.selected{border-color:var(--teal)}
+.vp-card.selected::before{background:var(--teal)}
+.vp-card.top::before{background:var(--teal)}
+.vp-card.warn::before{background:var(--gold)}
+.vp-card.danger::before{background:var(--red)}
+.vp-card.compare-on{border-color:var(--blue)}
+.vp-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.vp-claim{font-family:'DM Serif Display',serif;font-size:17px;color:var(--ink);margin-bottom:9px;line-height:1.32;outline:none;border-radius:4px;padding:2px 4px;margin-left:-4px}
+.vp-claim[contenteditable="true"]:hover{background:rgba(201,66,10,.05)}
+.vp-claim[contenteditable="true"]:focus{background:rgba(201,66,10,.06);box-shadow:0 0 0 2px var(--accent-mid)}
+.vp-edit-hint{font-size:9.5px;color:var(--ink3);opacity:0;transition:opacity .15s;margin-bottom:6px}
+.vp-card:hover .vp-edit-hint{opacity:1}
+.vp-scores{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.score-item{display:flex;flex-direction:column;gap:3px;min-width:76px}
+.score-label{font-size:9.5px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
+.score-bar{height:5px;background:var(--gray-lt);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.score-fill.teal{background:var(--teal)} .score-fill.gold{background:var(--gold)} .score-fill.red{background:var(--red)}
+.score-pct{font-size:11px;font-weight:700;color:var(--ink2);font-family:var(--mono)}
+.vp-pci-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:700;margin-bottom:8px;font-family:var(--mono)}
+.vp-flags{display:flex;flex-direction:column;gap:5px;margin-top:10px}
+.flag{display:flex;align-items:flex-start;gap:7px;padding:7px 10px;border-radius:6px;font-size:11px;line-height:1.4}
+.flag-warn{background:var(--accent-lt);color:var(--accent)}
+.flag-danger{background:var(--red-lt);color:var(--red)}
+.flag-ok{background:var(--teal-lt);color:var(--teal)}
+.flag-icon{font-size:12px;flex-shrink:0;margin-top:1px}
+.compare-check{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all .15s;z-index:2}
+.compare-check.checked{background:var(--blue);border-color:var(--blue);color:#fff}
+.rhs-panel{display:flex;flex-direction:column;gap:14px}
+.pci-meter{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);text-align:center}
+.pci-ring-wrap{position:relative;width:100px;height:100px;margin:0 auto 12px}
+.pci-ring-svg{transform:rotate(-90deg)}
+.pci-ring-bg{fill:none;stroke:var(--gray-lt);stroke-width:8}
+.pci-ring-fill{fill:none;stroke:var(--teal);stroke-width:8;stroke-linecap:round;stroke-dasharray:283;stroke-dashoffset:34;transition:stroke-dashoffset .8s cubic-bezier(.16,1,.3,1),stroke .3s}
+.pci-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pci-num .n{font-family:'DM Serif Display',serif;font-size:27px;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums}
+.pci-num .s{font-size:10px;color:var(--ink3)}
+.dim-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.dim-label{font-size:11.5px;color:var(--ink2)}
+.dim-val{font-size:11.5px;font-weight:700;font-family:var(--mono)}
+.dim-bar-wrap{height:4px;background:var(--gray-lt);border-radius:2px;overflow:hidden;margin-bottom:12px}
+.dim-bar{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.compare-panel{background:var(--blue-lt);border:1.5px solid var(--blue);border-radius:var(--radius);padding:16px;animation:popIn .2s ease}
+.compare-panel h5{font-size:11.5px;color:var(--blue);font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.compare-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:11px;margin-bottom:8px}
+.compare-row .cv-label{font-size:9.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.compare-row .cv-claim{font-weight:600;color:var(--ink);line-height:1.3}
+
+/* ═══════════════════════════════════════════════
+   POSITIONING BRIEF
+═══════════════════════════════════════════════ */
+.brief-layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.brief-hero{background:linear-gradient(135deg,#141416 0%,#1c2438 100%);border-radius:var(--radius-lg);padding:26px 30px;grid-column:1/-1;position:relative;overflow:hidden}
+.brief-hero::before{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(201,66,10,.18),transparent 70%);pointer-events:none}
+.brief-hero .eyebrow{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-mid);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.brief-hero .claim{font-family:'DM Serif Display',serif;font-size:28px;color:#fff;line-height:1.25;margin-bottom:14px}
+.brief-hero .claim em{color:var(--accent-mid);font-style:italic}
+.brief-pci-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brief-pci-pill{color:#fff;padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:700;font-family:var(--mono)}
+.brief-pci-bar{flex:1;min-width:120px;height:6px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden}
+.brief-pci-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.16,1,.3,1)}
+.brief-zone{background:rgba(232,184,75,.18);color:var(--gold);padding:6px 14px;border-radius:20px;font-size:11.5px;font-weight:700}
+.brief-meta{color:rgba(255,255,255,.4);font-size:11px;margin-left:auto}
+.brief-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:19px;box-shadow:var(--shadow)}
+.brief-section h4{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3);margin-bottom:13px;display:flex;justify-content:space-between;align-items:center}
+.claim-tier{padding:11px 13px;border-radius:7px;margin-bottom:8px;border-left:3px solid transparent}
+.claim-tier.tier1{border-left-color:var(--teal);background:var(--teal-lt)}
+.claim-tier.tier2{border-left-color:var(--gold);background:var(--gold-lt)}
+.claim-tier.tier3{border-left-color:var(--blue);background:var(--blue-lt)}
+.claim-tier-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;margin-bottom:3px}
+.claim-tier-text{font-size:13px;color:var(--ink);line-height:1.4}
+.risk-row{display:flex;align-items:flex-start;gap:9px;padding:10px 11px;border-radius:7px;margin-bottom:7px;font-size:12px;line-height:1.5}
+.risk-row.warn{background:var(--accent-lt);color:var(--ink2)}
+.risk-row.ok{background:var(--teal-lt);color:var(--ink2)}
+.rtb-item{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--gray-lt)}
+.rtb-item:last-child{border-bottom:none}
+.rtb-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:6px}
+.rtb-text{font-size:12.5px;color:var(--ink2);line-height:1.5}
+.next-actions{display:flex;flex-direction:column;gap:7px}
+.action-item{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:8px;background:var(--paper);border:1px solid var(--border);cursor:pointer;transition:all .16s;font-size:12.5px;color:var(--ink2)}
+.action-item:hover{background:var(--card);border-color:var(--accent);color:var(--accent);transform:translateX(2px)}
+.action-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.export-bar{background:linear-gradient(135deg,#141416 0%,#1c2438 100%);border-radius:var(--radius);padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:4px;flex-wrap:wrap}
+.export-bar p{font-size:12.5px;color:rgba(255,255,255,.6)}
+.export-bar p strong{color:#fff}
+.export-btns{display:flex;gap:8px;flex-wrap:wrap}
+.export-progress{display:none;align-items:center;gap:8px;font-size:11.5px;color:rgba(255,255,255,.7)}
+.export-progress.show{display:flex}
+.mini-spinner{width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;animation:spinRing .7s linear infinite}
+
+/* ═══════════════════════════════════════════════
+   MODALS & TOASTS
+═══════════════════════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,10,12,.55);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(2px)}
+.modal-overlay.show{display:flex;animation:fadeIn .18s ease}
+.modal-box{background:#fff;border-radius:14px;padding:26px;max-width:440px;width:92%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:popIn .22s cubic-bezier(.16,1,.3,1)}
+.modal-box h3{font-family:'DM Serif Display',serif;font-size:19px;margin-bottom:10px;color:var(--ink)}
+.modal-box p{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:18px}
+.modal-preview{background:var(--paper);border:1px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:18px;font-size:11.5px;font-family:var(--mono);color:var(--ink3);max-height:140px;overflow-y:auto;white-space:pre-wrap;line-height:1.6}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end}
+.notification{position:fixed;bottom:22px;right:22px;background:var(--dark);color:#fff;padding:13px 18px;border-radius:10px;font-size:12.5px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:11px;transform:translateY(90px);opacity:0;transition:all .32s cubic-bezier(.16,1,.3,1);z-index:300;max-width:340px}
+.notification.show{transform:translateY(0);opacity:1}
+.notification .n-icon{font-size:16px;flex-shrink:0}
+.notification .n-icon.success{color:var(--teal)}
+.notification .n-icon.info{color:var(--gold)}
+.notification-stack{position:fixed;bottom:22px;right:22px;z-index:300;display:flex;flex-direction:column-reverse;gap:10px}
+
+/* ═══════════════════════════════════════════════
+   HISTORY SCREEN
+═══════════════════════════════════════════════ */
+.history-toolbar{display:flex;gap:10px;margin-bottom:18px;align-items:center;flex-wrap:wrap}
+.filter-chip{padding:6px 13px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:11.5px;font-weight:600;color:var(--ink3);cursor:pointer;transition:all .15s}
+.filter-chip:hover{border-color:var(--ink3)}
+.filter-chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ═══════════════════════════════════════════════
+   SKELETON LOADERS
+═══════════════════════════════════════════════ */
+.skeleton{background:linear-gradient(90deg,#EEEDEA 25%,#F5F4F0 37%,#EEEDEA 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:6px}
+
+/* ═══════════════════════════════════════════════
+   MISC UTILITIES
+═══════════════════════════════════════════════ */
+.flex-between{display:flex;justify-content:space-between;align-items:center}
+.flex-gap{display:flex;gap:10px;align-items:center}
+.mt-2{margin-top:8px} .mt-4{margin-top:16px} .mt-6{margin-top:24px} .mb-4{margin-bottom:16px}
+hr.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.pill-green{background:var(--teal-lt);color:var(--teal)}
+.pill-amber{background:var(--gold-lt);color:#7A4F00}
+.pill-red{background:var(--red-lt);color:var(--red)}
+.pill-blue{background:var(--blue-lt);color:var(--blue)}
+.pill-gray{background:var(--gray-lt);color:var(--ink3)}
+.tooltip-anchor{position:relative;cursor:help}
+.tooltip-anchor .tt{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:7px 11px;border-radius:6px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:50}
+.tooltip-anchor:hover .tt{opacity:1}
+kbd{background:var(--gray-lt);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:10.5px;font-family:var(--mono);color:var(--ink2)}
+@media print{
+  .sidebar,.topbar,.notification-stack,.action-item,.export-bar{display:none!important}
+  .screen-area{overflow:visible;padding:0}
+  body{background:#fff}
+}
+@media (max-width:1080px){
+  .dashboard-grid{grid-template-columns:1fr 1fr}
+  .results-layout,.vp-layout,.brief-layout{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .sidebar{width:64px}
+  .sidebar .user-name,.sidebar .user-role,.sidebar .nav-item span:not(.icon),.sidebar .nav-section,.logo-mark span,.logo-sub{display:none}
+  .form-grid{grid-template-columns:1fr}
+  .dashboard-grid{grid-template-columns:1fr}
+}
+.shell:has(#s-dashboard.active) #topbar-new-btn,
+.shell:has(#s-new-analysis.active) #topbar-new-btn {
+  display: none !important;
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ══════════════════════════════ SIDEBAR ══════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div>
+        <div class="logo-mark"><span class="mark-icon">VF</span>Value<span>Forge</span>™</div>
+        <div class="logo-sub">by Ai Palette</div>
+      </div>
+    </div>
+
+    <div class="nav-section">Workspace</div>
+    <button class="nav-item active" data-nav="s-dashboard" onclick="goto('s-dashboard')">
+      <span class="icon">⬡</span> <span>Dashboard</span>
+    </button>
+    <button class="nav-item" data-nav="s-new-analysis" onclick="startNewAnalysis()">
+      <span class="icon">＋</span> <span>New Analysis</span>
+    </button>
+    <button class="nav-item" data-nav="s-history" onclick="goto('s-history')">
+      <span class="icon">◷</span> <span>History</span> <span class="nav-badge" id="history-count">6</span>
+    </button>
+
+    <div class="nav-divider"></div>
+    <div class="nav-section">Current Analysis</div>
+    <button class="nav-item" data-nav="s-whitespace" onclick="jumpToStep('s-whitespace')">
+      <span class="icon">★</span> <span>Whitespace Map</span>
+    </button>
+    <button class="nav-item" data-nav="s-vp-gen" onclick="jumpToStep('s-vp-gen')">
+      <span class="icon">◈</span> <span>VP Generator</span>
+    </button>
+    <button class="nav-item" data-nav="s-brief" onclick="jumpToStep('s-brief')">
+      <span class="icon">◻</span> <span>Positioning Brief</span>
+    </button>
+
+    <div class="nav-divider"></div>
+    <button class="nav-item" onclick="showNotif('Settings coming soon in Phase 2','info')" style="color:rgba(255,255,255,.35)">
+      <span class="icon">⚙</span> <span>Settings</span>
+    </button>
+
+    <div class="sidebar-footer">
+      <div class="user-badge" onclick="showNotif('Account switcher — Phase 2 feature','info')">
+        <div class="user-avatar">PS</div>
+        <div>
+          <div class="user-name">Priya Sharma</div>
+          <div class="user-role">Sr. Brand Manager · HUL</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════ MAIN ══════════════════════════════ -->
+  <main class="main">
+
+    <div class="topbar">
+      <div class="topbar-breadcrumb" id="breadcrumb">
+        <span class="crumb" onclick="goto('s-dashboard')">ValueForge™</span> <span>›</span> <span class="current">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <span class="badge-beta">BETA v2.0</span>
+        <button class="icon-btn tooltip-anchor" onclick="showKeyboardHelp()">
+          ⌘K<span class="tt">Keyboard shortcuts</span>
+        </button>
+        <button class="btn btn-primary btn-sm" id="topbar-new-btn" onclick="startNewAnalysis()" style="display:none">+ New Analysis</button>
+      </div>
+    </div>
+
+    <div class="screen-area" id="screen-area">
+
+      <!-- ════════════════════ S1 · DASHBOARD ════════════════════ -->
+      <div class="screen active" id="s-dashboard">
+
+        <div class="hero-banner">
+          <div class="hero-text">
+            <h2 id="dash-greeting">Welcome back, Priya.</h2>
+            <p id="dash-summary">You have <strong style="color:var(--gold)">2 analyses in progress</strong> and 1 brief ready to export. Your last Positioning Confidence Index was <strong style="color:var(--teal)">88/100</strong> — launch ready.</p>
+          </div>
+          <button class="btn btn-primary" onclick="startNewAnalysis()">Start New Analysis →</button>
+        </div>
+
+        <div class="dashboard-grid" id="dashboard-stats"></div>
+
+        <div class="card">
+          <div class="flex-between mb-4">
+            <div class="section-label" style="margin:0">Recent Analyses</div>
+            <div class="flex-gap">
+              <div class="search-box">
+                <span class="sicon">⌕</span>
+                <input type="text" placeholder="Search analyses…" id="dash-search" oninput="renderDashboardTable()">
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="goto('s-history')">View all</button>
+            </div>
+          </div>
+          <table class="recent-table">
+            <thead>
+              <tr>
+                <th>Product Concept</th><th>Category</th><th>Persona</th>
+                <th>Whitespace Zone</th><th>PCI Score</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="dashboard-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ════════════════════ S2 · NEW ANALYSIS — INPUT ════════════════════ -->
+      <div class="screen" id="s-new-analysis">
+        <div class="page-title">New ValueForge™ Analysis</div>
+        <div class="page-sub">Define your product concept. ValueForge will map the competitive landscape, find whitespace, and generate a positioning brief — tailored to your exact category and persona.</div>
+
+        <div class="steps-bar" id="steps-bar-input"></div>
+
+        <div class="example-row">
+          <span style="font-size:11px;color:var(--ink3);font-weight:600;align-self:center;margin-right:2px">Try an example:</span>
+          <button class="example-chip" onclick="loadExample(0)">⚡ Protein Drink</button>
+          <button class="example-chip" onclick="loadExample(1)">🍵 Functional Tea</button>
+          <button class="example-chip" onclick="loadExample(2)">✨ Niacinamide Serum</button>
+          <button class="example-chip" onclick="loadExample(3)">🌾 Protein Bar</button>
+        </div>
+
+        <div class="card">
+          <div class="section-label">Product Basics</div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Product Concept <span><span class="req">*</span> <span class="char-count" id="concept-count">0/120</span></span></label>
+              <input class="form-input" type="text" id="f-concept" maxlength="120" value="Plant-based protein drink" placeholder="Describe your product idea…" oninput="onConceptInput()">
+              <div class="field-err" id="err-concept">Please describe your product concept (min. 4 characters).</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category <span class="req">*</span></label>
+              <select class="form-select" id="f-category" onchange="onCategoryChange()">
+                <option value="Functional Beverages" selected>Functional Beverages</option>
+                <option value="Hot Beverages">Hot Beverages</option>
+                <option value="Snacks & Bars">Snacks & Bars</option>
+                <option value="Dairy & Alternatives">Dairy & Alternatives</option>
+                <option value="Skincare">Skincare</option>
+                <option value="Haircare">Haircare</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Market</label>
+              <select class="form-select" id="f-market">
+                <option selected>India</option>
+                <option>Indonesia</option><option>Singapore</option>
+                <option>UAE</option><option>Thailand</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price Tier</label>
+              <select class="form-select" id="f-price">
+                <option>Economy (₹20–50)</option>
+                <option selected>Mid (₹80–120)</option>
+                <option>Premium (₹150–300)</option>
+                <option>Super Premium (₹300+)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Channel</label>
+              <select class="form-select" id="f-channel">
+                <option selected>Modern Trade + E-Commerce</option>
+                <option>General Trade</option>
+                <option>D2C Online</option>
+                <option>Foodservice</option>
+              </select>
+            </div>
+          </div>
+
+          <hr class="divider">
+          <div class="section-label">Target Persona <span class="req">*</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink3)">(select one)</span></div>
+          <div class="persona-chips" id="persona-chips"></div>
+          <div class="field-err" id="err-persona">Please select a target persona.</div>
+
+          <hr class="divider">
+          <div class="section-label">Key Ingredients / Formats (Optional)</div>
+          <div id="ingredient-tags" style="margin-bottom:4px"></div>
+          <div class="flex-gap mt-2">
+            <input class="form-input" id="ing-input" type="text" placeholder="Add ingredient or format (e.g., RTD, plant-based)…" style="max-width:340px" onkeydown="if(event.key==='Enter'){event.preventDefault();addTag()}">
+            <button class="btn btn-secondary btn-sm" onclick="addTag()">+ Add</button>
+          </div>
+
+          <div class="tip-box mt-4">
+            <span class="tip-icon">◆</span>
+            <p><strong>Pro Tip:</strong> Adding ingredients helps ValueForge cross-reference claim density at the formulation level — identifying whether an ingredient-led claim is already overused in your category before you commit to it.</p>
+          </div>
+
+          <div class="flex-between mt-6">
+            <button class="btn btn-secondary" onclick="goto('s-dashboard')">← Cancel</button>
+            <button class="btn btn-primary" onclick="validateAndRun()">Run ValueForge Analysis →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ S3 · PROCESSING ════════════════════ -->
+      <div class="screen" id="s-processing">
+        <div class="processing-center">
+          <div class="forge-animation">
+            <div class="forge-ring"></div><div class="forge-ring"></div><div class="forge-ring"></div>
+            <div class="forge-core"><span>VF</span></div>
+          </div>
+          <div style="font-family:'DM Serif Display',serif;font-size:23px;margin-bottom:6px" id="proc-title">Forging your position…</div>
+          <div style="font-size:12.5px;color:var(--ink3);margin-bottom:26px" id="proc-sub">Running all 5 layers of the Differentiation Genome™</div>
+
+          <div class="process-steps">
+            <div class="process-step" id="ps1"><span class="ps-icon">◆</span><span style="flex:1">
+              <div>Persona Intelligence Module™ — Decoding Desire Vectors</div>
+              <div class="process-detail" id="pd1"></div></span>
+              <div class="ps-bar"><div class="ps-fill" id="pf1"></div></div></div>
+            <div class="process-step" id="ps2"><span class="ps-icon">▼</span><span style="flex:1">
+              <div>Competitive Saturation Scanner™ — Mapping category SKUs</div>
+              <div class="process-detail" id="pd2"></div></span>
+              <div class="ps-bar"><div class="ps-fill" id="pf2"></div></div></div>
+            <div class="process-step" id="ps3"><span class="ps-icon">★</span><span style="flex:1">
+              <div>WhiteSpace Navigator™ — Identifying Positioning Pockets</div>
+              <div class="process-detail" id="pd3"></div></span>
+              <div class="ps-bar"><div class="ps-fill" id="pf3"></div></div></div>
+            <div class="process-step" id="ps4"><span class="ps-icon">⚡</span><span style="flex:1">
+              <div>Claim Forge Engine™ — Generating differentiated claims</div>
+              <div class="process-detail" id="pd4"></div></span>
+              <div class="ps-bar"><div class="ps-fill" id="pf4"></div></div></div>
+            <div class="process-step" id="ps5"><span class="ps-icon">▶</span><span style="flex:1">
+              <div>Consumer Resonance Simulator™ — Scoring via synthetic cohorts</div>
+              <div class="process-detail" id="pd5"></div></span>
+              <div class="ps-bar"><div class="ps-fill" id="pf5"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ S4 · WHITESPACE MAP ════════════════════ -->
+      <div class="screen" id="s-whitespace">
+        <div class="steps-bar" id="steps-bar-whitespace"></div>
+        <div class="flex-between mb-4">
+          <div>
+            <div class="page-title" id="ws-title">Whitespace Map</div>
+            <div class="page-sub" style="margin-bottom:0" id="ws-sub">Competitor SKUs mapped. Positioning Pockets™ identified.</div>
+          </div>
+          <button class="btn btn-primary" onclick="goto('s-vp-gen')">Generate Value Props →</button>
+        </div>
+
+        <div class="results-layout">
+          <div class="map-container">
+            <div class="map-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Zone A: Overcrowded</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Zone B: Contested</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Zone C: Whitespace ★</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Zone D: Under-served</div>
+              <div class="legend-item" style="margin-left:auto"><span class="mono" style="font-size:10.5px" id="ws-sku-count">— SKUs analyzed</span></div>
+            </div>
+            <div class="map-svg-wrap">
+              <div class="zone-tooltip" id="tooltip"></div>
+              <svg id="ws-svg" viewBox="0 0 560 360" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+            <div id="zone-detail-container"></div>
+          </div>
+
+          <div class="results-sidebar" id="pocket-cards"></div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ S5 · VP GENERATOR ════════════════════ -->
+      <div class="screen" id="s-vp-gen">
+        <div class="steps-bar" id="steps-bar-vpgen"></div>
+        <div class="flex-between mb-4">
+          <div>
+            <div class="page-title">Value Proposition Generator</div>
+            <div class="page-sub" style="margin-bottom:0" id="vp-sub">Whitespace Zone · Persona · PCI Threshold: 75+</div>
+          </div>
+          <button class="btn btn-primary" onclick="goto('s-brief')">Build Positioning Brief →</button>
+        </div>
+
+        <div class="vp-toolbar">
+          <button class="btn btn-secondary btn-sm" onclick="regenerateVPs()">↻ Regenerate Claims</button>
+          <button class="btn btn-ghost btn-sm" id="compare-toggle-btn" onclick="toggleCompareMode()">⚌ Compare Mode</button>
+          <span style="font-size:11px;color:var(--ink3);margin-left:auto" id="vp-edit-hint">✎ Click any claim text to edit it — score recalculates live</span>
+        </div>
+
+        <div class="vp-layout">
+          <div class="vp-list" id="vp-list"></div>
+
+          <div class="rhs-panel">
+            <div class="pci-meter">
+              <div class="section-label" style="margin-bottom:12px">Positioning Confidence Index™</div>
+              <div class="pci-ring-wrap">
+                <svg class="pci-ring-svg" width="100" height="100" viewBox="0 0 100 100">
+                  <circle class="pci-ring-bg" cx="50" cy="50" r="42"/>
+                  <circle class="pci-ring-fill" id="pci-ring" cx="50" cy="50" r="42"/>
+                </svg>
+                <div class="pci-num"><div class="n" id="pci-display">—</div><div class="s">/ 100</div></div>
+              </div>
+              <div class="pill pill-green" id="pci-status-pill">Launch Ready</div>
+              <div style="font-size:11px;color:var(--ink3);margin-top:6px">Score ≥75 = launch ready. Select or edit a claim to update.</div>
+            </div>
+
+            <div class="card-sm">
+              <div class="section-label" style="margin-bottom:12px">Dimension Breakdown</div>
+              <div id="dim-breakdown"></div>
+            </div>
+
+            <div id="compare-panel-container"></div>
+
+            <div class="card-sm" id="vp-zone-summary"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ S6 · POSITIONING BRIEF ════════════════════ -->
+      <div class="screen" id="s-brief">
+        <div class="steps-bar" id="steps-bar-brief"></div>
+        <div class="flex-between mb-4">
+          <div>
+            <div class="page-title" id="brief-title">Positioning Brief</div>
+            <div class="page-sub" style="margin-bottom:0" id="brief-sub">Decision-ready brief</div>
+          </div>
+          <div class="flex-gap">
+            <button class="btn btn-secondary" onclick="copyBriefToClipboard()">⎘ Copy Text</button>
+            <button class="btn btn-secondary" onclick="window.print()">⎙ Print</button>
+            <button class="btn btn-primary" onclick="exportPDF()">↓ Export PDF</button>
+          </div>
+        </div>
+
+        <div class="brief-layout" id="brief-content"></div>
+
+        <div class="export-bar mt-4">
+          <p id="export-bar-label"><strong>ValueForge™ Brief</strong></p>
+          <div class="export-progress" id="export-progress"><div class="mini-spinner"></div><span id="export-progress-text">Generating PDF…</span></div>
+          <div class="export-btns">
+            <button class="btn btn-secondary btn-sm" onclick="exportCSV()">↓ Competitor Data (CSV)</button>
+            <button class="btn btn-secondary btn-sm" onclick="shareLink()">🔗 Copy Share Link</button>
+            <button class="btn btn-teal btn-sm" onclick="exportPDF()">↓ Download PDF</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ S-HISTORY ════════════════════ -->
+      <div class="screen" id="s-history">
+        <div class="page-title">Analysis History</div>
+        <div class="page-sub">All ValueForge analyses run on your account this session.</div>
+
+        <div class="history-toolbar">
+          <div class="search-box" style="max-width:280px">
+            <span class="sicon">⌕</span>
+            <input type="text" placeholder="Search by concept or category…" id="history-search" oninput="renderHistory()">
+          </div>
+          <button class="filter-chip active" data-filter="all" onclick="setHistoryFilter('all')">All</button>
+          <button class="filter-chip" data-filter="ready" onclick="setHistoryFilter('ready')">Launch Ready</button>
+          <button class="filter-chip" data-filter="progress" onclick="setHistoryFilter('progress')">In Progress</button>
+          <button class="filter-chip" data-filter="rework" onclick="setHistoryFilter('rework')">Rework Needed</button>
+        </div>
+
+        <div class="card">
+          <table class="recent-table">
+            <thead>
+              <tr><th>Date</th><th>Product Concept</th><th>Category</th><th>Persona</th><th>PCI</th><th>Zone</th><th>Action</th></tr>
+            </thead>
+            <tbody id="history-table-body"></tbody>
+          </table>
+          <div class="empty-state" id="history-empty" style="display:none">
+            <div class="es-icon">⌕</div>
+            <div class="es-title">No matching analyses</div>
+            <div class="es-sub">Try a different search term or filter</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /screen-area -->
+  </main>
+</div><!-- /shell -->
+
+<!-- Notification stack -->
+<div class="notification-stack" id="notif-stack"></div>
+
+<!-- Export confirmation modal -->
+<div class="modal-overlay" id="export-modal">
+  <div class="modal-box">
+    <h3>Export Positioning Brief</h3>
+    <p>This generates a real, downloadable PDF from your current analysis — hero claim, PCI score, claim hierarchy, risk flags, and reasons to believe.</p>
+    <div class="modal-preview" id="export-preview"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('export-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmExportPDF()">↓ Generate PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- Keyboard shortcuts modal -->
+<div class="modal-overlay" id="kbd-modal">
+  <div class="modal-box">
+    <h3>Keyboard Shortcuts</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+      <div class="flex-between"><span style="font-size:13px;color:var(--ink2)">New analysis</span><kbd>N</kbd></div>
+      <div class="flex-between"><span style="font-size:13px;color:var(--ink2)">Go to Dashboard</span><kbd>D</kbd></div>
+      <div class="flex-between"><span style="font-size:13px;color:var(--ink2)">Go to History</span><kbd>H</kbd></div>
+      <div class="flex-between"><span style="font-size:13px;color:var(--ink2)">Close dialog</span><kbd>Esc</kbd></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="closeModal('kbd-modal')">Got it</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// DATA MODEL — Categories, Personas, Claim Templates
+// ══════════════════════════════════════════════════════════
+const CATEGORIES = {
+  "Functional Beverages": {
+    benefit: "energy", moment: "morning", defaultIngredient: "plant protein",
+    competitors: [
+      {name:"Herbalife Protein Shake", tone:"clinical"}, {name:"MuscleBlaze Whey", tone:"clinical"},
+      {name:"Fast&Up Protein", tone:"clinical"}, {name:"Amway Protein", tone:"clinical"},
+      {name:"Ensure Plus", tone:"clinical"}, {name:"Protinex Daily", tone:"convenience"},
+      {name:"RiteBite Fuel Shake", tone:"convenience"}, {name:"OZiva Plant Protein", tone:"social"},
+      {name:"Bevzilla Cold Brew Protein", tone:"social"}, {name:"Yakult Original", tone:"convenience"},
+    ],
+    saturatedClaims: ["25g protein","clean label","no added sugar","plant-powered","clinically tested","clinically proven"],
+  },
+  "Hot Beverages": {
+    benefit: "calm", moment: "evening", defaultIngredient: "ashwagandha",
+    competitors: [
+      {name:"Tetley Green Tea", tone:"clinical"}, {name:"Lipton Immuni-T", tone:"clinical"},
+      {name:"Sleepy Owl Cold Brew", tone:"social"}, {name:"Blue Tokai Coffee", tone:"social"},
+      {name:"Vahdam Wellness Tea", tone:"ritual"}, {name:"Twinings Detox", tone:"clinical"},
+      {name:"Typhoo Green Tea", tone:"clinical"}, {name:"MyMuse Adaptogen Latte", tone:"ritual"},
+      {name:"Chaayos Kadak Chai", tone:"convenience"},
+    ],
+    saturatedClaims: ["antioxidant rich","detox","immunity boost","100% natural","farm fresh","pure"],
+  },
+  "Snacks & Bars": {
+    benefit: "fuel", moment: "midday", defaultIngredient: "almonds",
+    competitors: [
+      {name:"RiteBite Max Protein", tone:"clinical"}, {name:"Yoga Bar Protein", tone:"clinical"},
+      {name:"The Whole Truth Bar", tone:"social"}, {name:"Slurrp Farm Snacks", tone:"convenience"},
+      {name:"Too Yumm Baked", tone:"convenience"}, {name:"Epigamia Protein Bites", tone:"clinical"},
+      {name:"Nutriwish Trail Mix", tone:"ritual"}, {name:"Open Secret Millet Bar", tone:"social"},
+    ],
+    saturatedClaims: ["high protein","no maida","gluten free","guilt-free","baked not fried","zero sugar"],
+  },
+  "Dairy & Alternatives": {
+    benefit: "gut health", moment: "breakfast", defaultIngredient: "probiotics",
+    competitors: [
+      {name:"Epigamia Greek Yogurt", tone:"clinical"}, {name:"Go Desi A2 Milk", tone:"ritual"},
+      {name:"Nutriwiz Almond Milk", tone:"social"}, {name:"Sofit Soy Milk", tone:"convenience"},
+      {name:"Amul High Protein", tone:"clinical"}, {name:"Mother Dairy Probiotic", tone:"clinical"},
+      {name:"Raw Pressery Oat Milk", tone:"social"},
+    ],
+    saturatedClaims: ["probiotic","farm fresh","no preservatives","high calcium","rich & creamy","natural"],
+  },
+  "Skincare": {
+    benefit: "glow", moment: "evening", defaultIngredient: "niacinamide",
+    competitors: [
+      {name:"Minimalist Niacinamide", tone:"clinical"}, {name:"The Ordinary Serum", tone:"clinical"},
+      {name:"Plum 15% Vit-C Serum", tone:"clinical"}, {name:"Mamaearth Vitamin C", tone:"social"},
+      {name:"Dot & Key Glow Serum", tone:"ritual"}, {name:"Foxtale Barrier Repair", tone:"clinical"},
+      {name:"Re'equil Sunscreen", tone:"clinical"}, {name:"Forest Essentials Ubtan", tone:"ritual"},
+    ],
+    saturatedClaims: ["dermat tested","paraben free","niacinamide","clinically proven","cruelty free","10% concentration"],
+  },
+  "Haircare": {
+    benefit: "strength", moment: "weekend", defaultIngredient: "onion extract",
+    competitors: [
+      {name:"WOW Onion Oil", tone:"clinical"}, {name:"Mamaearth Onion Shampoo", tone:"social"},
+      {name:"Indulekha Bringha", tone:"ritual"}, {name:"Kesh King Ayurvedic", tone:"ritual"},
+      {name:"Bare Anatomy Serum", tone:"clinical"}, {name:"Traya Hair Growth", tone:"clinical"},
+      {name:"Khadi Natural Shampoo", tone:"ritual"},
+    ],
+    saturatedClaims: ["ayurvedic formula","sulphate free","hair fall control","onion extract","doctor recommended","clinically tested"],
+  },
+};
+
+const PERSONAS = [
+  { name:"Urban Millennials (25–34)", weights:{ritual:.90,clinical:.30,social:.60,convenience:.50} },
+  { name:"Gen Z Health-First",        weights:{ritual:.50,clinical:.40,social:.90,convenience:.60} },
+  { name:"Wellness Women 28–38",      weights:{ritual:.95,clinical:.50,social:.40,convenience:.40} },
+  { name:"Fitness Enthusiasts",       weights:{ritual:.30,clinical:.80,social:.50,convenience:.50} },
+  { name:"Busy Professionals",        weights:{ritual:.40,clinical:.50,social:.30,convenience:.90} },
+  { name:"Health-Conscious Parents",  weights:{ritual:.60,clinical:.65,social:.30,convenience:.70} },
+];
+
+const CLAIM_TEMPLATES = {
+  ritual:      ["Your {moment} ritual, reimagined.", "Make {concept} part of your everyday ritual.", "Slow down. {concept} — on your terms.", "{articleMoment} moment, made for you."],
+  clinical:    ["{ingredient}. Clinically studied. Visibly {benefit}.", "Backed by science. Built for {benefit}.", "The {catShort} formulated like a lab, not a trend.", "{ingredient} you can verify — not just trust."],
+  social:      ["The {catShort} everyone's asking about.", "Join the {conceptShort} movement.", "Made for how you actually live — and share.", "Your feed's next favorite {catShort}."],
+  convenience: ["{benefitCap}. Zero compromise. Zero effort.", "Fits your day, not the other way around.", "One step. All the {benefit}.", "{conceptShort}, without the extra steps."],
+};
+
+const RISK_TEMPLATES = {
+  saturation: n => `Saturation Flag: similar language already used by ${n} competitor SKU${n===1?'':'s'} in this category.`,
+  misalign:   persona => `Persona Misalignment: this tone scores well below the dominant Desire Vector for ${persona}.`,
+  price:      () => `Price Anchoring Risk: at this price tier, the claim needs a stronger visible reason-to-believe or risks rejection.`,
+};
+
+// ══════════════════════════════════════════════════════════
+// DETERMINISTIC PSEUDO-RANDOM (seeded by input so results are
+// stable per input, but genuinely vary across inputs)
+// ══════════════════════════════════════════════════════════
+function hashStr(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return (h >>> 0);
+}
+function seededRandom(seed) {
+  let s = seed % 2147483647; if (s <= 0) s += 2147483646;
+  return function() { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+function titleCase(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function shortConcept(s) {
+  const words = s.trim().split(/\s+/);
+  return words.length > 3 ? words.slice(-2).join(' ') : s;
+}
+
+// ══════════════════════════════════════════════════════════
+// GLOBAL APP STATE — single source of truth
+// ══════════════════════════════════════════════════════════
+const AppState = {
+  inputs: { concept:"Plant-based protein drink", category:"Functional Beverages", market:"India", price:"Mid (₹80–120)", channel:"Modern Trade + E-Commerce", persona:"Urban Millennials (25–34)", ingredients:["Pea Protein","Ashwagandha"] },
+  analysis: null,      // output of runAnalysis()
+  selectedPocketIdx: 0,
+  selectedVpIdx: 0,
+  compareMode: false,
+  compareSet: [],
+  regenNonce: 0,
+  history: [],         // completed analyses this session
+};
+
+const EXAMPLES = [
+  { concept:"Plant-based protein drink", category:"Functional Beverages", persona:"Urban Millennials (25–34)", ingredients:["Pea Protein","Ashwagandha"] },
+  { concept:"Daily ritual green tea", category:"Hot Beverages", persona:"Wellness Women 28–38", ingredients:["L-Theanine"] },
+  { concept:"10% niacinamide brightening serum", category:"Skincare", persona:"Gen Z Health-First", ingredients:["Niacinamide","Zinc"] },
+  { concept:"High-protein millet snack bar", category:"Snacks & Bars", persona:"Fitness Enthusiasts", ingredients:["Millet","Whey"] },
+];
+
+// ══════════════════════════════════════════════════════════
+// ANALYSIS ENGINE — genuinely responsive to inputs
+// ══════════════════════════════════════════════════════════
+function runAnalysis(inputs, nonce) {
+  const cat = CATEGORIES[inputs.category];
+  const persona = PERSONAS.find(p => p.name === inputs.persona) || PERSONAS[0];
+  const seedStr = inputs.concept + "|" + inputs.category + "|" + inputs.persona + "|" + inputs.price + "|" + (nonce||0);
+  const rng = seededRandom(hashStr(seedStr));
+
+  // ── 1. Competitive Saturation: assign each competitor a zone based on tone crowding ──
+  const toneCounts = {ritual:0, clinical:0, social:0, convenience:0};
+  cat.competitors.forEach(c => toneCounts[c.tone]++);
+  const maxCount = Math.max(...Object.values(toneCounts));
+
+  const competitorsPositioned = cat.competitors.map((c, i) => {
+    const crowding = toneCounts[c.tone] / maxCount; // 0-1, higher = more crowded
+    const desire = persona.weights[c.tone];          // 0-1, persona desire for this tone
+    return { ...c, crowding, desire, jitterX: rng()*0.5-0.25, jitterY: rng()*0.5-0.25 };
+  });
+
+  // ── 2. Whitespace Navigator: score each TONE for this persona ──
+  const tones = ["ritual","clinical","social","convenience"];
+  const toneScores = tones.map(t => {
+    const crowding = toneCounts[t] / maxCount;
+    const desire = persona.weights[t];
+    const opportunity = desire * (1 - crowding * 0.75); // high desire + low crowding = high opportunity
+    return { tone:t, crowding, desire, opportunity, count: toneCounts[t] };
+  }).sort((a,b) => b.opportunity - a.opportunity);
+
+  const pockets = toneScores.slice(0, 2).map((ts, idx) => {
+    const score = Math.round(60 + ts.opportunity * 38 + rng()*4);
+    const zone = ts.crowding < 0.4 ? 'C' : 'B';
+    return {
+      tone: ts.tone, score: Math.min(99, score), zone,
+      title: toneToPocketTitle(ts.tone, cat), 
+      desc: toneToPocketDesc(ts.tone, ts.crowding, toneCounts[ts.tone], persona.name),
+      competitorCount: toneCounts[ts.tone],
+      recommended: idx === 0,
+    };
+  });
+
+  // ── 3. Claim Forge Engine: generate 4 candidate claims across tones ──
+  const shortC = shortConcept(inputs.concept);
+  const ingredient = inputs.ingredients[0] || cat.defaultIngredient;
+  const ctx = {
+    concept: inputs.concept.charAt(0).toLowerCase()+inputs.concept.slice(1),
+    conceptShort: shortC,
+    ingredient: titleCase(ingredient),
+    benefit: cat.benefit, benefitCap: titleCase(cat.benefit),
+    moment: cat.moment, catShort: inputs.category.toLowerCase(),
+    articleMoment: (/^[aeiou]/i.test(cat.moment) ? 'An ' : 'A ') + cat.moment,
+  };
+  const fillTemplate = (t) => t.replace(/\{(\w+)\}/g, (m,k) => ctx[k] || m);
+
+  // pick claim tones: top pocket tone, 2nd pocket tone, one saturated (clinical-heavy risk), one weak-fit
+  const candidateTones = [pockets[0].tone, pockets[1] ? pockets[1].tone : tones[1]];
+  const usedTones = new Set(candidateTones);
+  const remaining = tones.filter(t => !usedTones.has(t));
+  candidateTones.push(remaining[Math.floor(rng()*remaining.length)] || tones[2]);
+  candidateTones.push(remaining.find(t=>t!==candidateTones[2]) || tones[3]);
+
+  const vpCandidates = candidateTones.slice(0,4).map((tone, i) => {
+    const templates = CLAIM_TEMPLATES[tone];
+    const claim = fillTemplate(templates[Math.floor(rng()*templates.length)]);
+    return scoreClaimForTone(claim, tone, cat, persona, toneCounts, maxCount, inputs, rng);
+  });
+  vpCandidates.sort((a,b) => b.score - a.score);
+
+  return {
+    inputs: {...inputs}, category: inputs.category, persona: inputs.persona,
+    competitors: competitorsPositioned, toneCounts, maxCount, pockets, vpCandidates,
+    generatedAt: new Date(),
+  };
+}
+
+function toneToPocketTitle(tone, cat) {
+  const map = {
+    ritual: `${titleCase(cat.moment)} Ritual + ${titleCase(cat.benefit)}`,
+    clinical: `Verified ${titleCase(cat.benefit)}, Proven Simply`,
+    social: `Shareable ${titleCase(cat.benefit)} Moments`,
+    convenience: `Effortless ${titleCase(cat.benefit)}, On Demand`,
+  };
+  return map[tone];
+}
+function toneToPocketDesc(tone, crowding, count, personaName) {
+  if (crowding < 0.35) return `High-desire zone for ${personaName} with only ${count} competitor${count===1?'':'s'} using this framing. Largely unowned territory.`;
+  if (crowding < 0.65) return `Moderate whitespace — ${count} competitors nearby. Requires sharp execution to stand out, but desire is strong for this persona.`;
+  return `Contested territory — ${count} competitors already active here. High desire but will require 3–5× the typical media weight to break through.`;
+}
+
+// Claim scoring: personaFit(35%) + novelty(25%) + competitiveGap(25%) + freshness(15%)
+function scoreClaimForTone(claimText, tone, cat, persona, toneCounts, maxCount, inputs, rng) {
+  const personaFit = persona.weights[tone];
+  const lc = claimText.toLowerCase();
+  const satMatches = cat.saturatedClaims.filter(sc => {
+    const words = sc.split(' ');
+    return words.some(w => w.length > 3 && lc.includes(w));
+  });
+  const novelty = Math.max(0.08, 1 - satMatches.length * 0.22);
+  const crowding = toneCounts[tone] / maxCount;
+  const competitiveGap = Math.max(0.05, 1 - crowding * 0.85);
+  const freshness = Math.max(0.15, 1 - crowding * 0.55 - (tone==='clinical'?0.12:0));
+
+  let score = Math.round((personaFit*35 + novelty*25 + competitiveGap*25 + freshness*15) + (rng()*5-2.5));
+  score = Math.max(12, Math.min(97, score));
+
+  const flags = [];
+  if (novelty < 0.55) flags.push({ type:'danger', icon:'✗', text: RISK_TEMPLATES.saturation(satMatches.length + toneCounts[tone]) });
+  if (personaFit < 0.45) flags.push({ type:'danger', icon:'✗', text: RISK_TEMPLATES.misalign(inputs.persona) });
+  if (personaFit >= 0.45 && novelty < 0.55) flags.push();
+  if (score >= 75) flags.unshift({ type:'ok', icon:'✓', text: `${toneCounts[tone]===0?'Zero':toneCounts[tone]} competitor${toneCounts[tone]===1?'':'s'} currently combine "${tone}" framing with this category's core benefit.` });
+  if (inputs.price.includes('Premium') && novelty < 0.6) flags.push({ type:'warn', icon:'⚠', text: RISK_TEMPLATES.price() });
+
+  return {
+    claim: claimText, tone, score,
+    dims: { personaFit: Math.round(personaFit*100), novelty: Math.round(novelty*100), competitiveGap: Math.round(competitiveGap*100), freshness: Math.round(freshness*100) },
+    flags: flags.filter(Boolean),
+  };
+}
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════
+const BREADCRUMBS = {
+  's-dashboard':    [['ValueForge™','s-dashboard']], 
+  's-new-analysis': [['ValueForge™','s-dashboard'],['New Analysis',null]],
+  's-processing':   [['ValueForge™','s-dashboard'],['New Analysis',null],['Running…',null]],
+  's-whitespace':   [['ValueForge™','s-dashboard'],['New Analysis','s-new-analysis'],['Whitespace Map',null]],
+  's-vp-gen':       [['ValueForge™','s-dashboard'],['New Analysis','s-new-analysis'],['VP Generator',null]],
+  's-brief':        [['ValueForge™','s-dashboard'],['New Analysis','s-new-analysis'],['Positioning Brief',null]],
+  's-history':      [['ValueForge™','s-dashboard'],['History',null]],
+};
+const NAV_MAP_BY_SCREEN = { 's-dashboard':'s-dashboard','s-new-analysis':'s-new-analysis','s-history':'s-history','s-whitespace':'s-whitespace','s-vp-gen':'s-vp-gen','s-brief':'s-brief','s-processing':'s-new-analysis' };
+
+function goto(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navTarget = NAV_MAP_BY_SCREEN[id];
+  const navBtn = document.querySelector(`.nav-item[data-nav="${navTarget}"]`);
+  if (navBtn) navBtn.classList.add('active');
+
+  const crumbs = BREADCRUMBS[id];
+  if (crumbs) {
+    document.getElementById('breadcrumb').innerHTML = crumbs.map((c,i) => {
+      const isLast = i === crumbs.length-1;
+      if (isLast || !c[1]) return `<span class="${isLast?'current':''}">${c[0]}</span>`;
+      return `<span class="crumb" onclick="goto('${c[1]}')">${c[0]}</span> <span>›</span>`;
+    }).join(' ');
+  }
+  document.getElementById('screen-area').scrollTop = 0;
+
+  if (id === 's-dashboard') renderDashboard();
+  if (id === 's-history') renderHistory();
+  if (id === 's-whitespace') renderWhitespace();
+  if (id === 's-vp-gen') renderVpGen();
+  if (id === 's-brief') renderBrief();
+  renderStepsBars(id);
+
+  const topbarBtn = document.getElementById('topbar-new-btn');
+  if (topbarBtn) {
+    topbarBtn.style.display = (id === 's-dashboard' || id === 's-new-analysis') ? 'none' : 'inline-flex';
+  }
+}
+
+function jumpToStep(id) {
+  if (!AppState.analysis) { showNotif('Run an analysis first — click "New Analysis" to begin.', 'info'); return; }
+  goto(id);
+}
+
+function startNewAnalysis() {
+  goto('s-new-analysis');
+  renderPersonaChips();
+  renderIngredientTags();
+}
+
+// Clickable steps bar rendered fresh on each screen (state-aware)
+function renderStepsBars(activeId) {
+  const steps = [
+    { id:'s-new-analysis', n:1, label:'Define Concept', sub:'Product & persona' },
+    { id:'s-whitespace',   n:2, label:'Explore Whitespace', sub:'Competitive map' },
+    { id:'s-vp-gen',       n:3, label:'Generate VPs', sub:'Claim options' },
+    { id:'s-brief',        n:4, label:'Positioning Brief', sub:'Decision-ready' },
+  ];
+  const order = steps.map(s=>s.id);
+  const activeIdx = order.indexOf(activeId);
+  const html = steps.map((s, i) => {
+    let cls = 'inactive';
+    let clickable = false;
+    if (i === activeIdx) cls = 'active';
+    else if (i < activeIdx || AppState.analysis) { cls = i < activeIdx ? 'done' : 'inactive'; clickable = i < activeIdx || (i===0); }
+    if (AppState.analysis && i <= activeIdx) { clickable = true; if (i < activeIdx) cls = 'done'; }
+    return `<div class="step-item ${cls} ${clickable?'clickable':''}" ${clickable?`onclick="goto('${s.id}')"`:''}>
+      <div class="step-num"><span>${cls==='done'?'':s.n}</span></div>
+      <div><div style="font-size:11px;font-weight:700">${s.label}</div><div style="font-size:10px;opacity:.7">${s.sub}</div></div>
+    </div>`;
+  }).join('');
+  ['steps-bar-input','steps-bar-whitespace','steps-bar-vpgen','steps-bar-brief'].forEach(elId => {
+    const el = document.getElementById(elId);
+    if (el) el.innerHTML = html;
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// FORM: persona chips, ingredient tags, validation, examples
+// ══════════════════════════════════════════════════════════
+function renderPersonaChips() {
+  const el = document.getElementById('persona-chips');
+  el.innerHTML = PERSONAS.map(p => `<div class="persona-chip ${p.name===AppState.inputs.persona?'selected':''}" onclick="selectPersona('${p.name.replace(/'/g,"\\'")}')">${p.name}</div>`).join('');
+}
+function selectPersona(name) {
+  AppState.inputs.persona = name;
+  renderPersonaChips();
+  document.getElementById('err-persona').classList.remove('show');
+}
+function renderIngredientTags() {
+  const el = document.getElementById('ingredient-tags');
+  el.innerHTML = AppState.inputs.ingredients.map((tag,i) => `<span class="ingredient-tag">${tag} <button onclick="removeTag(${i})">×</button></span>`).join('');
+}
+function addTag() {
+  const inp = document.getElementById('ing-input');
+  const val = inp.value.trim();
+  if (!val) return;
+  AppState.inputs.ingredients.push(val);
+  inp.value = '';
+  renderIngredientTags();
+}
+function removeTag(i) {
+  AppState.inputs.ingredients.splice(i,1);
+  renderIngredientTags();
+}
+function onConceptInput() {
+  const v = document.getElementById('f-concept').value;
+  document.getElementById('concept-count').textContent = v.length + '/120';
+  if (v.trim().length >= 4) document.getElementById('err-concept').classList.remove('show');
+}
+function onCategoryChange() {
+  const cat = document.getElementById('f-category').value;
+  const catData = CATEGORIES[cat];
+  // swap default ingredient suggestion subtly via placeholder
+  document.getElementById('ing-input').placeholder = `Add ingredient or format (e.g., ${catData.defaultIngredient})…`;
+}
+function loadExample(idx) {
+  const ex = EXAMPLES[idx];
+  document.getElementById('f-concept').value = ex.concept;
+  document.getElementById('f-category').value = ex.category;
+  AppState.inputs.persona = ex.persona;
+  AppState.inputs.ingredients = [...ex.ingredients];
+  onConceptInput();
+  onCategoryChange();
+  renderPersonaChips();
+  renderIngredientTags();
+  showNotif(`Loaded example: "${ex.concept}"`, 'info');
+}
+function validateAndRun() {
+  const concept = document.getElementById('f-concept').value.trim();
+  let valid = true;
+  if (concept.length < 4) { document.getElementById('err-concept').classList.add('show'); document.getElementById('f-concept').classList.add('err'); valid = false; }
+  else document.getElementById('f-concept').classList.remove('err');
+  if (!AppState.inputs.persona) { document.getElementById('err-persona').classList.add('show'); valid = false; }
+  if (!valid) { showNotif('Please complete the required fields before running an analysis.', 'warn'); return; }
+
+  AppState.inputs.concept = concept;
+  AppState.inputs.category = document.getElementById('f-category').value;
+  AppState.inputs.market = document.getElementById('f-market').value;
+  AppState.inputs.price = document.getElementById('f-price').value;
+  AppState.inputs.channel = document.getElementById('f-channel').value;
+  AppState.regenNonce = 0;
+  startProcessing();
+}
+
+// ══════════════════════════════════════════════════════════
+// PROCESSING — runs the real engine, animates 5 steps
+// ══════════════════════════════════════════════════════════
+function startProcessing() {
+  goto('s-processing');
+  document.getElementById('proc-title').textContent = 'Forging your position…';
+  document.getElementById('proc-sub').textContent = `Analyzing "${AppState.inputs.concept}" in ${AppState.inputs.category}`;
+
+  const cat = CATEGORIES[AppState.inputs.category];
+  const details = [
+    `Persona: ${AppState.inputs.persona}`,
+    `Scanning ${cat.competitors.length} category SKUs…`,
+    `Cross-referencing Desire Vectors with saturation map…`,
+    `Drafting claim candidates from Claim Forge Hierarchy™…`,
+    `Running synthetic cohort simulation…`,
+  ];
+  const steps = ['ps1','ps2','ps3','ps4','ps5'];
+  const fills = ['pf1','pf2','pf3','pf4','pf5'];
+  const detailEls = ['pd1','pd2','pd3','pd4','pd5'];
+  steps.forEach((s,i) => { document.getElementById(s).className = 'process-step'; document.getElementById(fills[i]).style.width='0%'; document.getElementById(detailEls[i]).textContent=''; });
+
+  function runStep(idx) {
+    if (idx >= steps.length) {
+      AppState.analysis = runAnalysis(AppState.inputs, AppState.regenNonce);
+      AppState.selectedPocketIdx = 0;
+      AppState.selectedVpIdx = 0;
+      setTimeout(() => goto('s-whitespace'), 500);
+      return;
+    }
+    const el = document.getElementById(steps[idx]);
+    el.className = 'process-step running';
+    document.getElementById(detailEls[idx]).textContent = details[idx];
+    const fill = document.getElementById(fills[idx]);
+    let pct = 0;
+    const iv = setInterval(() => {
+      pct += 5;
+      fill.style.width = pct + '%';
+      if (pct >= 100) { clearInterval(iv); el.className = 'process-step done'; setTimeout(()=>runStep(idx+1), 180); }
+    }, 20);
+  }
+  setTimeout(() => runStep(0), 350);
+}
+
+// ══════════════════════════════════════════════════════════
+// WHITESPACE MAP — dynamic SVG built from analysis
+// ══════════════════════════════════════════════════════════
+const TONE_ZONE_POS = { // quadrant anchor (x%,y%) within plot area per tone-derived zone logic is computed dynamically; this maps tone name -> display label
+  ritual:'Ritual & Self-Care', clinical:'Clinical & Functional', social:'Social & Discovery', convenience:'Convenience & Efficiency',
+};
+function renderWhitespace() {
+  const a = AppState.analysis; if (!a) return;
+  const cat = CATEGORIES[a.category];
+  document.getElementById('ws-title').innerHTML = `Whitespace Map — <em style="color:var(--accent);font-style:italic">${a.category} · ${a.inputs.market}</em>`;
+  document.getElementById('ws-sub').textContent = `${cat.competitors.length} competitor SKUs mapped for "${a.inputs.persona}". ${a.pockets.length} Positioning Pockets™ identified.`;
+  document.getElementById('ws-sku-count').textContent = `${cat.competitors.length} SKUs analyzed · ${a.inputs.persona}`;
+
+  // Build SVG: X = consumer desire (persona-specific), Y = competitive density (crowding)
+  const W=560,H=360, padL=48,padR=20,padT=20,padB=36;
+  const plotW = W-padL-padR, plotH = H-padT-padB;
+  let svg = `<rect x="${padL}" y="${padT}" width="${plotW/2}" height="${plotH/2}" fill="rgba(163,45,45,.06)" stroke="#eee"/>
+  <rect x="${padL+plotW/2}" y="${padT}" width="${plotW/2}" height="${plotH/2}" fill="rgba(212,160,23,.06)" stroke="#eee"/>
+  <rect x="${padL}" y="${padT+plotH/2}" width="${plotW/2}" height="${plotH/2}" fill="rgba(24,95,165,.05)" stroke="#eee"/>
+  <rect x="${padL+plotW/2}" y="${padT+plotH/2}" width="${plotW/2}" height="${plotH/2}" fill="rgba(15,110,86,.09)" stroke="#0F6E56" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="${padL+8}" y="${padT+14}" font-size="9" fill="#a32d2d" font-family="DM Sans" font-weight="700" letter-spacing="1">OVERCROWDED</text>
+  <text x="${padL+plotW/2+8}" y="${padT+14}" font-size="9" fill="#8a6300" font-family="DM Sans" font-weight="700" letter-spacing="1">CONTESTED</text>
+  <text x="${padL+8}" y="${padT+plotH/2+14}" font-size="9" fill="#185FA5" font-family="DM Sans" font-weight="700" letter-spacing="1">UNDER-SERVED</text>
+  <text x="${padL+plotW/2+8}" y="${padT+plotH/2+14}" font-size="9" fill="#0F6E56" font-family="DM Sans" font-weight="700" letter-spacing="1">WHITESPACE ★</text>`;
+
+  a.competitors.forEach((c,i) => {
+    const x = padL + (c.desire + c.jitterX*0.4) * plotW * 0.92 + plotW*0.04;
+    const y = padT + (c.crowding + c.jitterY*0.4) * plotH * 0.92 + plotH*0.04;
+    const r = 8 + c.crowding*8;
+    const color = {ritual:'201,66,10', clinical:'163,45,45', social:'24,95,165', convenience:'212,160,23'}[c.tone] || '136,135,128';
+    svg += `<circle class="sku-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="rgba(${color},.22)" stroke="rgba(${color},.55)" stroke-width="1.1" data-tip="${c.name} — ${TONE_ZONE_POS[c.tone]}"/>`;
+  });
+
+  // Recommended pocket star (top pocket) placed at high-desire/low-crowd position for its tone
+  const topTone = a.pockets[0].tone;
+  const topPersonaDesire = PERSONAS.find(p=>p.name===a.persona).weights[topTone];
+  const topCrowd = a.toneCounts[topTone]/a.maxCount;
+  const sx = padL + topPersonaDesire*plotW*0.92 + plotW*0.04;
+  const sy = padT + topCrowd*plotH*0.92 + plotH*0.04;
+  svg += `<text x="${sx}" y="${sy+8}" text-anchor="middle" font-size="30" fill="rgba(212,160,23,.9)">★</text>
+  <circle cx="${sx}" cy="${sy}" r="26" fill="none" stroke="rgba(15,110,86,.45)" stroke-width="2" stroke-dasharray="5 3"/>`;
+
+  svg += `<line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#ccc"/>
+  <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}" stroke="#ccc"/>
+  <text x="${W/2}" y="${H-8}" text-anchor="middle" font-size="10" fill="#888" font-family="DM Sans">Consumer Desire Intensity (for ${a.persona.split(' (')[0]}) →</text>
+  <text x="14" y="${H/2}" text-anchor="middle" font-size="10" fill="#888" font-family="DM Sans" transform="rotate(-90,14,${H/2})">← Competitive Density</text>`;
+
+  document.getElementById('ws-svg').innerHTML = svg;
+  attachTooltips();
+
+  // Pocket cards
+  document.getElementById('pocket-cards').innerHTML = `<div class="section-label">Recommended Positioning Pockets™</div>` +
+    a.pockets.map((p,i) => `
+    <div class="whitespace-card zone-${p.zone.toLowerCase()} ${i===AppState.selectedPocketIdx?'selected':''}" onclick="selectPocket(${i})">
+      <div class="ws-card-header">
+        <div><div class="ws-card-score" style="color:${p.zone==='C'?'var(--teal)':'#8a6300'}">${p.score}</div>
+        <div style="font-size:10px;color:var(--ink3);font-weight:600">OPPORTUNITY SCORE</div></div>
+        <div class="ws-card-badge ${p.recommended?'badge-rec':'badge-alt'}">${p.recommended?'★ Recommended':'Alternative'}</div>
+      </div>
+      <div class="ws-card-title">${p.title}</div>
+      <div class="ws-card-desc">${p.desc}</div>
+      <div class="ws-card-tags">
+        <span class="ws-tag" style="background:${p.zone==='C'?'var(--teal-lt)':'var(--gold-lt)'};color:${p.zone==='C'?'var(--teal)':'#7A4F00'}">Zone ${p.zone}</span>
+        <span class="ws-tag" style="background:var(--gray-lt);color:var(--ink3)">${p.competitorCount} competitor${p.competitorCount===1?'':'s'}</span>
+        <span class="ws-tag" style="background:var(--gray-lt);color:var(--ink3)">${TONE_ZONE_POS[p.tone]}</span>
+      </div>
+    </div>`).join('') +
+    `<div class="card-sm" style="background:var(--red-lt);border-color:#e8aaaa">
+      <div style="font-size:10px;font-weight:700;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">⚠ Avoid — Most Crowded Zone</div>
+      <div style="font-size:11.5px;color:var(--ink2);line-height:1.6">${a.competitors.length ? mostCrowdedNote(a) : ''}</div>
+    </div>` +
+    `<button class="btn btn-primary btn-block" onclick="goto('s-vp-gen')">Generate VPs for Top Pocket →</button>`;
+
+  renderZoneDetail();
+}
+function mostCrowdedNote(a) {
+  const worst = Object.entries(a.toneCounts).sort((x,y)=>y[1]-x[1])[0];
+  const examples = a.competitors.filter(c=>c.tone===worst[0]).slice(0,2).map(c=>c.name).join(', ');
+  return `<strong>${TONE_ZONE_POS[worst[0]]}</strong> framing is used by ${worst[1]} competitors (incl. ${examples}). Entering here requires 3–10× the media investment to break through.`;
+}
+function selectPocket(i) {
+  AppState.selectedPocketIdx = i;
+  renderWhitespace();
+}
+function renderZoneDetail() {
+  const p = AppState.analysis.pockets[AppState.selectedPocketIdx];
+  document.getElementById('zone-detail-container').innerHTML = `
+    <div class="zone-detail-panel">
+      <h5>SELECTED: ${p.title.toUpperCase()}</h5>
+      <div class="zd-row"><span class="zd-label">Opportunity Score</span><span class="zd-val">${p.score}/100</span></div>
+      <div class="zd-row"><span class="zd-label">Zone Classification</span><span class="zd-val">Zone ${p.zone}</span></div>
+      <div class="zd-row"><span class="zd-label">Direct Competitors</span><span class="zd-val">${p.competitorCount}</span></div>
+      <div class="zd-row"><span class="zd-label">Dominant Tone</span><span class="zd-val">${TONE_ZONE_POS[p.tone]}</span></div>
+    </div>`;
+}
+function attachTooltips() {
+  document.querySelectorAll('.sku-dot').forEach(dot => {
+    dot.style.cursor = 'pointer';
+    dot.addEventListener('mouseenter', () => {
+      const tip = document.getElementById('tooltip');
+      const wrap = dot.closest('.map-svg-wrap');
+      const rect = wrap.getBoundingClientRect();
+      const dotRect = dot.getBoundingClientRect();
+      tip.innerHTML = dot.dataset.tip.replace(' — ', ' — <b>') + '</b>';
+      tip.style.left = (dotRect.left - rect.left + dotRect.width/2) + 'px';
+      tip.style.top = (dotRect.top - rect.top - 42) + 'px';
+      tip.classList.add('visible');
+    });
+    dot.addEventListener('mouseleave', () => document.getElementById('tooltip').classList.remove('visible'));
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// VP GENERATOR — render, select, live-edit rescore, regenerate, compare
+// ══════════════════════════════════════════════════════════
+function renderVpGen() {
+  const a = AppState.analysis; if (!a) return;
+  const pocket = a.pockets[AppState.selectedPocketIdx];
+  document.getElementById('vp-sub').innerHTML = `Whitespace Zone: <strong>${pocket.title}</strong> · Persona: ${a.persona} · PCI Threshold: 75+`;
+
+  document.getElementById('vp-list').innerHTML = a.vpCandidates.map((vp,i) => {
+    const cardClass = vp.score>=75?'top':(vp.score>=55?'warn':'danger');
+    const isSel = i===AppState.selectedVpIdx;
+    const inCompare = AppState.compareSet.includes(i);
+    return `
+    <div class="vp-card ${cardClass} ${isSel?'selected':''} ${inCompare?'compare-on':''}" data-idx="${i}" onclick="handleVpCardClick(event,${i})">
+      ${AppState.compareMode?`<div class="compare-check ${inCompare?'checked':''}" onclick="event.stopPropagation();toggleCompareSelect(${i})">${inCompare?'✓':''}</div>`:''}
+      <span class="vp-pci-badge" style="background:${pciBg(vp.score)};color:${pciColor(vp.score)}">PCI™ ${vp.score} — ${pciLabel(vp.score)}</span>
+      ${i===0?`<span class="pill pill-green" style="margin-left:8px">★ Top Recommendation</span>`:''}
+      <div class="vp-edit-hint">✎ click to edit claim text</div>
+      <div class="vp-claim" contenteditable="true" data-idx="${i}" onblur="onClaimEdited(${i}, this)" onclick="event.stopPropagation()" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${vp.claim}</div>
+      <div class="vp-scores">
+        ${scoreItemHtml('Emotional/Persona Fit', vp.dims.personaFit)}
+        ${scoreItemHtml('Novelty', vp.dims.novelty)}
+        ${scoreItemHtml('Comp. Gap', vp.dims.competitiveGap)}
+        ${scoreItemHtml('Freshness', vp.dims.freshness)}
+      </div>
+      <div class="vp-flags">${vp.flags.map(f=>`<div class="flag flag-${f.type}"><span class="flag-icon">${f.icon}</span> ${f.text}</div>`).join('')}</div>
+    </div>`;
+  }).join('');
+
+  updatePciMeter();
+  renderDimBreakdown();
+  renderComparePanel();
+
+  document.getElementById('vp-zone-summary').innerHTML = `
+    <div class="section-label" style="margin-bottom:8px">Whitespace Zone</div>
+    <div style="font-size:17px;font-family:'DM Serif Display',serif;color:var(--teal);margin-bottom:4px">${pocket.title}</div>
+    <div style="font-size:11px;color:var(--ink3);line-height:1.5">${pocket.desc}</div>`;
+}
+function scoreItemHtml(label, pct) {
+  const color = pct>=70?'teal':(pct>=45?'gold':'red');
+  return `<div class="score-item"><div class="score-label">${label}</div>
+    <div class="score-bar"><div class="score-fill ${color}" style="width:${pct}%"></div></div>
+    <div class="score-pct">${pct}%</div></div>`;
+}
+function pciBg(s){ return s>=75?'var(--teal-lt)':(s>=55?'var(--gold-lt)':'var(--red-lt)'); }
+function pciColor(s){ return s>=75?'var(--teal)':(s>=55?'#8a6300':'var(--red)'); }
+function pciLabel(s){ return s>=75?'Launch Ready':(s>=55?'Refinement Suggested':'Rework Required'); }
+
+function handleVpCardClick(e, i) {
+  if (AppState.compareMode) { toggleCompareSelect(i); return; }
+  AppState.selectedVpIdx = i;
+  renderVpGen();
+}
+function updatePciMeter() {
+  const vp = AppState.analysis.vpCandidates[AppState.selectedVpIdx];
+  const ring = document.getElementById('pci-ring');
+  const disp = document.getElementById('pci-display');
+  const circumference = 263.9; // 2*pi*42
+  const offset = circumference * (1 - vp.score/100);
+  ring.style.stroke = pciColor(vp.score).replace('var(--teal)','#0F6E56').replace('var(--red)','#A32D2D');
+  ring.style.strokeDashoffset = offset;
+  disp.textContent = vp.score;
+  disp.style.color = pciColor(vp.score);
+  const pill = document.getElementById('pci-status-pill');
+  pill.textContent = pciLabel(vp.score);
+  pill.className = 'pill ' + (vp.score>=75?'pill-green':(vp.score>=55?'pill-amber':'pill-red'));
+}
+function renderDimBreakdown() {
+  const vp = AppState.analysis.vpCandidates[AppState.selectedVpIdx];
+  const dims = [['Emotional / Persona Fit','personaFit'],['Novelty Score','novelty'],['Competitive Gap','competitiveGap'],['Claim Freshness','freshness']];
+  document.getElementById('dim-breakdown').innerHTML = dims.map(([label,key]) => {
+    const v = vp.dims[key];
+    const color = v>=70?'var(--teal)':(v>=45?'var(--gold)':'var(--red)');
+    return `<div class="dim-row"><span class="dim-label">${label}</span><span class="dim-val" style="color:${color}">${v}%</span></div>
+    <div class="dim-bar-wrap"><div class="dim-bar" style="width:${v}%;background:${color}"></div></div>`;
+  }).join('');
+}
+
+// Live re-score on manual claim edit — real heuristic recompute
+function onClaimEdited(i, el) {
+  const newText = el.textContent.trim();
+  const vp = AppState.analysis.vpCandidates[i];
+  if (newText === vp.claim || !newText) { el.textContent = vp.claim; return; }
+  const cat = CATEGORIES[AppState.analysis.category];
+  const persona = PERSONAS.find(p=>p.name===AppState.analysis.persona);
+  const rng = seededRandom(hashStr(newText+i));
+  const rescored = scoreClaimForTone(newText, vp.tone, cat, persona, AppState.analysis.toneCounts, AppState.analysis.maxCount, AppState.inputs, rng);
+  AppState.analysis.vpCandidates[i] = rescored;
+  AppState.analysis.vpCandidates.sort((a,b)=>b.score-a.score);
+  AppState.selectedVpIdx = AppState.analysis.vpCandidates.indexOf(rescored);
+  showNotif(`Claim re-scored live: PCI ${rescored.score}`, 'success');
+  renderVpGen();
+}
+
+function regenerateVPs() {
+  AppState.regenNonce++;
+  const btn = event.currentTarget;
+  btn.disabled = true; btn.textContent = '↻ Regenerating…';
+  setTimeout(() => {
+    const fresh = runAnalysis(AppState.inputs, AppState.regenNonce);
+    AppState.analysis.vpCandidates = fresh.vpCandidates;
+    AppState.selectedVpIdx = 0;
+    btn.disabled = false; btn.innerHTML = '↻ Regenerate Claims';
+    renderVpGen();
+    showNotif('Generated a fresh set of claim candidates.', 'success');
+  }, 550);
+}
+
+function toggleCompareMode() {
+  AppState.compareMode = !AppState.compareMode;
+  AppState.compareSet = [];
+  document.getElementById('compare-toggle-btn').classList.toggle('btn-secondary', AppState.compareMode);
+  document.getElementById('vp-edit-hint').textContent = AppState.compareMode ? 'Select up to 2 claims to compare side-by-side' : '✎ Click any claim text to edit it — score recalculates live';
+  renderVpGen();
+}
+function toggleCompareSelect(i) {
+  const idx = AppState.compareSet.indexOf(i);
+  if (idx>-1) AppState.compareSet.splice(idx,1);
+  else { if (AppState.compareSet.length>=2) AppState.compareSet.shift(); AppState.compareSet.push(i); }
+  renderVpGen();
+}
+function renderComparePanel() {
+  const el = document.getElementById('compare-panel-container');
+  if (!AppState.compareMode || AppState.compareSet.length < 2) { el.innerHTML=''; return; }
+  const [a,b] = AppState.compareSet.map(i => AppState.analysis.vpCandidates[i]);
+  el.innerHTML = `<div class="compare-panel">
+    <h5>⚌ Comparing 2 Claims <span style="font-size:10px;font-weight:400;color:var(--ink3)">tap ✓ to change</span></h5>
+    <div class="compare-row">
+      <div><div class="cv-label">PCI ${a.score}</div><div class="cv-claim">${a.claim}</div></div>
+      <div><div class="cv-label">PCI ${b.score}</div><div class="cv-claim">${b.claim}</div></div>
+    </div>
+    ${['personaFit','novelty','competitiveGap','freshness'].map(k => `
+    <div class="compare-row"><div style="font-size:10.5px;color:var(--ink3)">${k}: <strong>${a.dims[k]}%</strong></div><div style="font-size:10.5px;color:var(--ink3)">${k}: <strong>${b.dims[k]}%</strong></div></div>`).join('')}
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// POSITIONING BRIEF — rendered from live analysis state
+// ══════════════════════════════════════════════════════════
+function buildRtbs(a, vp) {
+  const cat = CATEGORIES[a.category];
+  const ing = a.inputs.ingredients;
+  const rtbs = [];
+  if (ing[0]) rtbs.push(`${ing[0]} as a defining, callable-out ingredient — verified not yet claimed by top competitors in this exact combination.`);
+  rtbs.push(`Format and price tier (${a.inputs.price}) align with stated persona expectations for ${cat.benefit}-led ${a.category.toLowerCase()}.`);
+  if (ing[1]) rtbs.push(`${ing[1]} included as a secondary functional support ingredient, reinforcing the core claim.`);
+  rtbs.push(`Positioning Pocket™ selected has ${a.pockets[AppState.selectedPocketIdx].competitorCount} direct competitor(s) — validated via Competitive Saturation Scanner™ on ${cat.competitors.length} category SKUs.`);
+  return rtbs;
+}
+function renderBrief() {
+  const a = AppState.analysis; if (!a) return;
+  const vp = a.vpCandidates[AppState.selectedVpIdx];
+  const pocket = a.pockets[AppState.selectedPocketIdx];
+  const dateStr = a.generatedAt.toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+
+  document.getElementById('brief-title').innerHTML = `Positioning Brief — <em style="color:var(--accent);font-style:italic">${a.inputs.concept}</em>`;
+  document.getElementById('brief-sub').textContent = `Decision-ready brief · Generated ${dateStr} · ${a.inputs.market} · ${a.inputs.price}`;
+  document.getElementById('export-bar-label').innerHTML = `<strong>ValueForge™ Brief</strong> · ${a.inputs.concept} · ${a.inputs.market} · PCI ${vp.score} · ${dateStr}`;
+
+  const rtbs = buildRtbs(a, vp);
+  const supportingClaims = a.vpCandidates.filter((c,i)=>i!==AppState.selectedVpIdx).slice(0,2).map(c=>c.claim);
+
+  document.getElementById('brief-content').innerHTML = `
+    <div class="brief-hero">
+      <div class="eyebrow">Recommended Hero Claim · PCI™ ${vp.score} · Zone ${pocket.zone} ${pocket.zone==='C'?'Whitespace':'Contested'}</div>
+      <div class="claim">"${vp.claim}"</div>
+      <div class="brief-pci-row">
+        <div class="brief-pci-pill" style="background:${vp.score>=75?'var(--teal)':(vp.score>=55?'var(--gold)':'var(--red)')}">PCI™ ${vp.score} — ${pciLabel(vp.score)}</div>
+        <div class="brief-pci-bar"><div class="brief-pci-fill" style="width:${vp.score}%;background:${vp.score>=75?'var(--teal)':(vp.score>=55?'var(--gold)':'var(--red)')}"></div></div>
+        <div class="brief-zone">★ Zone ${pocket.zone}: ${pocket.title}</div>
+        <div class="brief-meta">${a.inputs.persona} · ${a.category}</div>
+      </div>
+    </div>
+
+    <div class="brief-section">
+      <h4>Claim Hierarchy™</h4>
+      <div class="claim-tier tier1"><div class="claim-tier-label" style="color:var(--teal)">Tier 1 — Hero Claim</div><div class="claim-tier-text">"${vp.claim}"</div></div>
+      ${supportingClaims.map((c,i)=>`<div class="claim-tier tier2"><div class="claim-tier-label" style="color:${i===0?'var(--gold)':'var(--blue)'}">Tier ${i+2} — Alternative / Supporting</div><div class="claim-tier-text">"${c}"</div></div>`).join('')}
+    </div>
+
+    <div class="brief-section">
+      <h4>Risk Flags (${vp.flags.filter(f=>f.type!=='ok').length})</h4>
+      ${vp.flags.filter(f=>f.type!=='ok').map(f=>`<div class="risk-row warn"><span>⚠</span><div>${f.text}</div></div>`).join('') || '<div class="risk-row ok"><span>✓</span><div>No material risk flags detected for this claim at current scoring.</div></div>'}
+      ${vp.flags.filter(f=>f.type==='ok').map(f=>`<div class="risk-row ok" style="margin-top:6px"><span>✓</span><div>${f.text}</div></div>`).join('')}
+    </div>
+
+    <div class="brief-section">
+      <h4>Reasons to Believe (RTBs)</h4>
+      ${rtbs.map(r=>`<div class="rtb-item"><div class="rtb-dot"></div><div class="rtb-text">${r}</div></div>`).join('')}
+    </div>
+
+    <div class="brief-section">
+      <h4>Next Actions</h4>
+      <div class="next-actions">
+        <div class="action-item" onclick="showNotif('Packaging brief drafted from this claim and queued for design review.','success')"><span class="action-icon">◆</span> Brief packaging team on ${pocket.tone} visual direction</div>
+        <div class="action-item" onclick="showNotif('Agency brief sent to your default creative partner.','success')"><span class="action-icon">▶</span> Send brief to creative agency</div>
+        <div class="action-item" onclick="showNotif('Opening Screen Winner with this concept pre-loaded…','info')"><span class="action-icon">▼</span> Run virtual concept test in Screen Winner</div>
+        <div class="action-item" onclick="finalizeAndReturnToDashboard()"><span class="action-icon">＋</span> Save &amp; start a new ValueForge analysis</div>
+      </div>
+    </div>`;
+}
+
+function finalizeAndReturnToDashboard() {
+  saveCurrentAnalysisToHistory();
+  showNotif('Analysis saved to History and Dashboard.', 'success');
+  startNewAnalysis();
+}
+function saveCurrentAnalysisToHistory() {
+  const a = AppState.analysis; if (!a) return;
+  const vp = a.vpCandidates[AppState.selectedVpIdx];
+  const pocket = a.pockets[AppState.selectedPocketIdx];
+  const exists = AppState.history.find(h => h._live === a);
+  if (exists) { exists.pci = vp.score; return; }
+  AppState.history.unshift({
+    date: a.generatedAt, concept: a.inputs.concept, category: a.category, persona: a.persona,
+    pci: vp.score, zone: pocket.zone, status: vp.score>=75?'ready':(vp.score>=55?'progress':'rework'), _live: a,
+  });
+  document.getElementById('history-count').textContent = AppState.history.length;
+}
+
+// ══════════════════════════════════════════════════════════
+// REAL EXECUTABLE EXPORTS — PDF (jsPDF), CSV (Blob), Clipboard
+// ══════════════════════════════════════════════════════════
+function briefAsPlainText() {
+  const a = AppState.analysis; const vp = a.vpCandidates[AppState.selectedVpIdx]; const pocket = a.pockets[AppState.selectedPocketIdx];
+  const dateStr = a.generatedAt.toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+  const rtbs = buildRtbs(a, vp);
+  const supporting = a.vpCandidates.filter((c,i)=>i!==AppState.selectedVpIdx).slice(0,2);
+  let t = `VALUEFORGE™ POSITIONING BRIEF\n`;
+  t += `${'='.repeat(50)}\n\n`;
+  t += `Product Concept: ${a.inputs.concept}\nCategory: ${a.category}   Market: ${a.inputs.market}\nPersona: ${a.persona}   Price Tier: ${a.inputs.price}\nGenerated: ${dateStr}\n\n`;
+  t += `POSITIONING CONFIDENCE INDEX (PCI)\n${vp.score} / 100 — ${pciLabel(vp.score)}\nWhitespace Zone: ${pocket.zone} — ${pocket.title}\n\n`;
+  t += `HERO CLAIM\n"${vp.claim}"\n\n`;
+  t += `SUPPORTING / ALTERNATIVE CLAIMS\n` + supporting.map(c=>`- "${c.claim}" (PCI ${c.score})`).join('\n') + `\n\n`;
+  t += `DIMENSION SCORES\nPersona Fit: ${vp.dims.personaFit}%   Novelty: ${vp.dims.novelty}%   Competitive Gap: ${vp.dims.competitiveGap}%   Freshness: ${vp.dims.freshness}%\n\n`;
+  t += `RISK FLAGS\n` + (vp.flags.filter(f=>f.type!=='ok').map(f=>`- ${f.text}`).join('\n') || 'None material at current scoring.') + `\n\n`;
+  t += `REASONS TO BELIEVE\n` + rtbs.map(r=>`- ${r}`).join('\n') + `\n\n`;
+  t += `${'='.repeat(50)}\nGenerated by ValueForge™ — a differentiation intelligence layer for Ai Palette\n`;
+  return t;
+}
+
+function copyBriefToClipboard() {
+  const text = briefAsPlainText();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => showNotif('Brief copied to clipboard as plain text.', 'success'),
+      () => fallbackCopy(text)
+    );
+  } else fallbackCopy(text);
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); showNotif('Brief copied to clipboard.', 'success'); }
+  catch(e) { showNotif('Copy failed — please select and copy manually.', 'warn'); }
+  document.body.removeChild(ta);
+}
+
+function shareLink() {
+  const a = AppState.analysis;
+  const fakeId = hashStr(a.inputs.concept + a.generatedAt.toISOString()).toString(36);
+  const link = `https://app.aipalette.com/valueforge/brief/${fakeId}`;
+  fallbackCopy(link);
+  showNotif('Shareable link copied: ' + link, 'success');
+}
+
+// ── CSV export of the actual competitor dataset used in this analysis ──
+function exportCSV() {
+  const a = AppState.analysis; if (!a) return;
+  let csv = 'Competitor,Positioning Tone,Consumer Desire Score,Competitive Crowding Score\n';
+  a.competitors.forEach(c => {
+    csv += `"${c.name}",${c.tone},${(c.desire*100).toFixed(0)}%,${(c.crowding*100).toFixed(0)}%\n`;
+  });
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url; link.download = `ValueForge_${a.category.replace(/\s+/g,'_')}_Competitors.csv`;
+  document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  showNotif(`Downloaded ${a.competitors.length}-row competitor dataset as CSV.`, 'success');
+}
+
+// ── Real PDF export via jsPDF ──
+function exportPDF() {
+  const preview = briefAsPlainText();
+  document.getElementById('export-preview').textContent = preview;
+  document.getElementById('export-modal').classList.add('show');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function confirmExportPDF() {
+  closeModal('export-modal');
+  const progress = document.getElementById('export-progress');
+  progress.classList.add('show');
+  setTimeout(() => {
+    try {
+      generatePdfFile();
+      showNotif('PDF downloaded successfully.', 'success');
+    } catch(e) {
+      console.error(e);
+      showNotif('PDF generation failed in this browser — try Print instead.', 'warn');
+    }
+    progress.classList.remove('show');
+  }, 500);
+}
+
+function generatePdfFile() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'pt', format:'a4' });
+  const a = AppState.analysis; const vp = a.vpCandidates[AppState.selectedVpIdx]; const pocket = a.pockets[AppState.selectedPocketIdx];
+  const dateStr = a.generatedAt.toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+  const pageW = doc.internal.pageSize.getWidth();
+  const marginX = 48; let y = 56;
+  // jsPDF's core fonts (Helvetica) don't include the ₹ glyph — swap to "Rs." for safe PDF rendering
+  const pdfSafe = (s) => String(s).replace(/₹/g, 'Rs. ');
+  const priceSafe = pdfSafe(a.inputs.price);
+
+  const navy = [20,33,61], orange=[201,66,10], teal=[15,110,86], ink2=[58,58,63], ink3=[113,113,121];
+
+  // Header band
+  doc.setFillColor(...navy); doc.rect(0,0,pageW,64,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.setTextColor(255,255,255);
+  doc.text('ValueForge', marginX, 40);
+  doc.setTextColor(...orange); doc.text('™', marginX + doc.getTextWidth('ValueForge')+2, 40);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(200,200,205);
+  doc.text('Positioning Brief · Generated ' + dateStr, marginX, 54);
+
+  y = 92;
+  doc.setTextColor(...ink3); doc.setFontSize(9);
+  doc.text(`${a.category}  ·  ${a.inputs.market}  ·  ${priceSafe}  ·  Persona: ${a.persona}`, marginX, y);
+  y += 26;
+
+  doc.setDrawColor(...teal); doc.setFillColor(230,244,239); doc.roundedRect(marginX, y, pageW-marginX*2, 70, 6, 6, 'FD');
+  doc.setFont('helvetica','italic'); doc.setFontSize(15); doc.setTextColor(20,20,20);
+  const claimLines = doc.splitTextToSize('"' + pdfSafe(vp.claim) + '"', pageW - marginX*2 - 24);
+  doc.text(claimLines, marginX+12, y+26);
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...teal);
+  doc.text(`PCI™ ${vp.score}/100 — ${pciLabel(vp.score)}   ·   Zone ${pocket.zone}: ${pocket.title}`, marginX+12, y+56);
+  y += 90;
+
+  function sectionHeader(title) {
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...ink3);
+    doc.text(title.toUpperCase(), marginX, y);
+    doc.setDrawColor(230,228,222); doc.line(marginX, y+4, pageW-marginX, y+4);
+    y += 18;
+  }
+  function bodyText(lines, opts={}) {
+    doc.setFont('helvetica', opts.bold?'bold':'normal'); doc.setFontSize(opts.size||10); doc.setTextColor(...(opts.color||ink2));
+    const wrapped = Array.isArray(lines) ? lines : doc.splitTextToSize(lines, pageW-marginX*2-(opts.indent||0));
+    doc.text(wrapped, marginX+(opts.indent||0), y);
+    y += wrapped.length * (opts.lh||13) + (opts.gap||6);
+  }
+
+  sectionHeader('Claim Hierarchy');
+  bodyText('Tier 1 — Hero Claim', {bold:true, size:8.5, color:teal});
+  bodyText('"' + pdfSafe(vp.claim) + '"', {gap:10});
+  const supporting = a.vpCandidates.filter((c,i)=>i!==AppState.selectedVpIdx).slice(0,2);
+  supporting.forEach((c,i) => {
+    bodyText(`Tier ${i+2} — Alternative`, {bold:true, size:8.5, color:[138,99,0]});
+    bodyText('"' + pdfSafe(c.claim) + '" (PCI ' + c.score + ')', {gap:10});
+  });
+  y += 4;
+
+  sectionHeader(`Risk Flags (${vp.flags.filter(f=>f.type!=='ok').length})`);
+  const risks = vp.flags.filter(f=>f.type!=='ok');
+  if (risks.length===0) bodyText('No material risk flags detected at current scoring.', {gap:10});
+  else risks.forEach(f => bodyText('•  ' + pdfSafe(f.text), {indent:2, gap:8}));
+  y += 4;
+
+  if (y > 620) { doc.addPage(); y = 56; }
+  sectionHeader('Reasons to Believe');
+  buildRtbs(a, vp).forEach(r => bodyText('•  ' + pdfSafe(r), {indent:2, gap:8}));
+  y += 4;
+
+  sectionHeader('Dimension Scores');
+  bodyText(`Persona Fit ${vp.dims.personaFit}%   ·   Novelty ${vp.dims.novelty}%   ·   Competitive Gap ${vp.dims.competitiveGap}%   ·   Freshness ${vp.dims.freshness}%`, {gap:10});
+
+  // Footer
+  const pageCount = doc.internal.getNumberOfPages();
+  for (let p=1; p<=pageCount; p++) {
+    doc.setPage(p);
+    doc.setDrawColor(230,228,222); doc.line(marginX, 780, pageW-marginX, 780);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...ink3);
+    doc.text('Generated by ValueForge™ — a differentiation intelligence layer for Ai Palette', marginX, 794);
+    doc.text(`Page ${p} of ${pageCount}`, pageW-marginX, 794, {align:'right'});
+  }
+
+  const fname = `ValueForge_${a.inputs.concept.replace(/[^a-z0-9]+/gi,'_').slice(0,40)}_Brief.pdf`;
+  doc.save(fname);
+}
+
+// ══════════════════════════════════════════════════════════
+// DASHBOARD — seeded example data + live session history
+// ══════════════════════════════════════════════════════════
+const SEED_HISTORY = [
+  { date:new Date(2025,5,18), concept:"Plant-Based Protein Drink", category:"Functional Beverages", persona:"Urban Millennials (25–34)", pci:88, zone:'C', status:'ready' },
+  { date:new Date(2025,4,22), concept:"Daily Ritual Green Tea", category:"Hot Beverages", persona:"Wellness Women 28–38", pci:91, zone:'C', status:'ready' },
+  { date:new Date(2025,4,10), concept:"Probiotic Snack Bar", category:"Snacks & Bars", persona:"Health-Conscious Parents", pci:74, zone:'B', status:'progress' },
+  { date:new Date(2025,3,29), concept:"Adaptogenic Coffee Blend", category:"Hot Beverages", persona:"Busy Professionals", pci:41, zone:'A', status:'rework' },
+  { date:new Date(2025,3,14), concept:"Coconut Collagen Water", category:"Functional Beverages", persona:"Fitness Enthusiasts", pci:82, zone:'C', status:'ready' },
+  { date:new Date(2025,2,30), concept:"Millet Breakfast Biscuit", category:"Snacks & Bars", persona:"Gen Z Health-First", pci:69, zone:'B', status:'progress' },
+];
+AppState.history = SEED_HISTORY.slice();
+
+function computeDashboardStats() {
+  const h = AppState.history;
+  const avgPci = h.length ? Math.round(h.reduce((s,x)=>s+x.pci,0)/h.length) : 0;
+  const whitespaceZones = h.filter(x=>x.zone==='C').length;
+  const totalRuns = h.length;
+  const exported = h.filter(x=>x.status==='ready').length;
+  return { avgPci, whitespaceZones, totalRuns, exported };
+}
+function renderDashboard() {
+  const s = computeDashboardStats();
+  document.getElementById('dashboard-stats').innerHTML = `
+    <div class="stat-card" style="animation-delay:.02s"><div class="num accent">${s.avgPci}</div><div class="lbl">Avg. Positioning Confidence Index™</div><div class="change up">↑ +12 vs last quarter</div></div>
+    <div class="stat-card" style="animation-delay:.06s"><div class="num teal">${s.whitespaceZones}</div><div class="lbl">Whitespace Zones Identified</div><div class="change up">↑ live this session</div></div>
+    <div class="stat-card" style="animation-delay:.10s"><div class="num gold">${s.totalRuns}</div><div class="lbl">Total Analyses Run</div><div class="change">${s.exported} launch ready</div></div>
+    <div class="stat-card" style="animation-delay:.14s"><div class="num" style="color:var(--blue)">${CATEGORIES[AppState.inputs.category]?.competitors.length||10}</div><div class="lbl">SKUs in Active Category Scan</div><div class="change">${AppState.inputs.category}</div></div>`;
+  renderDashboardTable();
+}
+function renderDashboardTable() {
+  const q = (document.getElementById('dash-search')?.value||'').toLowerCase();
+  const rows = AppState.history.filter(h => !q || h.concept.toLowerCase().includes(q) || h.category.toLowerCase().includes(q)).slice(0,5);
+  document.getElementById('dashboard-table-body').innerHTML = rows.map(h => historyRowHtml(h, true)).join('') ||
+    `<tr><td colspan="6"><div class="empty-state" style="padding:24px"><div class="es-title">No matches</div></div></td></tr>`;
+}
+function zoneColor(z){ return {A:'var(--red)',B:'var(--gold)',C:'var(--teal)',D:'var(--blue)'}[z]; }
+function zoneLabel(z){ return {A:'Overcrowded',B:'Contested',C:'Whitespace',D:'Under-served'}[z]; }
+function statusPill(status){
+  const map = { ready:['pill-green','Brief Ready'], progress:['pill-amber','In Progress'], rework:['pill-red','Rework Needed'] };
+  const [cls,label] = map[status]||map.progress;
+  return `<span class="pill ${cls}">${label}</span>`;
+}
+function historyRowHtml(h, short) {
+  return `<tr onclick="loadHistoryItem('${h.concept.replace(/'/g,"\\'")}')">
+    <td><strong>${h.concept}</strong></td>
+    <td>${h.category}</td><td>${h.persona.split(' (')[0]}</td>
+    ${short?'':`<td>${h.date.toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</td>`}
+    <td><span class="zone-dot" style="background:${zoneColor(h.zone)}"></span>Zone ${h.zone} — ${zoneLabel(h.zone)}</td>
+    <td><span class="pci-pill ${h.pci>=75?'pci-high':(h.pci>=55?'pci-mid':'pci-low')}">${h.pci}</span></td>
+    <td>${statusPill(h.status)}</td>
+  </tr>`;
+}
+function loadHistoryItem(concept) {
+  const h = AppState.history.find(x=>x.concept===concept);
+  if (!h) return;
+  if (h._live) { AppState.analysis = h._live; goto('s-brief'); return; }
+  // Reconstruct a full analysis deterministically from the seed row so it's fully interactive
+  const catKeys = Object.keys(CATEGORIES);
+  const inputs = { concept: h.concept, category: h.category, market:"India", price:"Mid (₹80–120)", channel:"Modern Trade + E-Commerce", persona: h.persona, ingredients: [CATEGORIES[h.category].defaultIngredient] };
+  AppState.inputs = inputs;
+  AppState.analysis = runAnalysis(inputs, 0);
+  AppState.selectedPocketIdx = 0; AppState.selectedVpIdx = 0;
+  h._live = AppState.analysis;
+  showNotif(`Loaded "${h.concept}" — fully interactive, re-analyze anytime.`, 'info');
+  goto('s-brief');
+}
+
+// ══════════════════════════════════════════════════════════
+// HISTORY SCREEN
+// ══════════════════════════════════════════════════════════
+let historyFilter = 'all';
+function setHistoryFilter(f) {
+  historyFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter===f));
+  renderHistory();
+}
+function renderHistory() {
+  const q = (document.getElementById('history-search')?.value||'').toLowerCase();
+  let rows = AppState.history.filter(h => !q || h.concept.toLowerCase().includes(q) || h.category.toLowerCase().includes(q));
+  if (historyFilter!=='all') rows = rows.filter(h=>h.status===historyFilter);
+  document.getElementById('history-table-body').innerHTML = rows.map(h=>historyRowHtml(h,false)).join('');
+  document.getElementById('history-empty').style.display = rows.length?'none':'block';
+}
+
+// ══════════════════════════════════════════════════════════
+// NOTIFICATIONS (stacked toasts)
+// ══════════════════════════════════════════════════════════
+function showNotif(msg, type) {
+  type = type || 'success';
+  const icons = { success:'✓', info:'◆', warn:'⚠' };
+  const stack = document.getElementById('notif-stack');
+  const el = document.createElement('div');
+  el.className = 'notification';
+  el.innerHTML = `<span class="n-icon ${type}">${icons[type]||'✓'}</span><span>${msg}</span>`;
+  stack.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(()=>el.remove(), 350); }, 3400);
+}
+
+// ══════════════════════════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════════════════════════
+function showKeyboardHelp() { document.getElementById('kbd-modal').classList.add('show'); }
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA' || e.target.isContentEditable) {
+    if (e.key==='Escape') e.target.blur();
+    return;
+  }
+  if (e.key==='Escape') { document.querySelectorAll('.modal-overlay.show').forEach(m=>m.classList.remove('show')); return; }
+  if (e.key==='n' || e.key==='N') startNewAnalysis();
+  if (e.key==='d' || e.key==='D') goto('s-dashboard');
+  if (e.key==='h' || e.key==='H') goto('s-history');
+});
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', (e) => { if (e.target===m) m.classList.remove('show'); });
+});
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+function init() {
+  renderPersonaChips();
+  renderIngredientTags();
+  onConceptInput();
+  onCategoryChange();
+  AppState.analysis = runAnalysis(AppState.inputs, 0);
+  renderDashboard();
+  document.getElementById('history-count').textContent = AppState.history.length;
+}
+init();
+</script>
+</body>
 </html>
