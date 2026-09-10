@@ -4,7 +4,7 @@
 > *A Product Strategy & Intelligence Engine submitted by Team “Three of a Kind” (Sarvagya Tiwari, Jinay Mehta, Sundaram Pandey) — E-Cell IIT Guwahati.*
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Live Demo](https://img.shields.io/badge/Vercel_Live-valueforge--seven.vercel.app-000?logo=vercel)](https://valueforge-seven.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Vercel_Live-valueforge--ai.vercel.app-000?logo=vercel)](https://valueforge-ai.vercel.app)
 [![Tech Stack: React + Vite](https://img.shields.io/badge/Tech_Stack-React_18_%2B_Vite_6-61DAFB?logo=react)](https://react.dev)
 [![Status: Prototype Ready](https://img.shields.io/badge/Prototype-v2.0_Interactive-emerald.svg)](#interactive-prototype-features)
 [![Design System](https://img.shields.io/badge/Design_System-DM_Serif_%2B_DM_Sans-orange.svg)](#tech-stack--architecture)
